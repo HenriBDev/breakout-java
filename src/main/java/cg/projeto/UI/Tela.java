@@ -11,6 +11,7 @@ import com.jogamp.opengl.util.awt.TextRenderer;
 
 import cg.projeto.Game.Jogo;
 import cg.projeto.UI.Componentes.Label;
+import cg.projeto.UI.Componentes.Octagono;
 import cg.projeto.UI.Componentes.Quadrilatero;
 
 public class Tela implements GLEventListener{    
@@ -103,11 +104,16 @@ public class Tela implements GLEventListener{
         Label texto = new Label(new float[]{1, 1, 1}, "Bem-vindo ao jogo de Pong!");
         texto.y = yMax - margem - texto.altura;
         texto.centralizarComponente(true, false, true);
+        
         Quadrilatero quadrado = new Quadrilatero(new float[]{1, 1, 1}, 150, 150, 1, true);
         quadrado.centralizarComponente(true, true, true);
+        
+        Octagono octagono = new Octagono(new float[]{1, 1, 0}, 200, 200, 1, false);
+        octagono.centralizarComponente(true, true, true);
 
         Camadas.TEXTO.add(texto);
         Camadas.MAIN.add(quadrado);
+        Camadas.MAIN.add(octagono);
     }
 
 }

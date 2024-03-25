@@ -11,8 +11,9 @@ import cg.projeto.UI.Componentes.Quadrilatero;
 
 public class Camadas {
 
-    public static List<Label> TEXTO = new ArrayList<Label>();
-    public static List<Quadrilatero> MAIN = new ArrayList<Quadrilatero>();
+    // A camada mais baixa fica atrás
+    public static List<ComponenteBase> TEXTO = new ArrayList<ComponenteBase>();
+    public static List<ComponenteBase> MAIN = new ArrayList<ComponenteBase>();
 
     public void desenharCamadas(){
         
@@ -23,10 +24,8 @@ public class Camadas {
             try{ objElementosCamada = (ArrayList<ComponenteBase>) camada.get(this);}
             catch (IllegalAccessException e) {}
 
-            Iterator<ComponenteBase> iterador = objElementosCamada.iterator();
-
-            while(iterador.hasNext()){
-                iterador.next().desenharElemento();
+            for(int index = objElementosCamada.size() - 1; index >= 0; index--){
+                objElementosCamada.get(index).desenharElemento();
             }
 
         }
