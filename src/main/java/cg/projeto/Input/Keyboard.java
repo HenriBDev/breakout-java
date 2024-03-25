@@ -1,11 +1,11 @@
-package cg.projeto;
+package cg.projeto.Input;
 
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.KeyListener;
 
-public class Input implements KeyListener{
+public class Keyboard implements KeyListener{
     
-    public Input(){}
+    public Keyboard(){}
     
     public void keyPressed(KeyEvent e) {        
 

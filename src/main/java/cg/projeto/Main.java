@@ -7,25 +7,24 @@ import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.util.FPSAnimator;
 
+import cg.projeto.Input.Keyboard;
+import cg.projeto.UI.Tela;
+
 public class Main {
+    
     private static GLWindow window = null;
-    public static int screenWidth = 1280;  //1280
-    public static int screenHeight = 960; //960
 
     //Cria a janela de rendeziração do JOGL
-    public static void init(){        
+    public static void init(){     
+
         GLProfile.initSingleton();
         GLProfile profile = GLProfile.get(GLProfile.GL2);
         GLCapabilities caps = new GLCapabilities(profile);        
         window = GLWindow.create(caps);
-        window.setSize(screenWidth, screenHeight);
-        //window.setResizable(false);
         
-        Cena cena = new Cena();
-        
-        window.addGLEventListener(cena); //adiciona a Cena a Janela  
-        //Habilita o teclado : cena
-        window.addKeyListener(new Input());
+        // Adiciona a Cena na janela e os inputs
+        window.addGLEventListener(new Tela()); 
+        window.addKeyListener(new Keyboard());
         
         //window.requestFocus();
         FPSAnimator animator = new FPSAnimator(window, 60);
@@ -40,8 +39,10 @@ public class Main {
             }
         });       
         
-        //window.setFullscreen(true);        
+        window.setSize(900, 900);    
+        // window.setFullscreen(true);    
         window.setVisible(true);
+
     }
   
     public static void main(String[] args) {
