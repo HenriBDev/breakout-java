@@ -57,19 +57,11 @@ public class Tela implements GLEventListener{
             break;
         }
         
+        // Adiciona borda do jogo
+        Camadas.MAIN.add(new Quadrilatero(0, 0, new float[]{1, 1, 1}, yMax, xMax, 10, false));
+
         // Desenha camadas com elementos adicionados baseado no estado do jogo
         camadas.desenharCamadas();
-
-        // Desenha borda do jogo
-        drawer.glLineWidth(10); 
-        drawer.glColor3f(1, 1, 1);
-        drawer.glBegin(GL2.GL_LINE_LOOP);
-        drawer.glVertex2d(xMin + 1, yMin);
-        drawer.glVertex2d(xMin + 1, yMax - 1);
-        drawer.glVertex2d(xMax, yMax - 1);
-        drawer.glVertex2d(xMax, yMin);
-        drawer.glEnd();
-        drawer.glLineWidth(1); 
 
         // Executa as alterações no OpenGL
         drawer.glFlush();
@@ -111,7 +103,7 @@ public class Tela implements GLEventListener{
         Label texto = new Label(new float[]{1, 1, 1}, "Bem-vindo ao jogo de Pong!");
         texto.y = yMax - margem - texto.altura;
         texto.centralizarComponente(true, false, true);
-        Quadrilatero quadrado = new Quadrilatero(new float[]{1, 1, 1}, 150, 150);
+        Quadrilatero quadrado = new Quadrilatero(new float[]{1, 1, 1}, 150, 150, 1, true);
         quadrado.centralizarComponente(true, true, true);
 
         Camadas.TEXTO.add(texto);

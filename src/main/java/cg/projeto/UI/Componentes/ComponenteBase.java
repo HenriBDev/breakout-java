@@ -4,11 +4,11 @@ import cg.projeto.UI.Tela;
 
 public abstract class ComponenteBase {
     
-    public float x;
-    public float y;
-    public float[] cor;
-    public float altura;
-    public float largura;
+    public float x = 0;
+    public float y = 0;
+    public float[] cor = new float[]{1, 1, 1};
+    public float altura = 1;
+    public float largura = 1;
 
     public abstract void desenharElemento();
 
