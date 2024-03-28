@@ -1,11 +1,13 @@
-package cg.projeto.UI.Componentes;
+package cg.projeto.UI._3D.Componentes;
 
+import cg.projeto.UI.ComponenteBase;
 import cg.projeto.UI.Tela;
 
-public abstract class ComponenteBase {
+public abstract class ComponenteBase3D extends ComponenteBase {
     
     public float x = 0;
     public float y = 0;
+    public float z = 0;
     public float[] cor = new float[]{1, 1, 1};
     public float altura = 1;
     public float largura = 1;

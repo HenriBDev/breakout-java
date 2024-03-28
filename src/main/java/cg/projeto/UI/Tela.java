@@ -8,11 +8,13 @@ import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.util.awt.TextRenderer;
+import com.jogamp.opengl.util.gl2.GLUT;
 
 import cg.projeto.Game.Jogo;
-import cg.projeto.UI.Componentes.Label;
-import cg.projeto.UI.Componentes.Octagono;
-import cg.projeto.UI.Componentes.Quadrilatero;
+import cg.projeto.UI._2D.Componentes.Label;
+import cg.projeto.UI._2D.Componentes.Octagono;
+import cg.projeto.UI._2D.Componentes.Quadrilatero;
+import cg.projeto.UI._3D.Componentes.Cubo;
 
 public class Tela implements GLEventListener{    
 
@@ -24,7 +26,8 @@ public class Tela implements GLEventListener{
     public final Jogo jogo = new Jogo();
 
     // Renderizadores
-    public static GL2 drawer;
+    public static GL2 drawer2D;
+    public static GLUT drawer3D = new GLUT();
     public static final TextRenderer textRenderer = new TextRenderer(new Font(Fonte.FAMILY, Fonte.STYLE, Fonte.SIZE));
     
     public void init(GLAutoDrawable drawable) {
@@ -36,36 +39,37 @@ public class Tela implements GLEventListener{
         // Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         // xMax = (float) screenSize.getWidth();
         // yMax = (float) screenSize.getHeight();
-        zMax = Camadas.class.getClass().getDeclaredFields().length - 1;
+        zMax = 1000;
         
         // Configura renderizador
-        drawer = drawable.getGL().getGL2();
-        drawer.glEnable(GL2.GL_DEPTH_TEST);
+        drawer2D = drawable.getGL().getGL2();
+        drawer2D.glEnable(GL2.GL_DEPTH_TEST);
     }
 
     public void display(GLAutoDrawable drawable) {
 
         //limpa a janela com a cor especificada
-        drawer.glClearColor(0, 0, 0, 1); // Seta cor pra quando limpar fundo
-        drawer.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT); // Limpa fundo
-        drawer.glLoadIdentity(); // Limpa resto
+        drawer2D.glClearColor(0, 0, 0, 1); // Seta cor pra quando limpar fundo
+        drawer2D.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT); // Limpa fundo
+        drawer2D.glLoadIdentity(); // Limpa resto
         camadas.limparCamadas(); // Esvazia camadas
 
         // Verifica estado atual do jogo
         switch(jogo.estado){
             case INICIAL:
-                montarMenu();
+                // montarMenu();
+                Camadas._3D.add(new Cubo(200, 200, 10, new float[]{1, 1, 1}, 200, 200, 200));
             break;
         }
         
         // Adiciona borda do jogo
-        Camadas.MAIN.add(new Quadrilatero(0, 0, new float[]{1, 1, 1}, yMax, xMax, 10, false));
+        Camadas.MAIN.add(new Quadrilatero(xMax / 2, yMax / 2, new float[]{1, 1, 1}, yMax, xMax, 10, false));
 
         // Desenha camadas com elementos adicionados baseado no estado do jogo
         camadas.desenharCamadas();
 
         // Executa as alterações no OpenGL
-        drawer.glFlush();
+        drawer2D.glFlush();
     }
 
     public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
@@ -77,23 +81,23 @@ public class Tela implements GLEventListener{
         float aspect = (float) width / height;
         
         // Seta o viewport para abranger a janela inteira
-        drawer.glViewport(0, 0, width, height);
+        drawer2D.glViewport(0, 0, width, height);
                 
         // Ativa a matriz de projeção
-        drawer.glMatrixMode(GL2.GL_PROJECTION);      
-        drawer.glLoadIdentity(); // lê a matriz identidade
+        drawer2D.glMatrixMode(GL2.GL_PROJECTION);      
+        drawer2D.glLoadIdentity(); // lê a matriz identidade
         
         // Projeção ortogonal
         // true:   aspect >= 1 configura a altura de -1 para 1 : com largura maior
         // false:  aspect < 1 configura a largura de -1 para 1 : com altura maior
         if(width >= height)            
-            drawer.glOrtho(xMin * aspect, xMax * aspect, yMin, yMax, zMin, zMax);
+            drawer2D.glOrtho(xMin * aspect, xMax * aspect, yMin, yMax, zMin, zMax);
         else        
-            drawer.glOrtho(xMin, xMax, yMin / aspect, yMax / aspect, zMin, zMax);
+            drawer2D.glOrtho(xMin, xMax, yMin / aspect, yMax / aspect, zMin, zMax);
                 
         // Ativa a matriz de modelagem
-        drawer.glMatrixMode(GL2.GL_MODELVIEW);
-        drawer.glLoadIdentity(); // lê a matriz identidade
+        drawer2D.glMatrixMode(GL2.GL_MODELVIEW);
+        drawer2D.glLoadIdentity(); // lê a matriz identidade
         System.out.println("Reshape: " + width + ", " + height);
     }    
        
@@ -103,13 +107,13 @@ public class Tela implements GLEventListener{
 
         Label texto = new Label(new float[]{1, 1, 1}, "Bem-vindo ao jogo de Pong!");
         texto.y = yMax - margem - texto.altura;
-        texto.centralizarComponente(true, false, true);
+        texto.centralizarComponente(false, true);
         
         Quadrilatero quadrado = new Quadrilatero(new float[]{1, 1, 1}, 150, 150, 1, true);
-        quadrado.centralizarComponente(true, true, true);
+        quadrado.centralizarComponente(true, true);
         
         Octagono octagono = new Octagono(new float[]{1, 1, 0}, 200, 200, 1, false);
-        octagono.centralizarComponente(true, true, true);
+        octagono.centralizarComponente(true, true);
 
         Camadas.TEXTO.add(texto);
         Camadas.MAIN.add(quadrado);

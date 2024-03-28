@@ -1,5 +1,6 @@
-package cg.projeto.UI.Componentes;
+package cg.projeto.UI._2D.Componentes;
 
+import cg.projeto.UI.ComponenteBase;
 import cg.projeto.UI.Tela;
 
 public class Label extends ComponenteBase {
@@ -27,7 +28,7 @@ public class Label extends ComponenteBase {
     public void desenharElemento(){
         Tela.textRenderer.beginRendering((int)Tela.xMax, (int)Tela.yMax);
         Tela.textRenderer.setColor(this.cor[0], this.cor[1], this.cor[2], 1);
-        Tela.textRenderer.draw(this.conteudo, (int)this.x, (int)this.y);
+        Tela.textRenderer.draw(this.conteudo, (int)(this.x - this.largura / 2), (int)(this.y - this.altura / 2));
         Tela.textRenderer.endRendering();
     }
 

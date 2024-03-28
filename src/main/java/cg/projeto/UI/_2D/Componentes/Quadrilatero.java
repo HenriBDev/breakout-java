@@ -1,7 +1,8 @@
-package cg.projeto.UI.Componentes;
+package cg.projeto.UI._2D.Componentes;
 
 import com.jogamp.opengl.GL2;
 
+import cg.projeto.UI.ComponenteBase;
 import cg.projeto.UI.Tela;
 
 public class Quadrilatero extends ComponenteBase {
@@ -28,15 +29,15 @@ public class Quadrilatero extends ComponenteBase {
     }
 
     public void desenharElemento(){
-        Tela.drawer.glLineWidth(this.espessuraBorda);
-        Tela.drawer.glColor3f(this.cor[0], this.cor[1], this.cor[2]);
-        Tela.drawer.glBegin(preencher ? GL2.GL_QUADS : GL2.GL_LINE_LOOP);
-        Tela.drawer.glVertex2f(this.x, this.y);
-        Tela.drawer.glVertex2f(this.x + (float)this.largura, this.y);
-        Tela.drawer.glVertex2f(this.x + (float)this.largura, this.y + (float)this.altura);
-        Tela.drawer.glVertex2f(this.x, this.y + (float)this.altura);
-        Tela.drawer.glEnd();
-        Tela.drawer.glLineWidth(1);
+        Tela.drawer2D.glLineWidth(this.espessuraBorda);
+        Tela.drawer2D.glColor3f(this.cor[0], this.cor[1], this.cor[2]);
+        Tela.drawer2D.glBegin(preencher ? GL2.GL_QUADS : GL2.GL_LINE_LOOP);
+        Tela.drawer2D.glVertex2f(this.x - this.largura / 2, this.y - this.altura / 2);
+        Tela.drawer2D.glVertex2f(this.x + this.largura / 2, this.y - this.altura / 2);
+        Tela.drawer2D.glVertex2f(this.x + this.largura / 2, this.y + this.altura / 2);
+        Tela.drawer2D.glVertex2f(this.x - this.largura / 2, this.y + this.altura / 2);
+        Tela.drawer2D.glEnd();
+        Tela.drawer2D.glLineWidth(1);
     }
 
 }

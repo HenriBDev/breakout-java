@@ -2,18 +2,16 @@ package cg.projeto.UI;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import cg.projeto.UI.Componentes.ComponenteBase;
-import cg.projeto.UI.Componentes.Label;
-import cg.projeto.UI.Componentes.Quadrilatero;
+import cg.projeto.UI._3D.Componentes.ComponenteBase3D;
 
 public class Camadas {
 
     // A camada mais baixa fica atrás
     public static List<ComponenteBase> TEXTO = new ArrayList<ComponenteBase>();
     public static List<ComponenteBase> MAIN = new ArrayList<ComponenteBase>();
+    public static List<ComponenteBase3D> _3D = new ArrayList<ComponenteBase3D>();
 
     public void desenharCamadas(){
         

@@ -1,13 +1,8 @@
 package cg.projeto.Game;
 
-import cg.projeto.UI.Componentes.Quadrilatero;
 
-public class Bastao extends Quadrilatero {
+public class Bastao {
     
     public float velocidadeMovimento;
-
-    Bastao(int x, int y, float[] cor, float altura, float largura){
-        super(x, y, cor, altura, largura, 1, true);
-    }
 
 }
