@@ -4,33 +4,28 @@ import com.jogamp.opengl.GL2;
 
 import cg.projeto.UI.Tela;
 
-public class Quadrilatero extends ComponenteBase2D {
+public class Quadrilatero extends ComponenteBase2D<Quadrilatero> {
 
     public boolean preencher = true;
     public float espessuraBorda = 1;
-    
-    public Quadrilatero(float x, float y, float z, float[] cor, float altura, float largura, float[] rotacao, float espessuraBorda, boolean preencher){
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.cor = cor;
-        this.altura = altura;
-        this.largura = largura;
-        this.rotacao = rotacao;
-        this.espessuraBorda = espessuraBorda;
-        this.preencher = preencher;
-    }
-    
-    public Quadrilatero(float[] cor, float altura, float largura, float[] rotacao, float espessuraBorda, boolean preencher){
-        this.cor = cor;
-        this.altura = altura;
-        this.largura = largura;
-        this.rotacao = rotacao;
-        this.espessuraBorda = espessuraBorda;
-        this.preencher = preencher;
+
+    public Quadrilatero redimensionarComponente(float novaLargura, float novaAltura){
+        this.largura = novaLargura;
+        this.altura = novaAltura;
+        return this;
     }
 
-    public void desenharElemento(){
+    public Quadrilatero preencherComponente(boolean preencher){
+        this.preencher = preencher;
+        return this;
+    }
+    
+    public Quadrilatero mudarEspessura(float novaEspessura){
+        this.espessuraBorda = novaEspessura;
+        return this;
+    }
+
+    public void desenharComponente(){
 
         Tela.drawer2D.glLineWidth(this.espessuraBorda);
 

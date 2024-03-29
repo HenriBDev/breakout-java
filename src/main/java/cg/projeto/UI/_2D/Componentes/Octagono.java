@@ -4,33 +4,28 @@ import com.jogamp.opengl.GL2;
 
 import cg.projeto.UI.Tela;
 
-public class Octagono extends ComponenteBase2D {
+public class Octagono extends ComponenteBase2D<Octagono> {
 
     public boolean preencher = true;
     public float espessuraBorda = 1;
-    
-    public Octagono(float x, float y, float z, float[] cor, float altura, float largura, float[] rotacao, float espessuraBorda, boolean preencher){
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.cor = cor;
-        this.altura = altura;
-        this.largura = largura;
-        this.rotacao = rotacao;
-        this.espessuraBorda = espessuraBorda;
-        this.preencher = preencher;
-    }
-    
-    public Octagono(float[] cor, float altura, float largura, float[] rotacao, float espessuraBorda, boolean preencher){
-        this.cor = cor;
-        this.altura = altura;
-        this.largura = largura;
-        this.rotacao = rotacao;
-        this.espessuraBorda = espessuraBorda;
-        this.preencher = preencher;
+
+    public Octagono redimensionarComponente(float novaLargura, float novaAltura){
+        this.largura = novaLargura;
+        this.altura = novaAltura;
+        return this;
     }
 
-    public void desenharElemento(){
+    public Octagono preencherComponente(boolean preencher){
+        this.preencher = preencher;
+        return this;
+    }
+
+    public Octagono mudarEspessura(float novaEspessura){
+        this.espessuraBorda = novaEspessura;
+        return this;
+    }
+
+    public void desenharComponente(){
 
         float tercoDaLargura = this.largura / 3, tercoDaAltura = this.altura / 3;
 

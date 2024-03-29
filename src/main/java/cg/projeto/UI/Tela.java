@@ -29,7 +29,7 @@ public class Tela implements GLEventListener{
     // Renderizadores
     public static GL2 drawer2D;
     public static GLUT drawer3D = new GLUT();
-    public static final TextRenderer textRenderer = new TextRenderer(new Font(Fonte.FAMILY, Fonte.STYLE, Fonte.SIZE));
+    public static TextRenderer textRenderer = new TextRenderer(new Font(Fonte.FAMILY, Fonte.STYLE, Fonte.SIZE));
     
     public void init(GLAutoDrawable drawable) {
 
@@ -60,12 +60,19 @@ public class Tela implements GLEventListener{
             }
             
         // Adiciona ponto vermelho central (DEBUG)
-        Quadrilatero pontoVermelho = new Quadrilatero(new float[]{1, 0, 0}, 10, 10, new float[]{0, 0, 0}, 1, true);
-        pontoVermelho.centralizarComponente(true, true, true);
+        Quadrilatero pontoVermelho = new Quadrilatero()
+            .trocarCor(1, 0, 0, 1)
+            .redimensionarComponente(10, 10)
+            .centralizarComponente(true, true, true);
         elementosTela.add(pontoVermelho);
         
         // Adiciona borda do jogo
-        elementosTela.add(new Quadrilatero(xMax / 2, yMax / 2, zMax, new float[]{1, 1, 1}, limiteSRU, limiteSRU, new float[]{0, 0, 0}, 10, false));
+        Quadrilatero borda = new Quadrilatero()
+            .moverComponente(xMax / 2, yMax / 2, zMax)
+            .redimensionarComponente(limiteSRU, limiteSRU)
+            .mudarEspessura(10)
+            .preencherComponente(false);
+        elementosTela.add(borda);
 
         // Desenha elementos adicionados baseado no estado do jogo
         this.desenharTela();
@@ -107,21 +114,36 @@ public class Tela implements GLEventListener{
 
     private void montarMenu(){
 
-        Texto texto = new Texto("Bem-vindo ao jogo de Pong!", new float[]{1, 1, 1}, new float[]{0, 0, 0});
-        texto.y = yMax - margem - texto.altura;
-        texto.centralizarComponente(false, true, true);
+        Texto texto = new Texto("Bem-vindo ao jogo de Pong!");
+        texto.moverComponente(texto.x, yMax - margem - texto.altura, texto.z)
+            .centralizarComponente(false, true, true);
         
-        Quadrilatero quadrado = new Quadrilatero(0, 0, 100, new float[]{0, 1, 0}, 150, 150, new float[]{0, 0, 45}, 1, true);
-        quadrado.centralizarComponente(true, true, false);
+        Quadrilatero quadrado = new Quadrilatero()
+            .moverComponente(0, 0, 100)
+            .trocarCor(0, 1, 0, 1)
+            .redimensionarComponente(150, 150)
+            .rotacionarComponente(0, 0, 45)
+            .centralizarComponente(true, true, false);
         
-        Octagono octagono = new Octagono(new float[]{1, 1, 0}, 200, 200, new float[]{0, 0, 0}, 1, false);
-        octagono.centralizarComponente(true, true, true);
+        Octagono octagono = new Octagono()
+            .trocarCor(1, 1, 0, 1)
+            .redimensionarComponente(200, 200)
+            .preencherComponente(false)
+            .centralizarComponente(true, true, true);
 
-        Hexaedro hexaedro = new Hexaedro(new float[]{1, 0, 1}, 200, 200, 200, new float[]{45, 45, 0}, false);
-        hexaedro.centralizarComponente(true, true, true);
+        Hexaedro hexaedro = new Hexaedro()
+            .trocarCor(1, 0, 1, 1)
+            .redimensionarComponente(200, 200, 200)
+            .rotacionarComponente(45, 45, 0)
+            .preencherComponente(false)
+            .centralizarComponente(true, true, true);
 
-        Esfera esfera = new Esfera(new float[]{1, 0, 0}, 75, new float[]{45, 45, 0}, false);
-        esfera.centralizarComponente(true, true, true);
+        Esfera esfera = new Esfera()
+            .trocarCor(1, 0, 0, 1)
+            .redimensionarComponente(75)
+            .preencherComponente(false)
+            .centralizarComponente(true, true, true)
+            .rotacionarComponente(0, 90, 0);
 
         elementosTela.add(texto);
         elementosTela.add(quadrado);
@@ -136,7 +158,7 @@ public class Tela implements GLEventListener{
             ComponenteBase componente = elementosTela.get(index);
 
             if(componente.x >= xMin && componente.x <= xMax && componente.y >= yMin && componente.y <= yMax && componente.z >= zMin && componente.z <= zMax)
-                componente.desenharElemento();
+                componente.desenharComponente();
         }
     }
     

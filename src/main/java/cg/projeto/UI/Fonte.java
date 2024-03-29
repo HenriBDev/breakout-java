@@ -4,8 +4,8 @@ import java.awt.Font;
 
 public class Fonte {
     
-    public static final String FAMILY = "SansSerif"; 
-    public static final int STYLE = Font.BOLD; 
-    public static final int SIZE = 32; 
+    public static String FAMILY = "SansSerif"; 
+    public static int STYLE = Font.BOLD; 
+    public static int SIZE = 32; 
 
 }

@@ -1,44 +1,21 @@
 package cg.projeto.UI._3D.Componentes;
 
-import cg.projeto.Main;
 import cg.projeto.UI.Tela;
 
-public class Hexaedro extends ComponenteBase3D {
+public class Hexaedro extends ComponenteBase3D<Hexaedro> {
 
     public float altura = 1;
     public float largura = 1;
     public float comprimento = 1;
-    
-    public Hexaedro(
-        float x, float y, float z, float[] cor, 
-        float altura, float largura, float comprimento, 
-        float[] rotacao, boolean preencher
-    ){
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.cor = cor;
-        this.altura = altura;
-        this.largura = largura;
-        this.comprimento = comprimento;
-        this.rotacao = rotacao;
-        this.preencher = preencher;
-    }
-    
-    public Hexaedro(
-        float[] cor, 
-        float altura, float largura, float comprimento, 
-        float[] rotacao, boolean preencher
-    ){
-        this.cor = cor;
-        this.altura = altura;
-        this.largura = largura;
-        this.comprimento = comprimento;
-        this.rotacao = rotacao;
-        this.preencher = preencher;
+
+    public Hexaedro redimensionarComponente(float novaLargura, float novaAltura, float novoComprimento){
+        this.largura = novaLargura;
+        this.altura = novaAltura;
+        this.comprimento = novoComprimento;
+        return this;
     }
 
-    public void desenharElemento(){
+    public void desenharComponente(){
 
         Tela.drawer2D.glColor3f(this.cor[0], this.cor[1], this.cor[2]);
 

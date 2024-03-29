@@ -2,30 +2,17 @@ package cg.projeto.UI._2D.Componentes;
 
 import cg.projeto.UI.Tela;
 
-public class Texto extends ComponenteBase2D {
+public class Texto extends ComponenteBase2D<Texto> {
     
-    public String conteudo;
-    
-    public Texto(String conteudo, float x, float y, float z, float[] cor, float[] rotacao){
+    public String conteudo = "";
+
+    public Texto(String conteudo){ 
         this.conteudo = conteudo;
-        this.x = x;
-        this.y = y;
-        this.y = z;
-        this.cor = cor;
-        this.rotacao = rotacao;
-        this.largura = calcularLarguraConteudo();
-        this.altura = calcularAlturaConteudo();
-    }
-    
-    public Texto(String conteudo, float[] cor, float[] rotacao){
-        this.conteudo = conteudo;
-        this.cor = cor;
-        this.rotacao = rotacao;
         this.largura = calcularLarguraConteudo();
         this.altura = calcularAlturaConteudo();
     }
 
-    public void desenharElemento(){
+    public void desenharComponente(){
 
         Tela.drawer2D.glPushMatrix();
 
