@@ -15,7 +15,7 @@ public class Main {
     private static GLWindow window = null;
 
     //Cria a janela de rendeziração do JOGL
-    public static void init(){     
+    public static void init(){
 
         GLProfile.initSingleton();
         GLProfile profile = GLProfile.get(GLProfile.GL2);
@@ -26,7 +26,7 @@ public class Main {
         window.addGLEventListener(new Tela()); 
         window.addKeyListener(new Keyboard());
         
-        //window.requestFocus();
+        // window.requestFocus();
         FPSAnimator animator = new FPSAnimator(window, 60);
         animator.start(); //inicia o loop de animação
         
@@ -38,7 +38,7 @@ public class Main {
                 System.exit(0);
             }
         });       
-        
+
         window.setSize(900, 900);    
         // window.setFullscreen(true);    
         window.setVisible(true);
@@ -48,4 +48,5 @@ public class Main {
     public static void main(String[] args) {
         init();
     }
+
 }

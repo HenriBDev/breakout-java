@@ -1,35 +1,46 @@
 package cg.projeto.UI._2D.Componentes;
 
-import cg.projeto.UI.ComponenteBase;
 import cg.projeto.UI.Tela;
 
-public class Label extends ComponenteBase {
+public class Texto extends ComponenteBase2D {
     
     public String conteudo;
     
-    public Label(float x, float y, float[] cor, String conteudo){
+    public Texto(String conteudo, float x, float y, float z, float[] cor, float[] rotacao){
+        this.conteudo = conteudo;
         this.x = x;
         this.y = y;
+        this.y = z;
         this.cor = cor;
-        this.conteudo = conteudo;
+        this.rotacao = rotacao;
         this.largura = calcularLarguraConteudo();
         this.altura = calcularAlturaConteudo();
     }
     
-    public Label(float[] cor, String conteudo){
-        this.x = 0;
-        this.y = 0;
-        this.cor = cor;
+    public Texto(String conteudo, float[] cor, float[] rotacao){
         this.conteudo = conteudo;
+        this.cor = cor;
+        this.rotacao = rotacao;
         this.largura = calcularLarguraConteudo();
         this.altura = calcularAlturaConteudo();
     }
 
     public void desenharElemento(){
-        Tela.textRenderer.beginRendering((int)Tela.xMax, (int)Tela.yMax);
+
+        Tela.drawer2D.glPushMatrix();
+
+        Tela.drawer2D.glTranslatef(this.x, this.y, Tela.zMax * -1 + this.z);
+
+        Tela.drawer2D.glRotatef(this.rotacao[1], 1, 0, 0);
+        Tela.drawer2D.glRotatef(this.rotacao[0], 0, 1, 0);
+        Tela.drawer2D.glRotatef(this.rotacao[2], 0, 0, 1);
+
+        Tela.textRenderer.begin3DRendering();
         Tela.textRenderer.setColor(this.cor[0], this.cor[1], this.cor[2], 1);
-        Tela.textRenderer.draw(this.conteudo, (int)(this.x - this.largura / 2), (int)(this.y - this.altura / 2));
-        Tela.textRenderer.endRendering();
+        Tela.textRenderer.draw3D(this.conteudo, Tela.xMin - this.largura / 2, Tela.yMin - this.altura / 2, Tela.zMin, 1);
+        Tela.textRenderer.end3DRendering();
+
+        Tela.drawer2D.glPopMatrix();
     }
 
     private float calcularLarguraConteudo() { return (float) Tela.textRenderer.getBounds(this.conteudo).getMaxX() - (float) Tela.textRenderer.getBounds(this.conteudo).getX(); }

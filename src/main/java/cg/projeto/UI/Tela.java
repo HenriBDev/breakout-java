@@ -1,8 +1,8 @@
 package cg.projeto.UI;
 
 import java.awt.Font;
-import java.awt.Toolkit;
-import java.awt.Dimension;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
@@ -11,16 +11,17 @@ import com.jogamp.opengl.util.awt.TextRenderer;
 import com.jogamp.opengl.util.gl2.GLUT;
 
 import cg.projeto.Game.Jogo;
-import cg.projeto.UI._2D.Componentes.Label;
+import cg.projeto.UI._2D.Componentes.Texto;
 import cg.projeto.UI._2D.Componentes.Octagono;
 import cg.projeto.UI._2D.Componentes.Quadrilatero;
-import cg.projeto.UI._3D.Componentes.Cubo;
+import cg.projeto.UI._3D.Componentes.Esfera;
+import cg.projeto.UI._3D.Componentes.Hexaedro;
 
 public class Tela implements GLEventListener{    
 
     // Elementos UI
-    public static float xMin, xMax, yMin, yMax, zMin, zMax, margem = 20;
-    private final Camadas camadas = new Camadas(); 
+    public static float limiteSRU = 1000, xMin, xMax, yMin, yMax, zMin, zMax, margem = 20;
+    private final List<ComponenteBase> elementosTela = new ArrayList<ComponenteBase>(); 
 
     // Conteúdo do jogo
     public final Jogo jogo = new Jogo();
@@ -34,12 +35,9 @@ public class Tela implements GLEventListener{
 
         //Estabelece as coordenadas do SRU (Sistema de Referencia do Universo)
         xMin = yMin = zMin = 0;
-        xMax = 1000;
-        yMax = 1000;
-        // Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        // xMax = (float) screenSize.getWidth();
-        // yMax = (float) screenSize.getHeight();
-        zMax = 1000;
+        xMax = limiteSRU;
+        yMax = limiteSRU;
+        zMax = limiteSRU;
         
         // Configura renderizador
         drawer2D = drawable.getGL().getGL2();
@@ -52,21 +50,25 @@ public class Tela implements GLEventListener{
         drawer2D.glClearColor(0, 0, 0, 1); // Seta cor pra quando limpar fundo
         drawer2D.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT); // Limpa fundo
         drawer2D.glLoadIdentity(); // Limpa resto
-        camadas.limparCamadas(); // Esvazia camadas
+        this.limparTela(); // Apaga elementos
 
         // Verifica estado atual do jogo
         switch(jogo.estado){
             case INICIAL:
-                // montarMenu();
-                Camadas._3D.add(new Cubo(200, 200, 10, new float[]{1, 1, 1}, 200, 200, 200));
-            break;
-        }
+                montarMenu();
+                break;
+            }
+            
+        // Adiciona ponto vermelho central (DEBUG)
+        Quadrilatero pontoVermelho = new Quadrilatero(new float[]{1, 0, 0}, 10, 10, new float[]{0, 0, 0}, 1, true);
+        pontoVermelho.centralizarComponente(true, true, true);
+        elementosTela.add(pontoVermelho);
         
         // Adiciona borda do jogo
-        Camadas.MAIN.add(new Quadrilatero(xMax / 2, yMax / 2, new float[]{1, 1, 1}, yMax, xMax, 10, false));
+        elementosTela.add(new Quadrilatero(xMax / 2, yMax / 2, zMax, new float[]{1, 1, 1}, limiteSRU, limiteSRU, new float[]{0, 0, 0}, 10, false));
 
-        // Desenha camadas com elementos adicionados baseado no estado do jogo
-        camadas.desenharCamadas();
+        // Desenha elementos adicionados baseado no estado do jogo
+        this.desenharTela();
 
         // Executa as alterações no OpenGL
         drawer2D.glFlush();
@@ -105,19 +107,39 @@ public class Tela implements GLEventListener{
 
     private void montarMenu(){
 
-        Label texto = new Label(new float[]{1, 1, 1}, "Bem-vindo ao jogo de Pong!");
+        Texto texto = new Texto("Bem-vindo ao jogo de Pong!", new float[]{1, 1, 1}, new float[]{0, 0, 0});
         texto.y = yMax - margem - texto.altura;
-        texto.centralizarComponente(false, true);
+        texto.centralizarComponente(false, true, true);
         
-        Quadrilatero quadrado = new Quadrilatero(new float[]{1, 1, 1}, 150, 150, 1, true);
-        quadrado.centralizarComponente(true, true);
+        Quadrilatero quadrado = new Quadrilatero(0, 0, 100, new float[]{0, 1, 0}, 150, 150, new float[]{0, 0, 45}, 1, true);
+        quadrado.centralizarComponente(true, true, false);
         
-        Octagono octagono = new Octagono(new float[]{1, 1, 0}, 200, 200, 1, false);
-        octagono.centralizarComponente(true, true);
+        Octagono octagono = new Octagono(new float[]{1, 1, 0}, 200, 200, new float[]{0, 0, 0}, 1, false);
+        octagono.centralizarComponente(true, true, true);
 
-        Camadas.TEXTO.add(texto);
-        Camadas.MAIN.add(quadrado);
-        Camadas.MAIN.add(octagono);
+        Hexaedro hexaedro = new Hexaedro(new float[]{1, 0, 1}, 200, 200, 200, new float[]{45, 45, 0}, false);
+        hexaedro.centralizarComponente(true, true, true);
+
+        Esfera esfera = new Esfera(new float[]{1, 0, 0}, 75, new float[]{45, 45, 0}, false);
+        esfera.centralizarComponente(true, true, true);
+
+        elementosTela.add(texto);
+        elementosTela.add(quadrado);
+        elementosTela.add(octagono);
+        elementosTela.add(hexaedro);
+        elementosTela.add(esfera);
     }
+
+    private void desenharTela(){
+        for(int index = elementosTela.size() - 1; index >= 0; index--){
+
+            ComponenteBase componente = elementosTela.get(index);
+
+            if(componente.x >= xMin && componente.x <= xMax && componente.y >= yMin && componente.y <= yMax && componente.z >= zMin && componente.z <= zMax)
+                componente.desenharElemento();
+        }
+    }
+    
+    private void limparTela(){ this.elementosTela.clear(); }
 
 }
