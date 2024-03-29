@@ -39,7 +39,8 @@ public class Main {
                 System.exit(0);
             }
         });       
-
+        
+        window.setTitle("Pong maneiro fi");
         window.setSize(900, 900);    
         // window.setFullscreen(true);    
         window.setVisible(true);
