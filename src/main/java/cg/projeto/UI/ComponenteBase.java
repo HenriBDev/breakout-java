@@ -5,7 +5,7 @@ public abstract class ComponenteBase<tipoComponente> {
     public float x = 0;
     public float y = 0;
     public float z = 0;
-    public float[] cor = new float[]{1, 1, 1};
+    public float[] cor = new float[]{1, 1, 1, 1};
     public float[] rotacao = new float[]{0, 0, 0};
 
     public abstract void desenharComponente();

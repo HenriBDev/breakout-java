@@ -23,7 +23,7 @@ public class Texto extends ComponenteBase2D<Texto> {
         Tela.drawer2D.glRotatef(this.rotacao[2], 0, 0, 1);
 
         Tela.textRenderer.begin3DRendering();
-        Tela.textRenderer.setColor(this.cor[0], this.cor[1], this.cor[2], 1);
+        Tela.textRenderer.setColor(this.cor[0], this.cor[1], this.cor[2], this.cor[3]);
         Tela.textRenderer.draw3D(this.conteudo, Tela.xMin - this.largura / 2, Tela.yMin - this.altura / 2, Tela.zMin, 1);
         Tela.textRenderer.end3DRendering();
 

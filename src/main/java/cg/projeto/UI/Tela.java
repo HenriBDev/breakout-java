@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.jogamp.opengl.GL2;
+import com.jogamp.opengl.GL4bc;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.util.awt.TextRenderer;
@@ -42,6 +43,9 @@ public class Tela implements GLEventListener{
         // Configura renderizador
         drawer2D = drawable.getGL().getGL2();
         drawer2D.glEnable(GL2.GL_DEPTH_TEST);
+        // Permite opacidade
+        drawer2D.glEnable(GL4bc.GL_BLEND);
+        drawer2D.glBlendFunc(GL4bc.GL_SRC_ALPHA, GL4bc.GL_ONE_MINUS_SRC_ALPHA);
     }
 
     public void display(GLAutoDrawable drawable) {
@@ -120,7 +124,7 @@ public class Tela implements GLEventListener{
         
         Quadrilatero quadrado = new Quadrilatero()
             .moverComponente(0, 0, 100)
-            .trocarCor(0, 1, 0, 1)
+            .trocarCor(0, 1, 0, 0.5f)
             .redimensionarComponente(150, 150)
             .rotacionarComponente(0, 0, 45)
             .centralizarComponente(true, true, false);
@@ -134,8 +138,8 @@ public class Tela implements GLEventListener{
         Hexaedro hexaedro = new Hexaedro()
             .trocarCor(1, 0, 1, 1)
             .redimensionarComponente(200, 200, 200)
-            .rotacionarComponente(45, 45, 0)
             .preencherComponente(false)
+            .rotacionarComponente(45, 45, 0)
             .centralizarComponente(true, true, true);
 
         Esfera esfera = new Esfera()

@@ -29,7 +29,7 @@ public class Quadrilatero extends ComponenteBase2D<Quadrilatero> {
 
         Tela.drawer2D.glLineWidth(this.espessuraBorda);
 
-        Tela.drawer2D.glColor3f(this.cor[0], this.cor[1], this.cor[2]);
+        Tela.drawer2D.glColor4f(this.cor[0], this.cor[1], this.cor[2], this.cor[3]);
 
         Tela.drawer2D.glPushMatrix();
 
