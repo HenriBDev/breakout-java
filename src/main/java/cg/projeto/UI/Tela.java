@@ -11,6 +11,8 @@ import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.util.awt.TextRenderer;
 import com.jogamp.opengl.util.gl2.GLUT;
 
+import cg.projeto.Utils;
+import cg.projeto.Debug.ModoEdicao;
 import cg.projeto.Game.Jogo;
 import cg.projeto.UI._2D.Componentes.Texto;
 import cg.projeto.UI._2D.Componentes.Octagono;
@@ -21,7 +23,15 @@ import cg.projeto.UI._3D.Componentes.Hexaedro;
 public class Tela implements GLEventListener{    
 
     // Elementos UI
-    public static float limiteSRU = 1000, xMin, xMax, yMin, yMax, zMin, zMax, margem = 20;
+    public static float
+        limiteSRU = 1000, margem = 20,
+        xMin, xMax, xPontoCentral,
+        yMin, yMax, yPontoCentral,
+        zMin, zMax, zPontoCentral;
+    public static float[]
+        escalaCamera = {1, 1, 1},
+        rotacaoCamera = {0, 0, 0},
+        posicaoCamera = {0, 0, 0};
     private final List<ComponenteBase> elementosTela = new ArrayList<ComponenteBase>(); 
 
     // Conteúdo do jogo
@@ -31,14 +41,16 @@ public class Tela implements GLEventListener{
     public static GL2 drawer2D;
     public static GLUT drawer3D = new GLUT();
     public static TextRenderer textRenderer = new TextRenderer(new Font(Fonte.FAMILY, Fonte.STYLE, Fonte.SIZE));
+
+    // Debug
+    public static ModoEdicao modoEdicao = ModoEdicao.MOVER;
     
     public void init(GLAutoDrawable drawable) {
 
         //Estabelece as coordenadas do SRU (Sistema de Referencia do Universo)
-        xMin = yMin = zMin = 0;
-        xMax = limiteSRU;
-        yMax = limiteSRU;
-        zMax = limiteSRU;
+        xMax = yMax = zMax = limiteSRU;
+        xMin = yMin = zMin = limiteSRU * -1;
+        xPontoCentral = yPontoCentral = zPontoCentral = Utils.mediana(limiteSRU * -1, limiteSRU);
         
         // Configura renderizador
         drawer2D = drawable.getGL().getGL2();
@@ -60,23 +72,26 @@ public class Tela implements GLEventListener{
         switch(jogo.estado){
             case INICIAL:
                 montarMenu();
-                break;
-            }
+            break;
+        }
             
         // Adiciona ponto vermelho central (DEBUG)
         Quadrilatero pontoVermelho = new Quadrilatero()
             .trocarCor(1, 0, 0, 1)
-            .redimensionarComponente(10, 10)
+            .redimensionarComponente(20, 20)
             .centralizarComponente(true, true, true);
         elementosTela.add(pontoVermelho);
-        
-        // Adiciona borda do jogo
-        Quadrilatero borda = new Quadrilatero()
-            .moverComponente(xMax / 2, yMax / 2, zMax)
-            .redimensionarComponente(limiteSRU, limiteSRU)
-            .mudarEspessura(10)
-            .preencherComponente(false);
-        elementosTela.add(borda);
+
+        // Adiciona modo de edição
+        Texto texto = new Texto("Modo de edição: "+modoEdicao);
+        texto.moverComponente(xMin + texto.largura / 2 + margem, yMin + texto.altura / 2 + margem, zPontoCentral);
+        elementosTela.add(texto);
+
+        // Calcula posição da câmera (DEBUG)
+        drawer2D.glTranslatef(posicaoCamera[0], posicaoCamera[1], posicaoCamera[2]);
+        drawer2D.glRotatef(rotacaoCamera[1], 1, 0, 0);
+        drawer2D.glRotatef(rotacaoCamera[0], 0, 1, 0);
+        drawer2D.glRotatef(rotacaoCamera[2], 0, 0, 1);
 
         // Desenha elementos adicionados baseado no estado do jogo
         this.desenharTela();
@@ -123,28 +138,26 @@ public class Tela implements GLEventListener{
             .centralizarComponente(false, true, true);
         
         Quadrilatero quadrado = new Quadrilatero()
-            .moverComponente(0, 0, 100)
             .trocarCor(0, 1, 0, 0.5f)
-            .redimensionarComponente(150, 150)
+            .redimensionarComponente(300, 300)
             .rotacionarComponente(0, 0, 45)
-            .centralizarComponente(true, true, false);
+            .centralizarComponente(true, true, true);
         
         Octagono octagono = new Octagono()
             .trocarCor(1, 1, 0, 1)
             .redimensionarComponente(200, 200)
-            .preencherComponente(false)
             .centralizarComponente(true, true, true);
 
         Hexaedro hexaedro = new Hexaedro()
             .trocarCor(1, 0, 1, 1)
-            .redimensionarComponente(200, 200, 200)
+            .redimensionarComponente(400, 400, 400)
             .preencherComponente(false)
             .rotacionarComponente(45, 45, 0)
-            .centralizarComponente(true, true, true);
+            .moverComponente(xPontoCentral, yPontoCentral - 100, zPontoCentral);
 
         Esfera esfera = new Esfera()
             .trocarCor(1, 0, 0, 1)
-            .redimensionarComponente(75)
+            .redimensionarComponente(150)
             .preencherComponente(false)
             .centralizarComponente(true, true, true)
             .rotacionarComponente(0, 90, 0);

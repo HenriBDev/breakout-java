@@ -17,11 +17,11 @@ public class Esfera extends ComponenteBase3D<Esfera> {
 
         Tela.drawer2D.glPushMatrix();
 
-        Tela.drawer2D.glTranslatef(this.x, this.y, Tela.zMax * -1 + this.z);
+        Tela.drawer2D.glTranslatef(this.x, this.y, this.z);
 
-        Tela.drawer2D.glRotatef(rotacao[1], 1, 0, 0);
-        Tela.drawer2D.glRotatef(rotacao[0], 0, 1, 0);
-        Tela.drawer2D.glRotatef(rotacao[2], 0, 0, 1);
+        Tela.drawer2D.glRotatef(this.rotacao[1], 1, 0, 0);
+        Tela.drawer2D.glRotatef(this.rotacao[0], 0, 1, 0);
+        Tela.drawer2D.glRotatef(this.rotacao[2], 0, 0, 1);
 
         if(this.preencher) Tela.drawer3D.glutSolidSphere(this.raio, 30, 30);
         else Tela.drawer3D.glutWireSphere(this.raio, 30, 30);

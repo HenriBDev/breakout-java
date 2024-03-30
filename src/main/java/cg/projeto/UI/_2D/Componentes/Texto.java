@@ -16,7 +16,7 @@ public class Texto extends ComponenteBase2D<Texto> {
 
         Tela.drawer2D.glPushMatrix();
 
-        Tela.drawer2D.glTranslatef(this.x, this.y, Tela.zMax * -1 + this.z);
+        Tela.drawer2D.glTranslatef(this.x, this.y, this.z);
 
         Tela.drawer2D.glRotatef(this.rotacao[1], 1, 0, 0);
         Tela.drawer2D.glRotatef(this.rotacao[0], 0, 1, 0);
@@ -24,7 +24,7 @@ public class Texto extends ComponenteBase2D<Texto> {
 
         Tela.textRenderer.begin3DRendering();
         Tela.textRenderer.setColor(this.cor[0], this.cor[1], this.cor[2], this.cor[3]);
-        Tela.textRenderer.draw3D(this.conteudo, Tela.xMin - this.largura / 2, Tela.yMin - this.altura / 2, Tela.zMin, 1);
+        Tela.textRenderer.draw3D(this.conteudo, Tela.xPontoCentral - this.largura / 2, Tela.yPontoCentral - this.altura / 2, Tela.zPontoCentral, 1);
         Tela.textRenderer.end3DRendering();
 
         Tela.drawer2D.glPopMatrix();

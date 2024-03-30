@@ -33,17 +33,17 @@ public class Quadrilatero extends ComponenteBase2D<Quadrilatero> {
 
         Tela.drawer2D.glPushMatrix();
 
-        Tela.drawer2D.glTranslatef(this.x, this.y, Tela.zMax * -1 + this.z);
+        Tela.drawer2D.glTranslatef(this.x, this.y, this.z);
 
         Tela.drawer2D.glRotatef(this.rotacao[1], 1, 0, 0);
         Tela.drawer2D.glRotatef(this.rotacao[0], 0, 1, 0);
         Tela.drawer2D.glRotatef(this.rotacao[2], 0, 0, 1);
 
         Tela.drawer2D.glBegin(preencher ? GL2.GL_QUADS : GL2.GL_LINE_LOOP);
-        Tela.drawer2D.glVertex3f(Tela.xMin - this.largura / 2, Tela.yMin - this.altura / 2, Tela.zMin);
-        Tela.drawer2D.glVertex3f(Tela.xMin + this.largura / 2, Tela.yMin - this.altura / 2, Tela.zMin);
-        Tela.drawer2D.glVertex3f(Tela.xMin + this.largura / 2, Tela.yMin + this.altura / 2, Tela.zMin);
-        Tela.drawer2D.glVertex3f(Tela.xMin - this.largura / 2, Tela.yMin + this.altura / 2, Tela.zMin);
+        Tela.drawer2D.glVertex3f(Tela.xPontoCentral - this.largura / 2, Tela.yPontoCentral - this.altura / 2, Tela.zPontoCentral);
+        Tela.drawer2D.glVertex3f(Tela.xPontoCentral + this.largura / 2, Tela.yPontoCentral - this.altura / 2, Tela.zPontoCentral);
+        Tela.drawer2D.glVertex3f(Tela.xPontoCentral + this.largura / 2, Tela.yPontoCentral + this.altura / 2, Tela.zPontoCentral);
+        Tela.drawer2D.glVertex3f(Tela.xPontoCentral - this.largura / 2, Tela.yPontoCentral + this.altura / 2, Tela.zPontoCentral);
         Tela.drawer2D.glEnd();
 
         Tela.drawer2D.glPopMatrix();

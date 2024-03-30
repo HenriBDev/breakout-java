@@ -6,6 +6,6 @@ public class Fonte {
     
     public static String FAMILY = "SansSerif"; 
     public static int STYLE = Font.BOLD; 
-    public static int SIZE = 32; 
+    public static int SIZE = 64; 
 
 }
