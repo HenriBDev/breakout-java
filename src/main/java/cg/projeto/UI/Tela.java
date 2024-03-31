@@ -4,6 +4,7 @@ import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GL4bc;
 import com.jogamp.opengl.GLAutoDrawable;
@@ -11,6 +12,7 @@ import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.util.awt.TextRenderer;
 import com.jogamp.opengl.util.gl2.GLUT;
 
+import cg.projeto.Main;
 import cg.projeto.Utils;
 import cg.projeto.Debug.ModoEdicao;
 import cg.projeto.Game.Jogo;
@@ -24,12 +26,12 @@ public class Tela implements GLEventListener{
 
     // Elementos UI
     public static float
-        limiteSRU = 1000, margem = 20,
+        limiteSRU = 1000, margem = 50, escalaCamera = 1,
         xMin, xMax, xPontoCentral,
         yMin, yMax, yPontoCentral,
-        zMin, zMax, zPontoCentral;
+        zMin, zMax, zPontoCentral,
+        anguloHexaedroDebug = 0;
     public static float[]
-        escalaCamera = {1, 1, 1},
         rotacaoCamera = {0, 0, 0},
         posicaoCamera = {0, 0, 0};
     private final List<ComponenteBase> elementosTela = new ArrayList<ComponenteBase>(); 
@@ -55,6 +57,14 @@ public class Tela implements GLEventListener{
         // Configura renderizador
         drawer2D = drawable.getGL().getGL2();
         drawer2D.glEnable(GL2.GL_DEPTH_TEST);
+
+        // Habilita iluminação
+        drawer2D.glEnable(GL2.GL_COLOR_MATERIAL);
+        drawer2D.glEnable(GL2.GL_LIGHTING);
+        drawer2D.glEnable(GL2.GL_LIGHT0);
+        drawer2D.glEnable(GL2.GL_NORMALIZE);
+        drawer2D.glShadeModel(GL2.GL_SMOOTH);
+
         // Permite opacidade
         drawer2D.glEnable(GL4bc.GL_BLEND);
         drawer2D.glBlendFunc(GL4bc.GL_SRC_ALPHA, GL4bc.GL_ONE_MINUS_SRC_ALPHA);
@@ -68,31 +78,26 @@ public class Tela implements GLEventListener{
         drawer2D.glLoadIdentity(); // Limpa resto
         this.limparTela(); // Apaga elementos
 
-        // Verifica estado atual do jogo
-        switch(jogo.estado){
-            case INICIAL:
-                montarMenu();
-            break;
+        if(Main.DEBUG) montarMenuDebug();
+        else{
+            // Verifica estado atual do jogo
+            switch(jogo.estado){
+                case INICIAL:
+                break;
+            }
         }
-            
-        // Adiciona ponto vermelho central (DEBUG)
-        Quadrilatero pontoVermelho = new Quadrilatero()
-            .trocarCor(1, 0, 0, 1)
-            .redimensionarComponente(20, 20)
-            .centralizarComponente(true, true, true);
-        elementosTela.add(pontoVermelho);
 
-        // Adiciona modo de edição
-        Texto texto = new Texto("Modo de edição: "+modoEdicao);
-        texto.moverComponente(xMin + texto.largura / 2 + margem, yMin + texto.altura / 2 + margem, zPontoCentral);
-        elementosTela.add(texto);
+        // Adiciona luz no cenário
+        drawer2D.glLightfv(GL2.GL_LIGHT0, GL2.GL_DIFFUSE, new float[]{1f, 1f, 1f, 1}, 0);
+        drawer2D.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, new float[]{xPontoCentral, yPontoCentral, zMax, 1}, 0);
 
-        // Calcula posição da câmera (DEBUG)
+        // Calcula posição da câmera
         drawer2D.glTranslatef(posicaoCamera[0], posicaoCamera[1], posicaoCamera[2]);
         drawer2D.glRotatef(rotacaoCamera[1], 1, 0, 0);
         drawer2D.glRotatef(rotacaoCamera[0], 0, 1, 0);
         drawer2D.glRotatef(rotacaoCamera[2], 0, 0, 1);
-
+        drawer2D.glScalef(escalaCamera, escalaCamera, escalaCamera);
+        
         // Desenha elementos adicionados baseado no estado do jogo
         this.desenharTela();
 
@@ -131,29 +136,34 @@ public class Tela implements GLEventListener{
        
     public void dispose(GLAutoDrawable drawable) {}
 
-    private void montarMenu(){
+    private void montarMenuDebug(){
 
-        Texto texto = new Texto("Bem-vindo ao jogo de Pong!");
+        Texto texto = new Texto("Bem-vindo ao editor do jogo de Pong!");
         texto.moverComponente(texto.x, yMax - margem - texto.altura, texto.z)
             .centralizarComponente(false, true, true);
         
         Quadrilatero quadrado = new Quadrilatero()
-            .trocarCor(0, 1, 0, 0.5f)
-            .redimensionarComponente(300, 300)
+            .moverComponente(0, 0, zMax - 2)
+            .trocarCor(0, 1, 0, 1f)
+            .preencherComponente(false)
+            .redimensionarComponente(1000, 1000)
             .rotacionarComponente(0, 0, 45)
-            .centralizarComponente(true, true, true);
+            .centralizarComponente(true, true, false);
         
         Octagono octagono = new Octagono()
-            .trocarCor(1, 1, 0, 1)
-            .redimensionarComponente(200, 200)
-            .centralizarComponente(true, true, true);
-
-        Hexaedro hexaedro = new Hexaedro()
-            .trocarCor(1, 0, 1, 1)
-            .redimensionarComponente(400, 400, 400)
+            .moverComponente(0, 0, zMax - 2)
             .preencherComponente(false)
-            .rotacionarComponente(45, 45, 0)
-            .moverComponente(xPontoCentral, yPontoCentral - 100, zPontoCentral);
+            .trocarCor(1, 1, 0, 1)
+            .redimensionarComponente(900, 900)
+            .centralizarComponente(true, true, false);
+
+        if(anguloHexaedroDebug < 360) anguloHexaedroDebug++;
+        else anguloHexaedroDebug = 0;
+        Hexaedro hexaedro = new Hexaedro()
+            .trocarCor(1, 0, 1, 0.2f)
+            .redimensionarComponente(400, 400, 400)
+            .rotacionarComponente(anguloHexaedroDebug, anguloHexaedroDebug, anguloHexaedroDebug)
+            .centralizarComponente(true, true, true);
 
         Esfera esfera = new Esfera()
             .trocarCor(1, 0, 0, 1)
@@ -162,11 +172,29 @@ public class Tela implements GLEventListener{
             .centralizarComponente(true, true, true)
             .rotacionarComponente(0, 90, 0);
 
+        // Adiciona ponto vermelho central
+        Quadrilatero pontoVermelho = new Quadrilatero()
+            .trocarCor(1, 0, 0, 1)
+            .redimensionarComponente(20, 20)
+            .centralizarComponente(true, true, true);
+            
+        // Adiciona modo de edição
+        Texto textoModoEdicao = new Texto("Modo de edição: "+modoEdicao);
+        textoModoEdicao.moverComponente(xMin + textoModoEdicao.largura / 2 + margem, yMin + textoModoEdicao.altura / 2 + margem, zPontoCentral);
+        
+        // Adiciona escala
+        Texto textoEscala = new Texto("Escala: "+Math.round(escalaCamera * 100)+"%");
+        textoEscala.moverComponente(xMin + textoEscala.largura / 2 + margem, yMin + textoEscala.altura / 2 + margem + textoModoEdicao.altura, zPontoCentral);
+            
         elementosTela.add(texto);
+        elementosTela.add(textoModoEdicao);
+        elementosTela.add(textoEscala);
+        elementosTela.add(pontoVermelho);
         elementosTela.add(quadrado);
         elementosTela.add(octagono);
         elementosTela.add(hexaedro);
         elementosTela.add(esfera);
+        
     }
 
     private void desenharTela(){

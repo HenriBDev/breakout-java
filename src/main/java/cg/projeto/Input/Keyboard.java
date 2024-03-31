@@ -3,6 +3,7 @@ package cg.projeto.Input;
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.KeyListener;
 
+import cg.projeto.Main;
 import cg.projeto.Debug.ModoEdicao;
 import cg.projeto.UI.Tela;
 
@@ -14,57 +15,78 @@ public class Keyboard implements KeyListener{
 
         System.out.println("Key pressed: " + e.getKeyCode());
 
-        if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
-            System.exit(0);
+        switch(e.getKeyCode()){
 
-        // Setas
-        if(e.getKeyCode() == KeyEvent.VK_RIGHT){
-            switch(Tela.modoEdicao){
-                case MOVER:
-                    Tela.posicaoCamera[0]+=10;
-                break;
-                case ROTACIONAR:
-                    Tela.rotacaoCamera[0]+=1;
-                break;
-            }
-        }
-        if(e.getKeyCode() == KeyEvent.VK_LEFT){
-            switch(Tela.modoEdicao){
-                case MOVER:
-                    Tela.posicaoCamera[0]-=10;
-                break;
-                case ROTACIONAR:
-                    Tela.rotacaoCamera[0]-=1;
-                break;
-            }
-        }
-        if(e.getKeyCode() == KeyEvent.VK_UP){
-            switch(Tela.modoEdicao){
-                case MOVER:
-                    Tela.posicaoCamera[1]+=10;
-                break;
-                case ROTACIONAR:
-                    Tela.rotacaoCamera[1]+=1;
-                break;
-            }
-        }
-        if(e.getKeyCode() == KeyEvent.VK_DOWN){
-            switch(Tela.modoEdicao){
-                case MOVER:
-                    Tela.posicaoCamera[1]-=10;
-                break;
-                case ROTACIONAR:
-                    Tela.rotacaoCamera[1]-=1;
-                break;
-            }
-        }
+            case KeyEvent.VK_ESCAPE:
+                System.exit(0);
+            break;
 
-        // Debug
-        if(e.getKeyCode() == KeyEvent.VK_M)
-            if(Tela.modoEdicao != ModoEdicao.MOVER) Tela.modoEdicao = ModoEdicao.MOVER;
-        if(e.getKeyCode() == KeyEvent.VK_R)
-            if(Tela.modoEdicao != ModoEdicao.ROTACIONAR) Tela.modoEdicao = ModoEdicao.ROTACIONAR;
+            // Setas
+            case KeyEvent.VK_RIGHT:
+                if(Main.DEBUG){
+                    switch(Tela.modoEdicao){
+                        case MOVER:
+                            Tela.posicaoCamera[0]+=10;
+                        break;
+                        case ROTACIONAR:
+                            Tela.rotacaoCamera[0]+=1;
+                        break;
+                    }
+                }
+            break;
+            case KeyEvent.VK_LEFT:
+                if(Main.DEBUG){
+                    switch(Tela.modoEdicao){
+                        case MOVER:
+                            Tela.posicaoCamera[0]-=10;
+                        break;
+                        case ROTACIONAR:
+                            Tela.rotacaoCamera[0]-=1;
+                        break;
+                    }
+                }
+            break;
+            case KeyEvent.VK_UP:
+                if(Main.DEBUG){
+                    switch(Tela.modoEdicao){
+                        case MOVER:
+                            Tela.posicaoCamera[1]+=10;
+                        break;
+                        case ROTACIONAR:
+                            Tela.rotacaoCamera[1]+=1;
+                        break;
+                    }
+                }
+            break;
+            case KeyEvent.VK_DOWN:
+                if(Main.DEBUG){
+                    switch(Tela.modoEdicao){
+                        case MOVER:
+                            Tela.posicaoCamera[1]-=10;
+                        break;
+                        case ROTACIONAR:
+                            Tela.rotacaoCamera[1]-=1;
+                        break;
+                    }
+                }
+            break;
 
+            // Debug
+            case KeyEvent.VK_M:
+                if(Main.DEBUG){
+                    if(Tela.modoEdicao != ModoEdicao.MOVER){
+                        Tela.modoEdicao = ModoEdicao.MOVER;
+                    }
+                }
+            break;
+            case KeyEvent.VK_R:
+                if(Main.DEBUG){
+                    if(Tela.modoEdicao != ModoEdicao.ROTACIONAR) {
+                        Tela.modoEdicao = ModoEdicao.ROTACIONAR;
+                    }
+                }
+            break;
+        }
     }
 
     public void keyReleased(KeyEvent e) { }

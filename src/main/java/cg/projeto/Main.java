@@ -8,9 +8,12 @@ import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.util.FPSAnimator;
 
 import cg.projeto.Input.Keyboard;
+import cg.projeto.Input.Mouse;
 import cg.projeto.UI.Tela;
 
 public class Main {
+
+    public static boolean DEBUG = true;
     
     private static GLWindow window = null;
 
@@ -26,6 +29,7 @@ public class Main {
         // Adiciona a Cena na janela e os inputs
         window.addGLEventListener(new Tela()); 
         window.addKeyListener(new Keyboard());
+        window.addMouseListener(new Mouse());
         
         // window.requestFocus();
         FPSAnimator animator = new FPSAnimator(window, 60);
