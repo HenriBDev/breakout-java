@@ -1,9 +1,12 @@
 package cg.projeto.UI._2D.Componentes;
 
+import cg.projeto.UI.ComponenteBase;
 import cg.projeto.UI.Tela;
 
-public class Texto extends ComponenteBase2D<Texto> {
+public class Texto extends ComponenteBase<Texto> {
     
+    public float altura = 1;
+    public float largura = 1;
     public String conteudo = "";
 
     public Texto(String conteudo){ 

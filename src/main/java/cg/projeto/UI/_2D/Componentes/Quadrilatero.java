@@ -2,10 +2,13 @@ package cg.projeto.UI._2D.Componentes;
 
 import com.jogamp.opengl.GL2;
 
+import cg.projeto.UI.ComponenteBase;
 import cg.projeto.UI.Tela;
 
-public class Quadrilatero extends ComponenteBase2D<Quadrilatero> {
+public class Quadrilatero extends ComponenteBase<Quadrilatero> {
 
+    public float altura = 1;
+    public float largura = 1;
     public boolean preencher = true;
     public float espessuraBorda = 1;
 
