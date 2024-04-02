@@ -17,6 +17,7 @@ import cg.projeto.Utils;
 import cg.projeto.Debug.ModoEdicao;
 import cg.projeto.Game.Jogo;
 import cg.projeto.UI._2D.Componentes.Texto;
+import cg.projeto.UI._2D.Componentes.Circulo;
 import cg.projeto.UI._2D.Componentes.Octagono;
 import cg.projeto.UI._2D.Componentes.Quadrilatero;
 import cg.projeto.UI._3D.Componentes.Esfera;
@@ -30,14 +31,27 @@ public class Tela implements GLEventListener{
         xMin, xMax, xPontoCentral,
         yMin, yMax, yPontoCentral,
         zMin, zMax, zPontoCentral,
-        anguloHexaedroDebug = 0;
+        anguloHexaedroDebug = 0,
+        espacamentoTexto = 50;
     public static float[]
         rotacaoCamera = {0, 0, 0},
         posicaoCamera = {0, 0, 0};
+    public String[] textoInicial = {
+        "Bem-vindo ao jogo de pong!",
+        "Use A D ou < > para movimentar-se",
+        "Ou se preferir pode utilizar seu mouse",
+        "",
+        "Seu objetivo é acumular 500 pontos para avançar",
+        "para a próxima fase. Rebata a esfera e ganhe pontos",
+        "por cada rebatida. Mas cuidado com a pegadinha do malandro 👀...",
+        "(A bolinha fica mais rápida)",
+        "",
+        "Pressione enter para continuar."
+    };
     private final List<ComponenteBase> elementosTela = new ArrayList<ComponenteBase>(); 
 
     // Conteúdo do jogo
-    public final Jogo jogo = new Jogo();
+    public static Jogo jogo = new Jogo();
 
     // Renderizadores
     public static GL2 drawer2D;
@@ -68,6 +82,9 @@ public class Tela implements GLEventListener{
         // Permite opacidade
         drawer2D.glEnable(GL4bc.GL_BLEND);
         drawer2D.glBlendFunc(GL4bc.GL_SRC_ALPHA, GL4bc.GL_ONE_MINUS_SRC_ALPHA);
+
+        // Instancia jogo
+        jogo = new Jogo();
     }
 
     public void display(GLAutoDrawable drawable) {
@@ -82,7 +99,47 @@ public class Tela implements GLEventListener{
         else{
             // Verifica estado atual do jogo
             switch(jogo.estado){
+
                 case INICIAL:
+
+                    // Desenha instruções na tela
+                    float posYAtual = yMax - margem;
+                    for(int i = 0; i < textoInicial.length; i++){
+                        Texto linhaTela = new Texto(textoInicial[i]);
+                        posYAtual -= linhaTela.altura + margem;
+                        linhaTela.centralizarComponente(false, true, false)
+                            .moverComponente(linhaTela.x, posYAtual, linhaTela.z);
+                        this.elementosTela.add(linhaTela);
+                    }
+
+                    posYAtual -= margem * 2;
+
+                    // Desenha "simulação" do jogo
+                    Quadrilatero campo = new Quadrilatero()
+                        .redimensionarComponente(750, 750)
+                        .centralizarComponente(false, false, false)
+                        .preencherComponente(false);
+                    campo.moverComponente(campo.x, posYAtual - campo.altura / 2, campo.z);
+                    this.elementosTela.add(campo);
+
+                    Quadrilatero bastao = new Quadrilatero()
+                        .redimensionarComponente(225, 75)
+                        .centralizarComponente(false, true, false);
+                    bastao.moverComponente(bastao.x, posYAtual - campo.altura + 11 + bastao.altura / 2, bastao.z);
+                    this.elementosTela.add(bastao);
+
+                    Circulo bolinha = new Circulo().redimensionarComponente(50);
+                    bolinha.moverComponente(campo.x + campo.largura / 3, campo.y , bolinha.z);
+                    this.elementosTela.add(bolinha);
+
+                break;
+
+                case JOGANDO:
+                    
+                    System.out.println(jogo.bastao.elemento.x + " " + jogo.bastao.elemento.y);
+                    this.elementosTela.add(jogo.bastao.elemento);
+                    this.elementosTela.add(jogo.bola.elemento);
+
                 break;
             }
         }

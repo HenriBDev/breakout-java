@@ -7,13 +7,13 @@ import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.util.FPSAnimator;
 
-import cg.projeto.Input.Keyboard;
-import cg.projeto.Input.Mouse;
+import cg.projeto.Events.Keyboard;
+import cg.projeto.Events.Mouse;
 import cg.projeto.UI.Tela;
 
 public class Main {
 
-    public static boolean DEBUG = true;
+    public static boolean DEBUG = false;
     
     private static GLWindow window = null;
 
@@ -45,8 +45,7 @@ public class Main {
         });       
         
         window.setTitle("Pong maneiro fi");
-        window.setSize(900, 900);    
-        // window.setFullscreen(true);    
+        window.setFullscreen(true);    
         window.setVisible(true);
 
     }
