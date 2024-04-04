@@ -27,7 +27,7 @@ public class Texto extends ComponenteBase<Texto> {
 
         Tela.textRenderer.begin3DRendering();
         Tela.textRenderer.setColor(this.cor[0], this.cor[1], this.cor[2], this.cor[3]);
-        Tela.textRenderer.draw3D(this.conteudo, Tela.xPontoCentral - this.largura / 2, Tela.yPontoCentral - this.altura / 2, Tela.zPontoCentral, 1);
+        Tela.textRenderer.draw3D(this.conteudo, 0 - this.largura / 2, 0 - this.altura / 2, 0, 1);
         Tela.textRenderer.end3DRendering();
 
         Tela.drawer2D.glPopMatrix();

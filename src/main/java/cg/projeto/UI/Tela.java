@@ -1,6 +1,8 @@
 package cg.projeto.UI;
 
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +29,7 @@ public class Tela implements GLEventListener{
 
     // Elementos UI
     public static float
-        limiteSRU = 1000, margem = 50, escalaCamera = 1,
+        limiteZ = 1000, margem = 50, escalaCamera = 1,
         xMin, xMax, xPontoCentral,
         yMin, yMax, yPontoCentral,
         zMin, zMax, zPontoCentral,
@@ -64,9 +66,19 @@ public class Tela implements GLEventListener{
     public void init(GLAutoDrawable drawable) {
 
         //Estabelece as coordenadas do SRU (Sistema de Referencia do Universo)
-        xMax = yMax = zMax = limiteSRU;
-        xMin = yMin = zMin = limiteSRU * -1;
-        xPontoCentral = yPontoCentral = zPontoCentral = Utils.mediana(limiteSRU * -1, limiteSRU);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        float width = (float) screenSize.getWidth();
+        float height = (float) screenSize.getHeight();
+
+        xMin = width * -1;
+        xMax = width;
+        yMin = height * -1;
+        yMax = height;
+        zMin = limiteZ * -1;
+        zMax = limiteZ;
+        xPontoCentral = Utils.mediana(xMin, xMax);
+        yPontoCentral = Utils.mediana(yMin, yMax);
+        zPontoCentral = Utils.mediana(zMin, zMax);
         
         // Configura renderizador
         drawer2D = drawable.getGL().getGL2();
@@ -95,7 +107,9 @@ public class Tela implements GLEventListener{
         drawer2D.glLoadIdentity(); // Limpa resto
         this.limparTela(); // Apaga elementos
 
-        if(Main.DEBUG) montarMenuDebug();
+        if(Main.DEBUG) {
+            montarMenuDebug();
+        }
         else{
             // Verifica estado atual do jogo
             switch(jogo.estado){
@@ -136,7 +150,6 @@ public class Tela implements GLEventListener{
 
                 case JOGANDO:
                     
-                    System.out.println(jogo.bastao.elemento.x + " " + jogo.bastao.elemento.y);
                     this.elementosTela.add(jogo.bastao.elemento);
                     this.elementosTela.add(jogo.bola.elemento);
 

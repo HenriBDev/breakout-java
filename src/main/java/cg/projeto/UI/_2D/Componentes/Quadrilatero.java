@@ -43,10 +43,10 @@ public class Quadrilatero extends ComponenteBase<Quadrilatero> {
         Tela.drawer2D.glRotatef(this.rotacao[2], 0, 0, 1);
 
         Tela.drawer2D.glBegin(preencher ? GL2.GL_QUADS : GL2.GL_LINE_LOOP);
-        Tela.drawer2D.glVertex3f(Tela.xPontoCentral - this.largura / 2, Tela.yPontoCentral - this.altura / 2, Tela.zPontoCentral);
-        Tela.drawer2D.glVertex3f(Tela.xPontoCentral + this.largura / 2, Tela.yPontoCentral - this.altura / 2, Tela.zPontoCentral);
-        Tela.drawer2D.glVertex3f(Tela.xPontoCentral + this.largura / 2, Tela.yPontoCentral + this.altura / 2, Tela.zPontoCentral);
-        Tela.drawer2D.glVertex3f(Tela.xPontoCentral - this.largura / 2, Tela.yPontoCentral + this.altura / 2, Tela.zPontoCentral);
+        Tela.drawer2D.glVertex3f(0 - this.largura / 2, 0 - this.altura / 2, 0);
+        Tela.drawer2D.glVertex3f(this.largura / 2, 0 - this.altura / 2, 0);
+        Tela.drawer2D.glVertex3f(this.largura / 2, this.altura / 2, 0);
+        Tela.drawer2D.glVertex3f(0 - this.largura / 2, this.altura / 2, 0);
         Tela.drawer2D.glEnd();
 
         Tela.drawer2D.glPopMatrix();

@@ -45,14 +45,14 @@ public class Octagono extends ComponenteBase<Octagono> {
         Tela.drawer2D.glRotatef(this.rotacao[2], 0, 0, 1);
 
         Tela.drawer2D.glBegin(preencher ? GL2.GL_POLYGON : GL2.GL_LINE_LOOP);
-        Tela.drawer2D.glVertex3f(Tela.xPontoCentral - this.largura / 2 + tercoDaLargura, Tela.yPontoCentral - this.altura / 2, Tela.zPontoCentral);
-        Tela.drawer2D.glVertex3f(Tela.xPontoCentral - this.largura / 2, Tela.yPontoCentral - this.altura / 2 + tercoDaAltura, Tela.zPontoCentral);
-        Tela.drawer2D.glVertex3f(Tela.xPontoCentral - this.largura / 2, Tela.yPontoCentral - this.altura / 2 + tercoDaAltura * 2, Tela.zPontoCentral);
-        Tela.drawer2D.glVertex3f(Tela.xPontoCentral - this.largura / 2 + tercoDaLargura, Tela.yPontoCentral - this.altura / 2 + tercoDaAltura * 3, Tela.zPontoCentral);
-        Tela.drawer2D.glVertex3f(Tela.xPontoCentral - this.largura / 2 + tercoDaLargura * 2, Tela.yPontoCentral - this.altura / 2 + tercoDaAltura * 3, Tela.zPontoCentral);
-        Tela.drawer2D.glVertex3f(Tela.xPontoCentral - this.largura / 2 + tercoDaLargura * 3, Tela.yPontoCentral - this.altura / 2 + tercoDaAltura * 2, Tela.zPontoCentral);
-        Tela.drawer2D.glVertex3f(Tela.xPontoCentral - this.largura / 2 + tercoDaLargura * 3, Tela.yPontoCentral - this.altura / 2 + tercoDaAltura, Tela.zPontoCentral);
-        Tela.drawer2D.glVertex3f(Tela.xPontoCentral - this.largura / 2 + tercoDaLargura * 2, Tela.yPontoCentral - this.altura / 2, Tela.zPontoCentral);
+        Tela.drawer2D.glVertex3f(0 - this.largura / 2 + tercoDaLargura, 0 - this.altura / 2, 0);
+        Tela.drawer2D.glVertex3f(0 - this.largura / 2, 0 - this.altura / 2 + tercoDaAltura, 0);
+        Tela.drawer2D.glVertex3f(0 - this.largura / 2, 0 - this.altura / 2 + tercoDaAltura * 2, 0);
+        Tela.drawer2D.glVertex3f(0 - this.largura / 2 + tercoDaLargura, 0 - this.altura / 2 + tercoDaAltura * 3, 0);
+        Tela.drawer2D.glVertex3f(0 - this.largura / 2 + tercoDaLargura * 2, 0 - this.altura / 2 + tercoDaAltura * 3, 0);
+        Tela.drawer2D.glVertex3f(0 - this.largura / 2 + tercoDaLargura * 3, 0 - this.altura / 2 + tercoDaAltura * 2, 0);
+        Tela.drawer2D.glVertex3f(0 - this.largura / 2 + tercoDaLargura * 3, 0 - this.altura / 2 + tercoDaAltura, 0);
+        Tela.drawer2D.glVertex3f(0 - this.largura / 2 + tercoDaLargura * 2, 0 - this.altura / 2, 0);
         Tela.drawer2D.glEnd();
 
         Tela.drawer2D.glPopMatrix();
