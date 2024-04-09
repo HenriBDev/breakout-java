@@ -1,6 +1,8 @@
 package cg.projeto.UI;
 
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +18,9 @@ import cg.projeto.Main;
 import cg.projeto.Utils;
 import cg.projeto.Debug.ModoEdicao;
 import cg.projeto.Game.Jogo;
+import cg.projeto.Game.Estados.EstadosBola;
 import cg.projeto.UI._2D.Componentes.Texto;
+import cg.projeto.UI._2D.Componentes.Circulo;
 import cg.projeto.UI._2D.Componentes.Octagono;
 import cg.projeto.UI._2D.Componentes.Quadrilatero;
 import cg.projeto.UI._3D.Componentes.Esfera;
@@ -26,18 +30,32 @@ public class Tela implements GLEventListener{
 
     // Elementos UI
     public static float
-        limiteSRU = 1000, margem = 50, escalaCamera = 1,
+        limiteZ = 1000, margem = 25, escalaCamera = 1,
         xMin, xMax, xPontoCentral,
         yMin, yMax, yPontoCentral,
         zMin, zMax, zPontoCentral,
-        anguloHexaedroDebug = 0;
+        anguloHexaedroDebug = 0,
+        espacamentoTexto = 25,
+        screenWidth = 0, screenHeight = 0;
     public static float[]
         rotacaoCamera = {0, 0, 0},
         posicaoCamera = {0, 0, 0};
+    public String[] textoInicial = {
+        "Bem-vindo ao jogo de pong!",
+        "Use A D ou < > para movimentar-se",
+        "Ou se preferir pode utilizar seu mouse",
+        "",
+        "Seu objetivo é acumular 500 pontos para avançar",
+        "para a próxima fase. Rebata a esfera e ganhe pontos",
+        "por cada rebatida. Mas cuidado com a pegadinha do malandro 👀...",
+        "(A bolinha fica mais rápida)",
+        "",
+        "Pressione enter para continuar."
+    };
     private final List<ComponenteBase> elementosTela = new ArrayList<ComponenteBase>(); 
 
     // Conteúdo do jogo
-    public final Jogo jogo = new Jogo();
+    public static Jogo jogo = new Jogo();
 
     // Renderizadores
     public static GL2 drawer2D;
@@ -50,9 +68,19 @@ public class Tela implements GLEventListener{
     public void init(GLAutoDrawable drawable) {
 
         //Estabelece as coordenadas do SRU (Sistema de Referencia do Universo)
-        xMax = yMax = zMax = limiteSRU;
-        xMin = yMin = zMin = limiteSRU * -1;
-        xPontoCentral = yPontoCentral = zPontoCentral = Utils.mediana(limiteSRU * -1, limiteSRU);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        screenWidth = (float) screenSize.getWidth();
+        screenHeight = (float) screenSize.getHeight();
+
+        xMin = screenWidth/2 * -1;
+        xMax = screenWidth/2;
+        yMin = screenHeight/2 * -1;
+        yMax = screenHeight/2;
+        zMin = limiteZ * -1;
+        zMax = limiteZ;
+        xPontoCentral = Utils.mediana(xMin, xMax);
+        yPontoCentral = Utils.mediana(yMin, yMax);
+        zPontoCentral = Utils.mediana(zMin, zMax);
         
         // Configura renderizador
         drawer2D = drawable.getGL().getGL2();
@@ -68,6 +96,9 @@ public class Tela implements GLEventListener{
         // Permite opacidade
         drawer2D.glEnable(GL4bc.GL_BLEND);
         drawer2D.glBlendFunc(GL4bc.GL_SRC_ALPHA, GL4bc.GL_ONE_MINUS_SRC_ALPHA);
+
+        // Instancia jogo
+        jogo = new Jogo();
     }
 
     public void display(GLAutoDrawable drawable) {
@@ -78,11 +109,69 @@ public class Tela implements GLEventListener{
         drawer2D.glLoadIdentity(); // Limpa resto
         this.limparTela(); // Apaga elementos
 
-        if(Main.DEBUG) montarMenuDebug();
+        if(Main.DEBUG) {
+            montarMenuDebug();
+        }
         else{
             // Verifica estado atual do jogo
             switch(jogo.estado){
+
                 case INICIAL:
+
+                    // Desenha instruções na tela
+                    float posYAtual = yMax - margem;
+                    for(int i = 0; i < textoInicial.length; i++){
+                        Texto linhaTela = new Texto(textoInicial[i]);
+                        posYAtual -= linhaTela.altura + margem;
+                        linhaTela.centralizarComponente(false, true, false)
+                            .moverComponente(linhaTela.x, posYAtual, linhaTela.z);
+                        this.elementosTela.add(linhaTela);
+                    }
+
+                    posYAtual -= margem * 2;
+
+                    // Desenha "simulação" do jogo
+                    Quadrilatero campo = new Quadrilatero()
+                        .redimensionarComponente(200, 200)
+                        .centralizarComponente(false, false, false)
+                        .preencherComponente(false);
+                    campo.moverComponente(campo.x, posYAtual - campo.altura / 2, campo.z);
+                    this.elementosTela.add(campo);
+
+                    Quadrilatero bastao = new Quadrilatero()
+                        .redimensionarComponente(112.5f, 37.5f)
+                        .centralizarComponente(false, true, false);
+                    bastao.moverComponente(bastao.x, posYAtual - campo.altura + 11 + bastao.altura / 2, bastao.z);
+                    this.elementosTela.add(bastao);
+
+                    Circulo bolinha = new Circulo().redimensionarComponente(20);
+                    bolinha.moverComponente(campo.x + campo.largura / 3, campo.y , bolinha.z);
+                    this.elementosTela.add(bolinha);
+
+                break;
+
+                case JOGANDO:
+                    
+                    if(jogo.bola.estado == EstadosBola.MOVENDO){
+                        float novaPosicaoBolaX = jogo.bola.elemento.x + 1 * jogo.bola.direcaoMovimentacaoX * jogo.bola.velocidadeMovimento;
+                        float novaPosicaoBolaY = jogo.bola.elemento.y + 1 * jogo.bola.direcaoMovimentacaoY * jogo.bola.velocidadeMovimento;
+                        if(novaPosicaoBolaX + jogo.bola.elemento.raio > xMax || novaPosicaoBolaX + jogo.bola.elemento.raio < xMin){
+                            jogo.bola.direcaoMovimentacaoX *= -1;
+                            jogo.bola.velocidadeMovimento+=0.5f;
+                        }
+                        if(novaPosicaoBolaY + jogo.bola.elemento.raio > yMax || novaPosicaoBolaY + jogo.bola.elemento.raio < yMin){
+                            jogo.bola.direcaoMovimentacaoY *= -1;
+                            jogo.bola.velocidadeMovimento+=0.5f;
+                        }
+                        jogo.bola.elemento.moverComponente(
+                            novaPosicaoBolaX, 
+                            novaPosicaoBolaY,  
+                            jogo.bola.elemento.z
+                        );
+                    }
+                    this.elementosTela.add(jogo.bastao.elemento);
+                    this.elementosTela.add(jogo.bola.elemento);
+
                 break;
             }
         }
@@ -110,12 +199,9 @@ public class Tela implements GLEventListener{
         // Evita a divisão por zero
         if(height == 0) height = 1;
         
-        // Calcula a proporção da janela (aspect ratio) da nova janela
-        float aspect = (float) width / height;
-        
         // Seta o viewport para abranger a janela inteira
         drawer2D.glViewport(0, 0, width, height);
-                
+        
         // Ativa a matriz de projeção
         drawer2D.glMatrixMode(GL2.GL_PROJECTION);      
         drawer2D.glLoadIdentity(); // lê a matriz identidade
@@ -123,10 +209,7 @@ public class Tela implements GLEventListener{
         // Projeção ortogonal
         // true:   aspect >= 1 configura a altura de -1 para 1 : com largura maior
         // false:  aspect < 1 configura a largura de -1 para 1 : com altura maior
-        if(width >= height)            
-            drawer2D.glOrtho(xMin * aspect, xMax * aspect, yMin, yMax, zMin, zMax);
-        else        
-            drawer2D.glOrtho(xMin, xMax, yMin / aspect, yMax / aspect, zMin, zMax);
+        drawer2D.glOrtho(xMin, xMax, yMin, yMax, zMin, zMax);
                 
         // Ativa a matriz de modelagem
         drawer2D.glMatrixMode(GL2.GL_MODELVIEW);
@@ -146,7 +229,7 @@ public class Tela implements GLEventListener{
             .moverComponente(0, 0, zMax - 2)
             .trocarCor(0, 1, 0, 1f)
             .preencherComponente(false)
-            .redimensionarComponente(1000, 1000)
+            .redimensionarComponente(500, 500)
             .rotacionarComponente(0, 0, 45)
             .centralizarComponente(true, true, false);
         
@@ -154,20 +237,20 @@ public class Tela implements GLEventListener{
             .moverComponente(0, 0, zMax - 2)
             .preencherComponente(false)
             .trocarCor(1, 1, 0, 1)
-            .redimensionarComponente(900, 900)
+            .redimensionarComponente(450, 450)
             .centralizarComponente(true, true, false);
 
         if(anguloHexaedroDebug < 360) anguloHexaedroDebug++;
         else anguloHexaedroDebug = 0;
         Hexaedro hexaedro = new Hexaedro()
             .trocarCor(1, 0, 1, 0.2f)
-            .redimensionarComponente(400, 400, 400)
+            .redimensionarComponente(200, 200, 200)
             .rotacionarComponente(anguloHexaedroDebug, anguloHexaedroDebug, anguloHexaedroDebug)
             .centralizarComponente(true, true, true);
 
         Esfera esfera = new Esfera()
             .trocarCor(1, 0, 0, 1)
-            .redimensionarComponente(150)
+            .redimensionarComponente(75)
             .preencherComponente(false)
             .centralizarComponente(true, true, true)
             .rotacionarComponente(0, 90, 0);
@@ -175,7 +258,7 @@ public class Tela implements GLEventListener{
         // Adiciona ponto vermelho central
         Quadrilatero pontoVermelho = new Quadrilatero()
             .trocarCor(1, 0, 0, 1)
-            .redimensionarComponente(20, 20)
+            .redimensionarComponente(10, 10)
             .centralizarComponente(true, true, true);
             
         // Adiciona modo de edição

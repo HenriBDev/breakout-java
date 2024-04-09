@@ -42,7 +42,7 @@ public class Circulo extends ComponenteBase<Circulo> {
 
         Tela.drawer2D.glBegin(preencher ? GL2.GL_POLYGON : GL2.GL_LINE_LOOP);
         for(float i = 0; i < 2 * Math.PI; i += 0.01){
-            Tela.drawer2D.glVertex3f((float)(Tela.xPontoCentral + this.raio * Math.cos(i)), (float)(Tela.yPontoCentral + this.raio * Math.sin(i)), Tela.zPontoCentral);
+            Tela.drawer2D.glVertex3f((float)(this.raio * Math.cos(i)), (float)(this.raio * Math.sin(i)), 0);
         }
         Tela.drawer2D.glEnd();
 

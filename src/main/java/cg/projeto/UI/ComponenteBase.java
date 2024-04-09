@@ -34,9 +34,9 @@ public abstract class ComponenteBase<tipoComponente> {
 
     public tipoComponente centralizarComponente(boolean vertical, boolean horizontal, boolean eixoZ){
         return this.moverComponente(
-            horizontal ? Tela.xMin + Math.abs(Tela.xMax - Tela.xMin) / 2 : this.x, 
-            vertical ? Tela.yMin + Math.abs(Tela.yMax - Tela.yMin) / 2 : this.y,
-            eixoZ ? Tela.zMin + Math.abs(Tela.zMax - Tela.zMin) / 2 : this.z
+            horizontal ? Tela.xPontoCentral : this.x, 
+            vertical ? Tela.yPontoCentral : this.y,
+            eixoZ ? Tela.zPontoCentral : this.z
         );
     }
 

@@ -1,10 +1,11 @@
-package cg.projeto.Input;
+package cg.projeto.Events;
 
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.KeyListener;
 
 import cg.projeto.Main;
 import cg.projeto.Debug.ModoEdicao;
+import cg.projeto.Game.Estados.EstadosJogo;
 import cg.projeto.UI.Tela;
 
 public class Keyboard implements KeyListener{
@@ -84,6 +85,13 @@ public class Keyboard implements KeyListener{
                     if(Tela.modoEdicao != ModoEdicao.ROTACIONAR) {
                         Tela.modoEdicao = ModoEdicao.ROTACIONAR;
                     }
+                }
+            break;
+
+            // Jogo
+            case KeyEvent.VK_ENTER:
+                if(!(Main.DEBUG) && Tela.jogo.estado == EstadosJogo.INICIAL){
+                    Tela.jogo.mudarEstado(EstadosJogo.JOGANDO);
                 }
             break;
         }

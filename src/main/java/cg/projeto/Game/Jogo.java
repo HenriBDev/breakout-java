@@ -1,20 +1,27 @@
 package cg.projeto.Game;
 
+import cg.projeto.Game.Estados.EstadosJogo;
+import cg.projeto.UI.Tela;
+
 public class Jogo {
     
-    public Estado estado;
-    public int vidas;
-    public int pontuacao;
-    public int fase;
+    public EstadosJogo estado = EstadosJogo.INICIAL;
+    public int vidas = 5;
+    public int pontuacao = 0;
+    public int fase = 1;
+    public Bastao bastao = new Bastao();
+    public Bola bola = new Bola();
 
     public Jogo(){
-        this.estado = Estado.INICIAL;
-        this.vidas = 5;
-        this.pontuacao = 0;
-        this.fase = 1;
+        this.bastao.elemento.centralizarComponente(false, true, true)
+            .redimensionarComponente(200, 50, 50);
+        this.bastao.elemento.moverComponente(this.bastao.elemento.x, Tela.yMin + Tela.margem + this.bastao.elemento.altura / 2, this.bastao.elemento.z);
+        this.bola.elemento.centralizarComponente(false, true, true)
+            .redimensionarComponente(25);
+        this.bola.elemento.moverComponente(this.bola.elemento.x, this.bastao.elemento.y + this.bastao.elemento.altura / 2 + this.bola.elemento.raio, this.bola.elemento.z);
     }
 
-    public void mudarEstado(Estado novoEstado){
+    public void mudarEstado(EstadosJogo novoEstado){
         this.estado = novoEstado;
     }
 
