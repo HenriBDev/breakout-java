@@ -13,9 +13,9 @@ import cg.projeto.UI.Tela;
 
 public class Main {
 
-    public static boolean DEBUG = true;
+    public static boolean DEBUG = false;
     
-    private static GLWindow window = null;
+    public static GLWindow window = null;
 
     //Cria a janela de rendeziração do JOGL
     public static void init(){
@@ -46,6 +46,7 @@ public class Main {
         
         window.setTitle("Pong maneiro fi");
         window.setFullscreen(true);
+        window.setPointerVisible(false);
         window.setVisible(true);
 
     }

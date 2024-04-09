@@ -18,6 +18,7 @@ import cg.projeto.Main;
 import cg.projeto.Utils;
 import cg.projeto.Debug.ModoEdicao;
 import cg.projeto.Game.Jogo;
+import cg.projeto.Game.Estados.EstadosBola;
 import cg.projeto.UI._2D.Componentes.Texto;
 import cg.projeto.UI._2D.Componentes.Circulo;
 import cg.projeto.UI._2D.Componentes.Octagono;
@@ -29,12 +30,13 @@ public class Tela implements GLEventListener{
 
     // Elementos UI
     public static float
-        limiteZ = 1000, margem = 50, escalaCamera = 1,
+        limiteZ = 1000, margem = 25, escalaCamera = 1,
         xMin, xMax, xPontoCentral,
         yMin, yMax, yPontoCentral,
         zMin, zMax, zPontoCentral,
         anguloHexaedroDebug = 0,
-        espacamentoTexto = 50;
+        espacamentoTexto = 25,
+        screenWidth = 0, screenHeight = 0;
     public static float[]
         rotacaoCamera = {0, 0, 0},
         posicaoCamera = {0, 0, 0};
@@ -67,13 +69,13 @@ public class Tela implements GLEventListener{
 
         //Estabelece as coordenadas do SRU (Sistema de Referencia do Universo)
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        float width = (float) screenSize.getWidth();
-        float height = (float) screenSize.getHeight();
+        screenWidth = (float) screenSize.getWidth();
+        screenHeight = (float) screenSize.getHeight();
 
-        xMin = width * -1;
-        xMax = width;
-        yMin = height * -1;
-        yMax = height;
+        xMin = screenWidth/2 * -1;
+        xMax = screenWidth/2;
+        yMin = screenHeight/2 * -1;
+        yMax = screenHeight/2;
         zMin = limiteZ * -1;
         zMax = limiteZ;
         xPontoCentral = Utils.mediana(xMin, xMax);
@@ -130,19 +132,19 @@ public class Tela implements GLEventListener{
 
                     // Desenha "simulação" do jogo
                     Quadrilatero campo = new Quadrilatero()
-                        .redimensionarComponente(750, 750)
+                        .redimensionarComponente(200, 200)
                         .centralizarComponente(false, false, false)
                         .preencherComponente(false);
                     campo.moverComponente(campo.x, posYAtual - campo.altura / 2, campo.z);
                     this.elementosTela.add(campo);
 
                     Quadrilatero bastao = new Quadrilatero()
-                        .redimensionarComponente(225, 75)
+                        .redimensionarComponente(112.5f, 37.5f)
                         .centralizarComponente(false, true, false);
                     bastao.moverComponente(bastao.x, posYAtual - campo.altura + 11 + bastao.altura / 2, bastao.z);
                     this.elementosTela.add(bastao);
 
-                    Circulo bolinha = new Circulo().redimensionarComponente(50);
+                    Circulo bolinha = new Circulo().redimensionarComponente(20);
                     bolinha.moverComponente(campo.x + campo.largura / 3, campo.y , bolinha.z);
                     this.elementosTela.add(bolinha);
 
@@ -150,6 +152,23 @@ public class Tela implements GLEventListener{
 
                 case JOGANDO:
                     
+                    if(jogo.bola.estado == EstadosBola.MOVENDO){
+                        float novaPosicaoBolaX = jogo.bola.elemento.x + 1 * jogo.bola.direcaoMovimentacaoX * jogo.bola.velocidadeMovimento;
+                        float novaPosicaoBolaY = jogo.bola.elemento.y + 1 * jogo.bola.direcaoMovimentacaoY * jogo.bola.velocidadeMovimento;
+                        if(novaPosicaoBolaX + jogo.bola.elemento.raio > xMax || novaPosicaoBolaX + jogo.bola.elemento.raio < xMin){
+                            jogo.bola.direcaoMovimentacaoX *= -1;
+                            jogo.bola.velocidadeMovimento+=0.5f;
+                        }
+                        if(novaPosicaoBolaY + jogo.bola.elemento.raio > yMax || novaPosicaoBolaY + jogo.bola.elemento.raio < yMin){
+                            jogo.bola.direcaoMovimentacaoY *= -1;
+                            jogo.bola.velocidadeMovimento+=0.5f;
+                        }
+                        jogo.bola.elemento.moverComponente(
+                            novaPosicaoBolaX, 
+                            novaPosicaoBolaY,  
+                            jogo.bola.elemento.z
+                        );
+                    }
                     this.elementosTela.add(jogo.bastao.elemento);
                     this.elementosTela.add(jogo.bola.elemento);
 
@@ -180,12 +199,9 @@ public class Tela implements GLEventListener{
         // Evita a divisão por zero
         if(height == 0) height = 1;
         
-        // Calcula a proporção da janela (aspect ratio) da nova janela
-        float aspect = (float) width / height;
-        
         // Seta o viewport para abranger a janela inteira
         drawer2D.glViewport(0, 0, width, height);
-                
+        
         // Ativa a matriz de projeção
         drawer2D.glMatrixMode(GL2.GL_PROJECTION);      
         drawer2D.glLoadIdentity(); // lê a matriz identidade
@@ -193,10 +209,7 @@ public class Tela implements GLEventListener{
         // Projeção ortogonal
         // true:   aspect >= 1 configura a altura de -1 para 1 : com largura maior
         // false:  aspect < 1 configura a largura de -1 para 1 : com altura maior
-        if(width >= height)            
-            drawer2D.glOrtho(xMin * aspect, xMax * aspect, yMin, yMax, zMin, zMax);
-        else        
-            drawer2D.glOrtho(xMin, xMax, yMin / aspect, yMax / aspect, zMin, zMax);
+        drawer2D.glOrtho(xMin, xMax, yMin, yMax, zMin, zMax);
                 
         // Ativa a matriz de modelagem
         drawer2D.glMatrixMode(GL2.GL_MODELVIEW);
@@ -216,7 +229,7 @@ public class Tela implements GLEventListener{
             .moverComponente(0, 0, zMax - 2)
             .trocarCor(0, 1, 0, 1f)
             .preencherComponente(false)
-            .redimensionarComponente(1000, 1000)
+            .redimensionarComponente(500, 500)
             .rotacionarComponente(0, 0, 45)
             .centralizarComponente(true, true, false);
         
@@ -224,20 +237,20 @@ public class Tela implements GLEventListener{
             .moverComponente(0, 0, zMax - 2)
             .preencherComponente(false)
             .trocarCor(1, 1, 0, 1)
-            .redimensionarComponente(900, 900)
+            .redimensionarComponente(450, 450)
             .centralizarComponente(true, true, false);
 
         if(anguloHexaedroDebug < 360) anguloHexaedroDebug++;
         else anguloHexaedroDebug = 0;
         Hexaedro hexaedro = new Hexaedro()
             .trocarCor(1, 0, 1, 0.2f)
-            .redimensionarComponente(400, 400, 400)
+            .redimensionarComponente(200, 200, 200)
             .rotacionarComponente(anguloHexaedroDebug, anguloHexaedroDebug, anguloHexaedroDebug)
             .centralizarComponente(true, true, true);
 
         Esfera esfera = new Esfera()
             .trocarCor(1, 0, 0, 1)
-            .redimensionarComponente(150)
+            .redimensionarComponente(75)
             .preencherComponente(false)
             .centralizarComponente(true, true, true)
             .rotacionarComponente(0, 90, 0);
@@ -245,7 +258,7 @@ public class Tela implements GLEventListener{
         // Adiciona ponto vermelho central
         Quadrilatero pontoVermelho = new Quadrilatero()
             .trocarCor(1, 0, 0, 1)
-            .redimensionarComponente(20, 20)
+            .redimensionarComponente(10, 10)
             .centralizarComponente(true, true, true);
             
         // Adiciona modo de edição

@@ -14,10 +14,10 @@ public class Jogo {
 
     public Jogo(){
         this.bastao.elemento.centralizarComponente(false, true, true)
-            .redimensionarComponente(400, 100, 100);
+            .redimensionarComponente(200, 50, 50);
         this.bastao.elemento.moverComponente(this.bastao.elemento.x, Tela.yMin + Tela.margem + this.bastao.elemento.altura / 2, this.bastao.elemento.z);
         this.bola.elemento.centralizarComponente(false, true, true)
-            .redimensionarComponente(50);
+            .redimensionarComponente(25);
         this.bola.elemento.moverComponente(this.bola.elemento.x, this.bastao.elemento.y + this.bastao.elemento.altura / 2 + this.bola.elemento.raio, this.bola.elemento.z);
     }
 
