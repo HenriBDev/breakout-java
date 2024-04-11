@@ -37,7 +37,7 @@ public class Mouse implements MouseListener{
 
     public void mouseMoved(MouseEvent e){
 
-        if(!(Main.DEBUG) && Tela.jogo.estado == EstadosJogo.JOGANDO){
+        if(!(Main.DEBUG) && Tela.jogo.estado == EstadosJogo.JOGANDO && Tela.jogo.bola.estado == EstadosBola.MOVENDO){
             float distanciaBolaBastaoX = Tela.jogo.bastao.elemento.x - Tela.jogo.bola.elemento.x;
             float posicaoBastaoX;
             if(e.getX() - Tela.screenWidth/2 + Tela.jogo.bastao.elemento.largura/2 >= Tela.screenWidth/2){
@@ -53,7 +53,6 @@ public class Mouse implements MouseListener{
             if(Tela.jogo.bola.estado == EstadosBola.PARADA){
                 Tela.jogo.bola.elemento.moverComponente(posicaoBastaoX + distanciaBolaBastaoX, Tela.jogo.bola.elemento.y, Tela.jogo.bola.elemento.z);
             }
-            System.out.println(Tela.jogo.bastao.elemento.x);
         }
 
     }
