@@ -13,12 +13,9 @@ public class Jogo {
     public Bola bola = new Bola();
 
     public Jogo(){
-        this.bastao.elemento.centralizarComponente(false, true, true)
-            .redimensionarComponente(200, 50, 50);
-        this.bastao.elemento.moverComponente(this.bastao.elemento.x, Tela.yMin + Tela.margem + this.bastao.elemento.altura / 2, this.bastao.elemento.z);
-        this.bola.elemento.centralizarComponente(false, true, true)
-            .redimensionarComponente(25);
-        this.bola.elemento.moverComponente(this.bola.elemento.x, this.bastao.elemento.y + this.bastao.elemento.altura / 2 + this.bola.elemento.raio, this.bola.elemento.z);
+        this.bastao.elemento.redimensionarComponente(200, 50, 50);
+        this.bola.elemento.redimensionarComponente(25);
+        this.resetarPosicoes();
     }
 
     public void mudarEstado(EstadosJogo novoEstado){
@@ -35,6 +32,14 @@ public class Jogo {
 
     public void trocarFase(int novaFase){
         this.fase = novaFase;
+    }
+
+    public void resetarPosicoes(){
+        this.bola.pararBola();
+        this.bastao.elemento.centralizarComponente(false, true, true)
+            .moverComponente(this.bastao.elemento.x, Tela.yMin + Tela.margem + this.bastao.elemento.altura / 2, this.bastao.elemento.z);
+        this.bola.elemento.centralizarComponente(false, true, true)
+            .moverComponente(this.bola.elemento.x, this.bastao.elemento.y + this.bastao.elemento.altura / 2 + this.bola.elemento.raio, this.bola.elemento.z);
     }
 
 }
