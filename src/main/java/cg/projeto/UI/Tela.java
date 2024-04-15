@@ -185,6 +185,7 @@ public class Tela implements GLEventListener{
                                 }
                                 if(jogo.bola.elemento.x == jogo.bastao.elemento.x){
                                     jogo.bola.direcaoMovimentacaoX = new Random().nextBoolean() ? 1 : -1;
+                                }
                                 jogo.bola.direcaoMovimentacaoY = 1;
                             }
                         }
