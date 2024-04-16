@@ -20,6 +20,7 @@ import cg.projeto.Utils;
 import cg.projeto.Debug.ModoEdicao;
 import cg.projeto.Game.Jogo;
 import cg.projeto.Game.Estados.EstadosBola;
+import cg.projeto.Game.Estados.EstadosJogo;
 import cg.projeto.UI._2D.Componentes.Texto;
 import cg.projeto.UI._2D.Componentes.Circulo;
 import cg.projeto.UI._2D.Componentes.Octagono;
@@ -27,8 +28,8 @@ import cg.projeto.UI._2D.Componentes.Quadrilatero;
 import cg.projeto.UI._3D.Componentes.Esfera;
 import cg.projeto.UI._3D.Componentes.Hexaedro;
 
-public class Tela implements GLEventListener{    
-
+public class Tela implements GLEventListener
+{    
     // Elementos UI
     public static float
         limiteZ = 1000, margem = 25, escalaCamera = 1,
@@ -54,10 +55,11 @@ public class Tela implements GLEventListener{
         "Pressione enter para continuar."
     };
     private final List<ComponenteBase> elementosTela = new ArrayList<ComponenteBase>(); 
+    private int camadaMenu, camadaHUD;
 
     // Conteúdo do jogo
     public static Jogo jogo = new Jogo();
-    private Texto textoPontuacao;
+    private Texto textoPontuacao, textoVidas;
 
     // Renderizadores
     public static GL2 drawer2D;
@@ -67,8 +69,8 @@ public class Tela implements GLEventListener{
     // Debug
     public static ModoEdicao modoEdicao = ModoEdicao.MOVER;
     
-    public void init(GLAutoDrawable drawable) {
-
+    public void init(GLAutoDrawable drawable) 
+    {
         //Estabelece as coordenadas do SRU (Sistema de Referencia do Universo)
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         screenWidth = (float) screenSize.getWidth();
@@ -102,10 +104,13 @@ public class Tela implements GLEventListener{
         // Inicializa jogo
         jogo = new Jogo();
         textoPontuacao = new Texto("Pontuação: 0");
+        textoVidas = new Texto("Vidas: 5");
+        camadaMenu = (int)zMax;
+        camadaHUD = camadaMenu - 1;
     }
 
-    public void display(GLAutoDrawable drawable) {
-
+    public void display(GLAutoDrawable drawable) 
+    {
         //limpa a janela com a cor especificada
         drawer2D.glClearColor(0, 0, 0, 1); // Seta cor pra quando limpar fundo
         drawer2D.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT); // Limpa fundo
@@ -113,7 +118,7 @@ public class Tela implements GLEventListener{
         this.limparTela(); // Apaga elementos
 
         if(Main.DEBUG) {
-            montarMenuDebug();
+            montarMenu(Menus.DEBUG);
         }
         else{
             // Verifica estado atual do jogo
@@ -159,6 +164,10 @@ public class Tela implements GLEventListener{
                     this.textoPontuacao.moverComponente(xMin + margem + textoPontuacao.largura/2, yMax - margem - textoPontuacao.altura/2, zMax);
                     this.elementosTela.add(textoPontuacao);
                     
+                    this.textoVidas.conteudo = "Vidas: " + jogo.vidas;
+                    this.textoVidas.moverComponente(xMax - margem - textoVidas.largura/2, yMax - margem - textoVidas.altura/2, zMax);
+                    this.elementosTela.add(textoVidas);
+                    
                     if(jogo.bola.estado == EstadosBola.MOVENDO){
                         float novaPosicaoBolaX = jogo.bola.elemento.x + jogo.bola.direcaoMovimentacaoX * jogo.bola.velocidadeMovimento * jogo.bola.anguloX;
                         float novaPosicaoBolaY = jogo.bola.elemento.y + jogo.bola.direcaoMovimentacaoY * jogo.bola.velocidadeMovimento;
@@ -196,10 +205,18 @@ public class Tela implements GLEventListener{
                         );
                         if(novaPosicaoBolaY < jogo.bastao.elemento.y){
                             jogo.resetarPosicoes();
+                            jogo.vidas--;
                         }
                     }
                     this.elementosTela.add(jogo.bastao.elemento);
                     this.elementosTela.add(jogo.bola.elemento);
+                    if(jogo.vidas == 0) jogo.estado = EstadosJogo.PERDEU;
+
+                break;
+
+                case PERDEU:
+
+
 
                 break;
             }
@@ -223,8 +240,8 @@ public class Tela implements GLEventListener{
         drawer2D.glFlush();
     }
 
-    public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
-        
+    public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) 
+    {    
         // Evita a divisão por zero
         if(height == 0) height = 1;
         
@@ -248,77 +265,84 @@ public class Tela implements GLEventListener{
        
     public void dispose(GLAutoDrawable drawable) {}
 
-    private void montarMenuDebug(){
-
-        Texto texto = new Texto("Bem-vindo ao editor do jogo de Pong!");
-        texto.moverComponente(texto.x, yMax - margem - texto.altura, texto.z)
-            .centralizarComponente(false, true, true);
-        
-        Quadrilatero quadrado = new Quadrilatero()
-            .moverComponente(0, 0, zMax - 2)
-            .trocarCor(0, 1, 0, 1f)
-            .preencherComponente(false)
-            .redimensionarComponente(500, 500)
-            .rotacionarComponente(0, 0, 45)
-            .centralizarComponente(true, true, false);
-        
-        Octagono octagono = new Octagono()
-            .moverComponente(0, 0, zMax - 2)
-            .preencherComponente(false)
-            .trocarCor(1, 1, 0, 1)
-            .redimensionarComponente(450, 450)
-            .centralizarComponente(true, true, false);
-
-        if(anguloHexaedroDebug < 360) anguloHexaedroDebug++;
-        else anguloHexaedroDebug = 0;
-        Hexaedro hexaedro = new Hexaedro()
-            .trocarCor(1, 0, 1, 0.2f)
-            .redimensionarComponente(200, 200, 200)
-            .rotacionarComponente(anguloHexaedroDebug, anguloHexaedroDebug, anguloHexaedroDebug)
-            .centralizarComponente(true, true, true);
-
-        Esfera esfera = new Esfera()
-            .trocarCor(1, 0, 0, 1)
-            .redimensionarComponente(75)
-            .preencherComponente(false)
-            .centralizarComponente(true, true, true)
-            .rotacionarComponente(0, 90, 0);
-
-        // Adiciona ponto vermelho central
-        Quadrilatero pontoVermelho = new Quadrilatero()
-            .trocarCor(1, 0, 0, 1)
-            .redimensionarComponente(10, 10)
-            .centralizarComponente(true, true, true);
-            
-        // Adiciona modo de edição
-        Texto textoModoEdicao = new Texto("Modo de edição: "+modoEdicao);
-        textoModoEdicao.moverComponente(xMin + textoModoEdicao.largura / 2 + margem, yMin + textoModoEdicao.altura / 2 + margem, zPontoCentral);
-        
-        // Adiciona escala
-        Texto textoEscala = new Texto("Escala: "+Math.round(escalaCamera * 100)+"%");
-        textoEscala.moverComponente(xMin + textoEscala.largura / 2 + margem, yMin + textoEscala.altura / 2 + margem + textoModoEdicao.altura, zPontoCentral);
-            
-        elementosTela.add(texto);
-        elementosTela.add(textoModoEdicao);
-        elementosTela.add(textoEscala);
-        elementosTela.add(pontoVermelho);
-        elementosTela.add(quadrado);
-        elementosTela.add(octagono);
-        elementosTela.add(hexaedro);
-        elementosTela.add(esfera);
-        
-    }
-
-    private void desenharTela(){
-        for(int index = elementosTela.size() - 1; index >= 0; index--){
-
+    private void desenharTela()
+    {
+        for(int index = elementosTela.size() - 1; index >= 0; index--)
+        {    
             ComponenteBase componente = elementosTela.get(index);
-
+            
             if(componente.x >= xMin && componente.x <= xMax && componente.y >= yMin && componente.y <= yMax && componente.z >= zMin && componente.z <= zMax)
-                componente.desenharComponente();
+            componente.desenharComponente();
         }
     }
     
     private void limparTela(){ this.elementosTela.clear(); }
+    
+    private void montarMenuDebug(){
+        
+        
+    }
 
+    private void montarMenu(Menus novoMenu){
+        switch(novoMenu){
+            case DEBUG:
+                Texto texto = new Texto("Bem-vindo ao editor do jogo de Pong!");
+                texto.moverComponente(texto.x, yMax - margem - texto.altura, texto.z)
+                    .centralizarComponente(false, true, true);
+                
+                Quadrilatero quadrado = new Quadrilatero()
+                    .moverComponente(0, 0, zMax - 2)
+                    .trocarCor(0, 1, 0, 1f)
+                    .preencherComponente(false)
+                    .redimensionarComponente(500, 500)
+                    .rotacionarComponente(0, 0, 45)
+                    .centralizarComponente(true, true, false);
+                
+                Octagono octagono = new Octagono()
+                    .moverComponente(0, 0, zMax - 2)
+                    .preencherComponente(false)
+                    .trocarCor(1, 1, 0, 1)
+                    .redimensionarComponente(450, 450)
+                    .centralizarComponente(true, true, false);
+            
+                if(anguloHexaedroDebug < 360) anguloHexaedroDebug++;
+                else anguloHexaedroDebug = 0;
+                Hexaedro hexaedro = new Hexaedro()
+                    .trocarCor(1, 0, 1, 0.2f)
+                    .redimensionarComponente(200, 200, 200)
+                    .rotacionarComponente(anguloHexaedroDebug, anguloHexaedroDebug, anguloHexaedroDebug)
+                    .centralizarComponente(true, true, true);
+            
+                Esfera esfera = new Esfera()
+                    .trocarCor(1, 0, 0, 1)
+                    .redimensionarComponente(75)
+                    .preencherComponente(false)
+                    .centralizarComponente(true, true, true)
+                    .rotacionarComponente(0, 90, 0);
+            
+                // Adiciona ponto vermelho central
+                Quadrilatero pontoVermelho = new Quadrilatero()
+                    .trocarCor(1, 0, 0, 1)
+                    .redimensionarComponente(10, 10)
+                    .centralizarComponente(true, true, true);
+                    
+                // Adiciona modo de edição
+                Texto textoModoEdicao = new Texto("Modo de edição: "+modoEdicao);
+                textoModoEdicao.moverComponente(xMin + textoModoEdicao.largura / 2 + margem, yMin + textoModoEdicao.altura / 2 + margem, zPontoCentral);
+                
+                // Adiciona escala
+                Texto textoEscala = new Texto("Escala: "+Math.round(escalaCamera * 100)+"%");
+                textoEscala.moverComponente(xMin + textoEscala.largura / 2 + margem, yMin + textoEscala.altura / 2 + margem + textoModoEdicao.altura, zPontoCentral);
+                    
+                elementosTela.add(texto);
+                elementosTela.add(textoModoEdicao);
+                elementosTela.add(textoEscala);
+                elementosTela.add(pontoVermelho);
+                elementosTela.add(quadrado);
+                elementosTela.add(octagono);
+                elementosTela.add(hexaedro);
+                elementosTela.add(esfera);
+            break;
+        }
+    }
 }
