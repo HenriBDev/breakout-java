@@ -40,4 +40,24 @@ public abstract class ComponenteBase<tipoComponente> {
         );
     }
 
+    public boolean colisaoComponente(componenteBase componenteAColidir)
+    {
+        float posicaoComponenteAtualX = this.elementoX;
+        float posicaoComponenteAtualY = this.elementoY;
+
+        float posicaoComponenteAColidirX = componenteAColidir.elementoX;
+        float inicioPosicaoX = componenteAColidir.largura/2 - posicaoComponenteAColidirX;
+        float fimPosicaoX = componenteAColidir.largura/2 + posicaoComponenteAColidirX;
+
+        float posicaoComponenteAColidirY = componenteAColidir.elementoY;
+        float topoPosicaoComponenteAColidir = componenteAColidir.altura/2 + posicaoComponenteAColidirY;
+
+        if((posicaoComponenteAtualX >= inicioPosicaoX || posicaoComponenteAtualX <= fimPosicaoX) &&
+        posicaoComponenteAtualY == topoPosicaoComponenteAColidir)
+        {
+            return true;
+        }
+
+        return false;
+    }
 }
