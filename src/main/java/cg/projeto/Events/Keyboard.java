@@ -81,9 +81,21 @@ public class Keyboard implements KeyListener{
                 }
             break;
             case KeyEvent.VK_R:
-                if(Main.DEBUG){
-                    if(Tela.modoEdicao != ModoEdicao.ROTACIONAR) {
+                if(Main.DEBUG)
+                {
+                    if(Tela.modoEdicao != ModoEdicao.ROTACIONAR)
+                    {
                         Tela.modoEdicao = ModoEdicao.ROTACIONAR;
+                    }
+                }
+                else
+                {
+                    if(Tela.jogo.estado == EstadosJogo.JOGANDO)
+                    {
+                        Tela.jogo.pontuacao = 0;
+                        Tela.jogo.vidas = 5;
+                        Tela.jogo.fase = 1;
+                        Tela.jogo.resetarPosicoes();
                     }
                 }
             break;

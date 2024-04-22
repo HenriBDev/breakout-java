@@ -37,22 +37,21 @@ public class Tela implements GLEventListener
         yMin, yMax, yPontoCentral,
         zMin, zMax, zPontoCentral,
         anguloHexaedroDebug = 0,
-        espacamentoTexto = 25,
+        espacamentoTexto = 10,
         screenWidth = 0, screenHeight = 0;
     public static float[]
         rotacaoCamera = {0, 0, 0},
         posicaoCamera = {0, 0, 0};
     public String[] textoInicial = {
         "Bem-vindo ao jogo de pong!",
-        "Use A D ou < > para movimentar-se",
-        "Ou se preferir pode utilizar seu mouse",
-        "",
+        "A D ou <- -> ou MOUSE (Movimentação).",
+        "P (Pause)", 
+        "R (Recomeçar jogo)",
         "Seu objetivo é acumular 500 pontos para avançar",
-        "para a próxima fase. Rebata a esfera e ganhe pontos",
-        "por cada rebatida. Mas cuidado com a pegadinha do malandro 👀...",
-        "(A bolinha fica mais rápida)",
+        "para a próxima fase. Rebata a esfera e ganhe pontos.",
+        "Mas cuidado com a pegadinha do malandro 👀... (A bolinha fica mais rápida)",
         "",
-        "Pressione enter para continuar."
+        "Pressione enter para começar."
     };
     private final List<ComponenteBase> elementosTela = new ArrayList<ComponenteBase>(); 
     private int camadaMenu, camadaHUD;
@@ -126,35 +125,7 @@ public class Tela implements GLEventListener
 
                 case INICIAL:
 
-                    // Desenha instruções na tela
-                    float posYAtual = yMax - margem;
-                    for(int i = 0; i < textoInicial.length; i++){
-                        Texto linhaTela = new Texto(textoInicial[i]);
-                        posYAtual -= linhaTela.altura + margem;
-                        linhaTela.centralizarComponente(false, true, false)
-                            .moverComponente(linhaTela.x, posYAtual, linhaTela.z);
-                        this.elementosTela.add(linhaTela);
-                    }
-
-                    posYAtual -= margem * 2;
-
-                    // Desenha "simulação" do jogo
-                    Quadrilatero campo = new Quadrilatero()
-                        .redimensionarComponente(200, 200)
-                        .centralizarComponente(false, false, false)
-                        .preencherComponente(false);
-                    campo.moverComponente(campo.x, posYAtual - campo.altura / 2, campo.z);
-                    this.elementosTela.add(campo);
-
-                    Quadrilatero bastao = new Quadrilatero()
-                        .redimensionarComponente(112.5f, 37.5f)
-                        .centralizarComponente(false, true, false);
-                    bastao.moverComponente(bastao.x, posYAtual - campo.altura + 11 + bastao.altura / 2, bastao.z);
-                    this.elementosTela.add(bastao);
-
-                    Circulo bolinha = new Circulo().redimensionarComponente(20);
-                    bolinha.moverComponente(campo.x + campo.largura / 3, campo.y , bolinha.z);
-                    this.elementosTela.add(bolinha);
+                    montarMenu(Menus.INICIAL);
 
                 break;
 
@@ -280,8 +251,44 @@ public class Tela implements GLEventListener
     
     private void limparTela(){ this.elementosTela.clear(); }
 
-    private void montarMenu(Menus novoMenu){
-        switch(novoMenu){
+    private void montarMenu(Menus novoMenu)
+    {
+        switch(novoMenu)
+        {
+            case INICIAL:
+
+                // Desenha instruções na tela
+                float posYAtual = yMax - margem;
+                for(int i = 0; i < textoInicial.length; i++){
+                    Texto linhaTela = new Texto(textoInicial[i]);
+                    posYAtual -= linhaTela.altura + margem;
+                    linhaTela.centralizarComponente(false, true, false)
+                        .moverComponente(linhaTela.x, posYAtual, linhaTela.z);
+                    this.elementosTela.add(linhaTela);
+                }
+
+                posYAtual -= margem * 2;
+
+                // Desenha "simulação" do jogo
+                Quadrilatero campo = new Quadrilatero()
+                    .redimensionarComponente(200, 200)
+                    .centralizarComponente(false, false, false)
+                    .preencherComponente(false);
+                campo.moverComponente(campo.x, posYAtual - campo.altura / 2, campo.z);
+                this.elementosTela.add(campo);
+
+                Quadrilatero bastao = new Quadrilatero()
+                    .redimensionarComponente(112.5f, 37.5f)
+                    .centralizarComponente(false, true, false);
+                bastao.moverComponente(bastao.x, posYAtual - campo.altura + 11 + bastao.altura / 2, bastao.z);
+                this.elementosTela.add(bastao);
+
+                Circulo bolinha = new Circulo().redimensionarComponente(20);
+                bolinha.moverComponente(campo.x + campo.largura / 3, campo.y , bolinha.z);
+                this.elementosTela.add(bolinha);
+
+            break;
+
             case DEBUG:
                 Texto texto = new Texto("Bem-vindo ao editor do jogo de Pong!");
                 texto.moverComponente(texto.x, yMax - margem - texto.altura, texto.z)
@@ -347,7 +354,7 @@ public class Tela implements GLEventListener
                     .trocarCor(0, 0, 0, 1);
                 telaTransparente.moverComponente(telaTransparente.x, telaTransparente.y, zMax - 1);
                 this.elementosTela.add(telaTransparente);
-                Texto textoPausado = new Texto("Jogo pausado (Pressione P para despausar)");
+                Texto textoPausado = new Texto("Jogo pausado (Pressione P para continuar)");
                 textoPausado.moverComponente(textoPausado.x, textoPausado.y, zMax);
                 this.elementosTela.add(textoPausado);
             break;
