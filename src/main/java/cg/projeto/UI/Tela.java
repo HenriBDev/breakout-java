@@ -161,11 +161,11 @@ public class Tela implements GLEventListener
                 case JOGANDO:
 
                     this.textoPontuacao.conteudo = "Pontuação: " + jogo.pontuacao;
-                    this.textoPontuacao.moverComponente(xMin + margem + textoPontuacao.largura/2, yMax - margem - textoPontuacao.altura/2, zMax);
+                    this.textoPontuacao.moverComponente(xMin + margem + textoPontuacao.largura/2, yMax - margem - textoPontuacao.altura/2, zMax - 2);
                     this.elementosTela.add(textoPontuacao);
                     
                     this.textoVidas.conteudo = "Vidas: " + jogo.vidas;
-                    this.textoVidas.moverComponente(xMax - margem - textoVidas.largura/2, yMax - margem - textoVidas.altura/2, zMax);
+                    this.textoVidas.moverComponente(xMax - margem - textoVidas.largura/2, yMax - margem - textoVidas.altura/2, zMax - 2);
                     this.elementosTela.add(textoVidas);
                     
                     if(jogo.bola.estado == EstadosBola.MOVENDO){
@@ -214,10 +214,12 @@ public class Tela implements GLEventListener
 
                 break;
 
-                case PERDEU:
-
-
-
+                case PAUSADO:
+                    this.elementosTela.add(textoVidas);
+                    this.elementosTela.add(textoPontuacao);
+                    this.elementosTela.add(jogo.bastao.elemento);
+                    this.elementosTela.add(jogo.bola.elemento);
+                    montarMenu(Menus.PAUSADO);
                 break;
             }
         }
@@ -277,11 +279,6 @@ public class Tela implements GLEventListener
     }
     
     private void limparTela(){ this.elementosTela.clear(); }
-    
-    private void montarMenuDebug(){
-        
-        
-    }
 
     private void montarMenu(Menus novoMenu){
         switch(novoMenu){
@@ -342,6 +339,17 @@ public class Tela implements GLEventListener
                 elementosTela.add(octagono);
                 elementosTela.add(hexaedro);
                 elementosTela.add(esfera);
+            break;
+
+            case PAUSADO:
+                Quadrilatero telaTransparente = new Quadrilatero()
+                    .redimensionarComponente(xMax - xMin, yMax - yMin)
+                    .trocarCor(0, 0, 0, 1);
+                telaTransparente.moverComponente(telaTransparente.x, telaTransparente.y, zMax - 1);
+                this.elementosTela.add(telaTransparente);
+                Texto textoPausado = new Texto("Jogo pausado (Pressione P para despausar)");
+                textoPausado.moverComponente(textoPausado.x, textoPausado.y, zMax);
+                this.elementosTela.add(textoPausado);
             break;
         }
     }

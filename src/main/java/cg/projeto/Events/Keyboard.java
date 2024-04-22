@@ -94,6 +94,12 @@ public class Keyboard implements KeyListener{
                     Tela.jogo.mudarEstado(EstadosJogo.JOGANDO);
                 }
             break;
+            case KeyEvent.VK_P:
+                if(!(Main.DEBUG)){
+                    if(Tela.jogo.estado == EstadosJogo.JOGANDO) Tela.jogo.mudarEstado(EstadosJogo.PAUSADO);
+                    else if(Tela.jogo.estado == EstadosJogo.PAUSADO) Tela.jogo.mudarEstado(EstadosJogo.JOGANDO);
+                }
+            break;
         }
     }
 

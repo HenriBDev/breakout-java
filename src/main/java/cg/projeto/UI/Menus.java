@@ -1,5 +1,6 @@
 package cg.projeto.UI;
 
 public enum Menus {
-    DEBUG
+    DEBUG,
+    PAUSADO
 }
