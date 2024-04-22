@@ -45,15 +45,24 @@ public abstract class ComponenteBase<tipoComponente> {
         float posicaoComponenteAtualX = this.elementoX;
         float posicaoComponenteAtualY = this.elementoY;
 
+        float pontaDireitaComponenteAtual = posicaoComponenteAtualX + this.largura/2;
+        float pontaEsquerdaComponenteAtual = posicaoComponenteAtualX + this.largura/2;
+        float pontaCimaComponenteAtual = posicaoComponenteAtualY + this.largura/2;
+        float pontaBaixoComponenteAtual = posicaoComponenteAtualY - this.largura/2;
+
         float posicaoComponenteAColidirX = componenteAColidir.elementoX;
         float inicioPosicaoX = componenteAColidir.largura/2 - posicaoComponenteAColidirX;
         float fimPosicaoX = componenteAColidir.largura/2 + posicaoComponenteAColidirX;
 
         float posicaoComponenteAColidirY = componenteAColidir.elementoY;
         float topoPosicaoComponenteAColidir = componenteAColidir.altura/2 + posicaoComponenteAColidirY;
+        float inicioPosicaoY = componenteAColidir.largura/2 + posicaoComponenteAColidirY;
+        float fimPosicaoY = componenteAColidir.largura/2 - posicaoComponenteAColidirY;
 
-        if((posicaoComponenteAtualX >= inicioPosicaoX || posicaoComponenteAtualX <= fimPosicaoX) &&
-        posicaoComponenteAtualY == topoPosicaoComponenteAColidir)
+        if(((posicaoComponenteAtualX >= inicioPosicaoX || posicaoComponenteAtualX <= fimPosicaoX) && // Colisão em cima e em baixo
+        posicaoComponenteAtualY == topoPosicaoComponenteAColidir) ||
+        (pontaDireitaComponenteAtual == inicioPosicaoX || pontaDireitaComponenteAtual == fimPosicaoX) && // Colisão nas laterais
+        (posicaoComponenteAtualY >= inicioPosicaoY || posicaoComponenteAtualY <= fimPosicaoY))
         {
             return true;
         }
