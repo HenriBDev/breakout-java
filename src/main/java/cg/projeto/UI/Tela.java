@@ -337,15 +337,37 @@ public class Tela implements GLEventListener
                 // Adiciona escala
                 Texto textoEscala = new Texto("Escala: "+Math.round(escalaCamera * 100)+"%");
                 textoEscala.moverComponente(xMin + textoEscala.largura / 2 + margem, yMin + textoEscala.altura / 2 + margem + textoModoEdicao.altura, zPontoCentral);
-                    
+                
+                Esfera esfera1 = new Esfera()
+                .trocarCor(1, 1, 0, 1)
+                .redimensionarComponente(75)
+                .preencherComponente(false)
+                .centralizarComponente(true, true, true)
+                .rotacionarComponente(0, 90, 0)
+                .moverComponente(xMin, yMin, 0);
+                
+                Esfera esfera2 = new Esfera()
+                .trocarCor(0, 1, 1, 1)
+                .redimensionarComponente(75)
+                .preencherComponente(false)
+                .centralizarComponente(true, true, true)
+                .rotacionarComponente(0, 90, 0)
+                .moverComponente(xMin+10, yMin+10, 0);
+                
+                Texto textoColidiu = new Texto("Colidiu?: " + esfera1.largura + (esfera1.colidiuComComponente(esfera2) ? "Sim" : "Não"));
+                textoColidiu.moverComponente(xMin + textoEscala.largura + margem + textoColidiu.largura/2 + 30, yMin + textoColidiu.altura / 2 + margem + textoModoEdicao.altura, zPontoCentral);
+
                 elementosTela.add(texto);
                 elementosTela.add(textoModoEdicao);
                 elementosTela.add(textoEscala);
+                elementosTela.add(textoColidiu);
                 elementosTela.add(pontoVermelho);
                 elementosTela.add(quadrado);
                 elementosTela.add(octagono);
                 elementosTela.add(hexaedro);
                 elementosTela.add(esfera);
+                elementosTela.add(esfera1);
+                elementosTela.add(esfera2);
             break;
 
             case PAUSADO:

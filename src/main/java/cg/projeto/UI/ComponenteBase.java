@@ -5,6 +5,8 @@ public abstract class ComponenteBase<tipoComponente> {
     public float x = 0;
     public float y = 0;
     public float z = 0;
+    public float largura = 0;
+    public float altura = 0;
     public float[][] vertices;
     public float[] cor = new float[]{1, 1, 1, 1};
     public float[] rotacao = new float[]{0, 0, 0};
@@ -40,33 +42,30 @@ public abstract class ComponenteBase<tipoComponente> {
         );
     }
 
-    public boolean colisaoComponente(componenteBase componenteAColidir)
+    public boolean colidiuComComponente(ComponenteBase componenteAColidir)
     {
-        float posicaoComponenteAtualX = this.elementoX;
-        float posicaoComponenteAtualY = this.elementoY;
+        float pontaDireitaComponenteAtual = this.x + this.largura/2;
+        float pontaEsquerdaComponenteAtual = this.x + this.largura/2;
+        float pontaCimaComponenteAtual = this.y + this.altura/2;
+        float pontaBaixoComponenteAtual = this.y - this.altura/2;
 
-        float pontaDireitaComponenteAtual = posicaoComponenteAtualX + this.largura/2;
-        float pontaEsquerdaComponenteAtual = posicaoComponenteAtualX + this.largura/2;
-        float pontaCimaComponenteAtual = posicaoComponenteAtualY + this.largura/2;
-        float pontaBaixoComponenteAtual = posicaoComponenteAtualY - this.largura/2;
+        float pontaDireitaComponenteAColidir = componenteAColidir.x + componenteAColidir.largura/2;
+        float pontaEsquerdaComponenteAColidir = componenteAColidir.x - componenteAColidir.largura/2;
+        float pontaCimaComponenteAColidir = componenteAColidir.y + componenteAColidir.altura/2;
+        float pontaBaixoComponenteAColidir = componenteAColidir.y - componenteAColidir.altura/2;
 
-        float posicaoComponenteAColidirX = componenteAColidir.elementoX;
-        float inicioPosicaoX = componenteAColidir.largura/2 - posicaoComponenteAColidirX;
-        float fimPosicaoX = componenteAColidir.largura/2 + posicaoComponenteAColidirX;
+        boolean colidiuHorizontalmente = (pontaDireitaComponenteAtual >= pontaEsquerdaComponenteAColidir &&
+        pontaDireitaComponenteAtual <= pontaDireitaComponenteAColidir) ||
+        (pontaEsquerdaComponenteAtual <= pontaDireitaComponenteAColidir &&
+        pontaEsquerdaComponenteAtual >= pontaEsquerdaComponenteAColidir);
+        System.out.println("H - " + colidiuHorizontalmente);
+        
+        boolean colidiuVerticalmente = (pontaCimaComponenteAtual >= pontaBaixoComponenteAColidir &&
+        pontaCimaComponenteAtual <= pontaCimaComponenteAColidir) ||
+        (pontaBaixoComponenteAtual <= pontaCimaComponenteAColidir &&
+        pontaBaixoComponenteAtual >= pontaBaixoComponenteAColidir);
+        System.out.println("V - " + colidiuVerticalmente);
 
-        float posicaoComponenteAColidirY = componenteAColidir.elementoY;
-        float topoPosicaoComponenteAColidir = componenteAColidir.altura/2 + posicaoComponenteAColidirY;
-        float inicioPosicaoY = componenteAColidir.largura/2 + posicaoComponenteAColidirY;
-        float fimPosicaoY = componenteAColidir.largura/2 - posicaoComponenteAColidirY;
-
-        if(((posicaoComponenteAtualX >= inicioPosicaoX || posicaoComponenteAtualX <= fimPosicaoX) && // Colisão em cima e em baixo
-        posicaoComponenteAtualY == topoPosicaoComponenteAColidir) ||
-        (pontaDireitaComponenteAtual == inicioPosicaoX || pontaDireitaComponenteAtual == fimPosicaoX) && // Colisão nas laterais
-        (posicaoComponenteAtualY >= inicioPosicaoY || posicaoComponenteAtualY <= fimPosicaoY))
-        {
-            return true;
-        }
-
-        return false;
+        return colidiuVerticalmente && colidiuHorizontalmente;
     }
 }
