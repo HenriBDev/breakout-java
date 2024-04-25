@@ -179,18 +179,31 @@ public class Tela implements GLEventListener
                             jogo.vidas--;
                         }
                     }
+
                     this.elementosTela.add(jogo.bastao.elemento);
                     this.elementosTela.add(jogo.bola.elemento);
                     if(jogo.vidas == 0) jogo.estado = EstadosJogo.PERDEU;
 
                 break;
 
+                case PERDEU:
+
+                    this.elementosTela.add(textoVidas);
+                    this.elementosTela.add(textoPontuacao);
+                    this.elementosTela.add(jogo.bastao.elemento);
+                    this.elementosTela.add(jogo.bola.elemento);
+                    montarMenu(Menus.PERDEU);
+
+                break;
+
                 case PAUSADO:
+
                     this.elementosTela.add(textoVidas);
                     this.elementosTela.add(textoPontuacao);
                     this.elementosTela.add(jogo.bastao.elemento);
                     this.elementosTela.add(jogo.bola.elemento);
                     montarMenu(Menus.PAUSADO);
+
                 break;
             }
         }
@@ -259,7 +272,8 @@ public class Tela implements GLEventListener
 
                 // Desenha instruções na tela
                 float posYAtual = yMax - margem;
-                for(int i = 0; i < textoInicial.length; i++){
+                for(int i = 0; i < textoInicial.length; i++)
+                {
                     Texto linhaTela = new Texto(textoInicial[i]);
                     posYAtual -= linhaTela.altura + margem;
                     linhaTela.centralizarComponente(false, true, false)
@@ -290,6 +304,7 @@ public class Tela implements GLEventListener
             break;
 
             case DEBUG:
+
                 Texto texto = new Texto("Bem-vindo ao editor do jogo de Pong!");
                 texto.moverComponente(texto.x, yMax - margem - texto.altura, texto.z)
                     .centralizarComponente(false, true, true);
@@ -346,17 +361,29 @@ public class Tela implements GLEventListener
                 elementosTela.add(octagono);
                 elementosTela.add(hexaedro);
                 elementosTela.add(esfera);
+
             break;
 
             case PAUSADO:
+
                 Quadrilatero telaTransparente = new Quadrilatero()
                     .redimensionarComponente(xMax - xMin, yMax - yMin)
                     .trocarCor(0, 0, 0, 1);
                 telaTransparente.moverComponente(telaTransparente.x, telaTransparente.y, zMax - 1);
                 this.elementosTela.add(telaTransparente);
+
                 Texto textoPausado = new Texto("Jogo pausado (Pressione P para continuar)");
                 textoPausado.moverComponente(textoPausado.x, textoPausado.y, zMax);
                 this.elementosTela.add(textoPausado);
+
+            break;
+
+            case PERDEU:
+
+                Texto textoPerdeu = new Texto("Você perdeu, pressione R para recomeçar");
+                textoPerdeu.moverComponente(textoPerdeu.x, textoPerdeu.y, zMax);
+                this.elementosTela.add(textoPerdeu);
+
             break;
         }
     }
