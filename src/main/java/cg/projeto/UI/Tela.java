@@ -58,7 +58,7 @@ public class Tela implements GLEventListener
 
     // Conteúdo do jogo
     public static Jogo jogo = new Jogo();
-    private Texto textoPontuacao, textoVidas;
+    private Texto textoPontuacao, textoVidas, textoFase;
 
     // Renderizadores
     public static GL2 drawer2D;
@@ -102,8 +102,9 @@ public class Tela implements GLEventListener
 
         // Inicializa jogo
         jogo = new Jogo();
-        textoPontuacao = new Texto("Pontuação: 0");
-        textoVidas = new Texto("Vidas: 5");
+        textoPontuacao = new Texto("Pontuação: " + jogo.pontuacao);
+        textoVidas = new Texto("Vidas: " + jogo.vidas);
+        textoFase = new Texto("Fase " + jogo.vidas);
         camadaMenu = (int)zMax;
         camadaHUD = camadaMenu - 1;
     }
@@ -138,32 +139,44 @@ public class Tela implements GLEventListener
                     this.textoVidas.conteudo = "Vidas: " + jogo.vidas;
                     this.textoVidas.moverComponente(xMax - margem - textoVidas.largura/2, yMax - margem - textoVidas.altura/2, zMax - 2);
                     this.elementosTela.add(textoVidas);
+
+                    this.textoFase.conteudo = "Fase " + jogo.fase;
+                    this.textoFase.moverComponente(0, yMax - margem - textoFase.altura/2, zMax - 2);
+                    this.elementosTela.add(textoFase);
                     
-                    if(jogo.bola.estado == EstadosBola.MOVENDO){
+                    if(jogo.bola.estado == EstadosBola.MOVENDO)
+                    {
                         float novaPosicaoBolaX = jogo.bola.elemento.x + jogo.bola.direcaoMovimentacaoX * jogo.bola.velocidadeMovimento * jogo.bola.anguloX;
                         float novaPosicaoBolaY = jogo.bola.elemento.y + jogo.bola.direcaoMovimentacaoY * jogo.bola.velocidadeMovimento;
-                        if(novaPosicaoBolaX + jogo.bola.elemento.raio >= xMax || novaPosicaoBolaX - jogo.bola.elemento.raio <= xMin){
+                        if(novaPosicaoBolaX + jogo.bola.elemento.raio >= xMax || novaPosicaoBolaX - jogo.bola.elemento.raio <= xMin)
+                        {
                             jogo.bola.inverterDirecaoMovimentacaoX();
                         }
-                        if(novaPosicaoBolaY + jogo.bola.elemento.raio >= yMax){
+                        if(novaPosicaoBolaY + jogo.bola.elemento.raio >= yMax)
+                        {
                             jogo.bola.direcaoMovimentacaoY = -1;
                         }
-                        if(novaPosicaoBolaY <= jogo.bastao.elemento.y + jogo.bastao.elemento.altura/2 + jogo.bola.elemento.raio){
+                        if(novaPosicaoBolaY <= jogo.bastao.elemento.y + jogo.bastao.elemento.altura/2 + jogo.bola.elemento.raio)
+                        {
                             if(((novaPosicaoBolaX + jogo.bola.elemento.raio <= jogo.bastao.elemento.x + jogo.bastao.elemento.largura/2 &&
                             novaPosicaoBolaX + jogo.bola.elemento.raio >= jogo.bastao.elemento.x - jogo.bastao.elemento.largura/2) ||
                             (novaPosicaoBolaX - jogo.bola.elemento.raio >= jogo.bastao.elemento.x - jogo.bastao.elemento.largura/2 &&
-                            novaPosicaoBolaX - jogo.bola.elemento.raio <= jogo.bastao.elemento.x + jogo.bastao.elemento.largura/2))){
-                                jogo.bola.aumentarVelocidade(1);
+                            novaPosicaoBolaX - jogo.bola.elemento.raio <= jogo.bastao.elemento.x + jogo.bastao.elemento.largura/2)))
+                            {
+                                jogo.bola.aumentarVelocidade(0.7f + 0.8f * jogo.fase);
                                 jogo.aumentarPontuacao(20);
-                                if(jogo.bola.elemento.x > jogo.bastao.elemento.x){
+                                if(jogo.bola.elemento.x > jogo.bastao.elemento.x)
+                                {
                                     jogo.bola.anguloX = jogo.bastao.elemento.largura/2 / 100 * (jogo.bola.elemento.x - jogo.bastao.elemento.x) / 100; 
                                     jogo.bola.direcaoMovimentacaoX = 1;
                                 }
-                                if(jogo.bola.elemento.x < jogo.bastao.elemento.x){
+                                if(jogo.bola.elemento.x < jogo.bastao.elemento.x)
+                                {
                                     jogo.bola.anguloX = jogo.bastao.elemento.largura/2 / 100 * (jogo.bastao.elemento.x - jogo.bola.elemento.x) / 100; 
                                     jogo.bola.direcaoMovimentacaoX = -1;
                                 }
-                                if(jogo.bola.elemento.x == jogo.bastao.elemento.x){
+                                if(jogo.bola.elemento.x == jogo.bastao.elemento.x)
+                                {
                                     jogo.bola.direcaoMovimentacaoX = new Random().nextBoolean() ? 1 : -1;
                                 }
                                 jogo.bola.direcaoMovimentacaoY = 1;
@@ -174,9 +187,12 @@ public class Tela implements GLEventListener
                             novaPosicaoBolaY,  
                             jogo.bola.elemento.z
                         );
-                        if(novaPosicaoBolaY < jogo.bastao.elemento.y){
+                        if(novaPosicaoBolaY < jogo.bastao.elemento.y || jogo.pontuacao >= 200 * jogo.fase)
+                        {
                             jogo.resetarPosicoes();
-                            jogo.vidas--;
+
+                            if(novaPosicaoBolaY < jogo.bastao.elemento.y) jogo.vidas--;
+                            if(jogo.pontuacao >= 200 * jogo.fase) jogo.fase += 1;
                         }
                     }
 

@@ -5,6 +5,7 @@ import com.jogamp.newt.event.KeyListener;
 
 import cg.projeto.Main;
 import cg.projeto.Debug.ModoEdicao;
+import cg.projeto.Game.Jogo;
 import cg.projeto.Game.Estados.EstadosJogo;
 import cg.projeto.UI.Tela;
 
@@ -89,9 +90,7 @@ public class Keyboard implements KeyListener{
                 }
                 else if(Tela.jogo.estado == EstadosJogo.JOGANDO || Tela.jogo.estado == EstadosJogo.PERDEU)
                 {
-                    Tela.jogo.pontuacao = 0;
-                    Tela.jogo.vidas = 5;
-                    Tela.jogo.fase = 1;
+                    Tela.jogo = new Jogo();
                     Tela.jogo.resetarPosicoes();
                     if(Tela.jogo.estado == EstadosJogo.PERDEU) Tela.jogo.estado = EstadosJogo.JOGANDO;
                 }
