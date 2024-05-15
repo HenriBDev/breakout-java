@@ -13,7 +13,7 @@ import cg.projeto.UI.Tela;
 
 public class Main {
 
-    public static boolean DEBUG = true;
+    public static boolean DEBUG = false;
     
     public static GLWindow window = null;
 
@@ -22,8 +22,8 @@ public class Main {
 
         GLProfile.initSingleton();
         GLProfile profile = GLProfile.get(GLProfile.GL2);
-        GLCapabilities caps = new GLCapabilities(profile);      
-        caps.setBackgroundOpaque(true);  
+        GLCapabilities caps = new GLCapabilities(profile);
+        caps.setBackgroundOpaque(true);
         window = GLWindow.create(caps);
         
         // Adiciona a Cena na janela e os inputs

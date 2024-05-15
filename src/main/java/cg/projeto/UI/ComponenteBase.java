@@ -55,16 +55,14 @@ public abstract class ComponenteBase<tipoComponente> {
         float pontaBaixoComponenteAColidir = componenteAColidir.y - componenteAColidir.altura/2;
 
         boolean colidiuHorizontalmente = (pontaDireitaComponenteAtual >= pontaEsquerdaComponenteAColidir &&
-        pontaDireitaComponenteAtual <= pontaDireitaComponenteAColidir) ||
+        pontaEsquerdaComponenteAtual <= pontaDireitaComponenteAColidir) ||
         (pontaEsquerdaComponenteAtual <= pontaDireitaComponenteAColidir &&
-        pontaEsquerdaComponenteAtual >= pontaEsquerdaComponenteAColidir);
-        System.out.println("H - " + colidiuHorizontalmente);
+        pontaDireitaComponenteAtual >= pontaEsquerdaComponenteAColidir);
         
         boolean colidiuVerticalmente = (pontaCimaComponenteAtual >= pontaBaixoComponenteAColidir &&
-        pontaCimaComponenteAtual <= pontaCimaComponenteAColidir) ||
+        pontaBaixoComponenteAtual <= pontaCimaComponenteAColidir) ||
         (pontaBaixoComponenteAtual <= pontaCimaComponenteAColidir &&
-        pontaBaixoComponenteAtual >= pontaBaixoComponenteAColidir);
-        System.out.println("V - " + colidiuVerticalmente);
+        pontaCimaComponenteAtual >= pontaBaixoComponenteAColidir);
 
         return colidiuVerticalmente && colidiuHorizontalmente;
     }
