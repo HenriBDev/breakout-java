@@ -7,8 +7,6 @@ import cg.projeto.UI.Tela;
 
 public class Octagono extends ComponenteBase<Octagono> {
 
-    public float altura = 1;
-    public float largura = 1;
     public boolean preencher = true;
     public float espessuraBorda = 1;
 

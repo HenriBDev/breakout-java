@@ -4,8 +4,6 @@ import cg.projeto.UI.Tela;
 
 public class Hexaedro extends ComponenteBase3D<Hexaedro> {
 
-    public float altura = 1;
-    public float largura = 1;
     public float comprimento = 1;
 
     public Hexaedro redimensionarComponente(float novaLargura, float novaAltura, float novoComprimento){

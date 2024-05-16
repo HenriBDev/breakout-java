@@ -150,20 +150,27 @@ public class Tela implements GLEventListener
                         );
                         if(jogo.bola.elemento.colidiuComComponente(jogo.bastao.elemento) && jogo.bola.elemento.y >= jogo.bastao.elemento.y)
                         {   
-                            System.out.println("bastao - entrei fi");
-                            jogo.bola.inverterDirecaoMovimentacaoX();
-                            jogo.bola.inverterDirecaoMovimentacaoY();
                             jogo.bola.aumentarVelocidade(1);
                             jogo.aumentarPontuacao(20);
+                            if(jogo.bola.elemento.x > jogo.bastao.elemento.x){
+                                jogo.bola.anguloX = jogo.bastao.elemento.largura/2 / 100 * (jogo.bola.elemento.x - jogo.bastao.elemento.x) / 100; 
+                                jogo.bola.direcaoMovimentacaoX = 1;
+                            }
+                            if(jogo.bola.elemento.x < jogo.bastao.elemento.x){
+                                jogo.bola.anguloX = jogo.bastao.elemento.largura/2 / 100 * (jogo.bastao.elemento.x - jogo.bola.elemento.x) / 100; 
+                                jogo.bola.direcaoMovimentacaoX = -1;
+                            }
+                            if(jogo.bola.elemento.x == jogo.bastao.elemento.x){
+                                jogo.bola.direcaoMovimentacaoX = new Random().nextBoolean() ? 1 : -1;
+                            }
+                            jogo.bola.direcaoMovimentacaoY = 1;
                         }
                         if(jogo.bola.elemento.colidiuComComponente(jogo.teto.elemento))
                         {
-                            System.out.println("cima - entrei fi");
                             jogo.bola.inverterDirecaoMovimentacaoY();
                         }
                         if(jogo.bola.elemento.colidiuComComponente(jogo.paredeDireita.elemento) || jogo.bola.elemento.colidiuComComponente(jogo.paredeEsquerda.elemento))
                         {
-                            System.out.println("lateral - entrei fi");
                             jogo.bola.inverterDirecaoMovimentacaoX();
                         }
                         if(novaPosicaoBolaY < jogo.bastao.elemento.y){

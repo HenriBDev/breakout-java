@@ -7,8 +7,6 @@ import cg.projeto.UI.Tela;
 
 public class Quadrilatero extends ComponenteBase<Quadrilatero> {
 
-    public float altura = 1;
-    public float largura = 1;
     public boolean preencher = true;
     public float espessuraBorda = 1;
 

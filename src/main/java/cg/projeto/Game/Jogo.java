@@ -47,11 +47,11 @@ public class Jogo {
         this.bola.elemento.centralizarComponente(false, true, true)
             .moverComponente(this.bola.elemento.x, this.bastao.elemento.y + this.bastao.elemento.altura / 2 + this.bola.elemento.raio, this.bola.elemento.z);
         this.paredeDireita.elemento.centralizarComponente(true, false, true)
-            .moverComponente(Tela.xMax, this.paredeDireita.elemento.y, this.paredeDireita.elemento.z);
+            .moverComponente(Tela.xMax + this.paredeDireita.elemento.largura/2, this.paredeDireita.elemento.y, this.paredeDireita.elemento.z);
         this.paredeEsquerda.elemento.centralizarComponente(true, false, true)
-            .moverComponente(Tela.xMin, this.paredeEsquerda.elemento.y, this.paredeEsquerda.elemento.z);
+            .moverComponente(Tela.xMin - this.paredeEsquerda.elemento.largura/2, this.paredeEsquerda.elemento.y, this.paredeEsquerda.elemento.z);
         this.teto.elemento.centralizarComponente(false, true, true)
-            .moverComponente(this.teto.elemento.x, Tela.yMax, this.teto.elemento.z);
+            .moverComponente(this.teto.elemento.x, Tela.yMax + this.teto.elemento.altura/2, this.teto.elemento.z);
     }
 
 }

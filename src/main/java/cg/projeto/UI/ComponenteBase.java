@@ -45,7 +45,7 @@ public abstract class ComponenteBase<tipoComponente> {
     public boolean colidiuComComponente(ComponenteBase componenteAColidir)
     {
         float pontaDireitaComponenteAtual = this.x + this.largura/2;
-        float pontaEsquerdaComponenteAtual = this.x + this.largura/2;
+        float pontaEsquerdaComponenteAtual = this.x - this.largura/2;
         float pontaCimaComponenteAtual = this.y + this.altura/2;
         float pontaBaixoComponenteAtual = this.y - this.altura/2;
 

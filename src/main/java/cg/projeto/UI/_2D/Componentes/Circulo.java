@@ -8,7 +8,6 @@ import cg.projeto.UI.Tela;
 public class Circulo extends ComponenteBase<Circulo> {
     
     public float raio = 1;
-    public float largura = altura = raio * 2;
     public boolean preencher = true;
     public float espessuraBorda = 1;
 
