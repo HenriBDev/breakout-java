@@ -8,6 +8,8 @@ public class Esfera extends ComponenteBase3D<Esfera> {
 
     public Esfera redimensionarComponente(float raio){
         this.raio = raio;
+        this.altura = raio * 2;
+        this.largura = raio * 2;
         return this;
     }
 

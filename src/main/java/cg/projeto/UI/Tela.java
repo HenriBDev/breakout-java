@@ -141,13 +141,6 @@ public class Tela implements GLEventListener
                     
                     if(jogo.bola.estado == EstadosBola.MOVENDO)
                     {
-                        float novaPosicaoBolaX = jogo.bola.elemento.x + jogo.bola.direcaoMovimentacaoX * jogo.bola.velocidadeMovimento * jogo.bola.anguloX;
-                        float novaPosicaoBolaY = jogo.bola.elemento.y + jogo.bola.direcaoMovimentacaoY * jogo.bola.velocidadeMovimento;
-                        jogo.bola.elemento.moverComponente(
-                            novaPosicaoBolaX, 
-                            novaPosicaoBolaY,  
-                            jogo.bola.elemento.z
-                        );
                         if(jogo.bola.elemento.colidiuComComponente(jogo.bastao.elemento) && jogo.bola.elemento.y >= jogo.bastao.elemento.y)
                         {   
                             jogo.bola.aumentarVelocidade(1);
@@ -173,10 +166,20 @@ public class Tela implements GLEventListener
                         {
                             jogo.bola.inverterDirecaoMovimentacaoX();
                         }
-                        if(novaPosicaoBolaY < jogo.bastao.elemento.y){
+
+                        float novaPosicaoBolaX = jogo.bola.elemento.x + jogo.bola.direcaoMovimentacaoX * jogo.bola.velocidadeMovimento * jogo.bola.anguloX;
+                        float novaPosicaoBolaY = jogo.bola.elemento.y + jogo.bola.direcaoMovimentacaoY * jogo.bola.velocidadeMovimento;
+                        
+                        if(novaPosicaoBolaY < jogo.bastao.elemento.y)
+                        {
                             jogo.resetarPosicoes();
                             jogo.vidas--;
                         }
+                        else jogo.bola.elemento.moverComponente(
+                            novaPosicaoBolaX, 
+                            novaPosicaoBolaY,  
+                            jogo.bola.elemento.z
+                        );
                     }
                     this.elementosTela.add(jogo.bastao.elemento);
                     this.elementosTela.add(jogo.bola.elemento);
