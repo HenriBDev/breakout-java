@@ -58,7 +58,7 @@ public class Tela implements GLEventListener
 
     // Conteúdo do jogo
     public static Jogo jogo = new Jogo();
-    private Texto textoPontuacao, textoVidas;
+    private Texto textoPontuacao, textoVidas, textoFase;
 
     // Renderizadores
     public static GL2 drawer2D;
@@ -102,8 +102,9 @@ public class Tela implements GLEventListener
 
         // Inicializa jogo
         jogo = new Jogo();
-        textoPontuacao = new Texto("Pontuação: 0");
-        textoVidas = new Texto("Vidas: 5");
+        textoPontuacao = new Texto("Pontuação: " + jogo.pontuacao);
+        textoVidas = new Texto("Vidas: " + jogo.vidas);
+        textoFase = new Texto("Fase " + jogo.vidas);
         camadaMenu = (int)zMax;
         camadaHUD = camadaMenu - 1;
     }
@@ -181,6 +182,7 @@ public class Tela implements GLEventListener
                             jogo.bola.elemento.z
                         );
                     }
+
                     this.elementosTela.add(jogo.bastao.elemento);
                     this.elementosTela.add(jogo.bola.elemento);
                     this.elementosTela.add(jogo.teto.elemento);
@@ -190,12 +192,24 @@ public class Tela implements GLEventListener
 
                 break;
 
+                case PERDEU:
+
+                    this.elementosTela.add(textoVidas);
+                    this.elementosTela.add(textoPontuacao);
+                    this.elementosTela.add(jogo.bastao.elemento);
+                    this.elementosTela.add(jogo.bola.elemento);
+                    montarMenu(Menus.PERDEU);
+
+                break;
+
                 case PAUSADO:
+
                     this.elementosTela.add(textoVidas);
                     this.elementosTela.add(textoPontuacao);
                     this.elementosTela.add(jogo.bastao.elemento);
                     this.elementosTela.add(jogo.bola.elemento);
                     montarMenu(Menus.PAUSADO);
+
                 break;
             }
         }
@@ -264,7 +278,8 @@ public class Tela implements GLEventListener
 
                 // Desenha instruções na tela
                 float posYAtual = yMax - margem;
-                for(int i = 0; i < textoInicial.length; i++){
+                for(int i = 0; i < textoInicial.length; i++)
+                {
                     Texto linhaTela = new Texto(textoInicial[i]);
                     posYAtual -= linhaTela.altura + margem;
                     linhaTela.centralizarComponente(false, true, false)
@@ -295,6 +310,7 @@ public class Tela implements GLEventListener
             break;
 
             case DEBUG:
+
                 Texto texto = new Texto("Bem-vindo ao editor do jogo de Pong!");
                 texto.moverComponente(texto.x, yMax - margem - texto.altura, texto.z)
                     .centralizarComponente(false, true, true);
@@ -376,14 +392,25 @@ public class Tela implements GLEventListener
             break;
 
             case PAUSADO:
+
                 Quadrilatero telaTransparente = new Quadrilatero()
                     .redimensionarComponente(xMax - xMin, yMax - yMin)
                     .trocarCor(0, 0, 0, 1);
                 telaTransparente.moverComponente(telaTransparente.x, telaTransparente.y, zMax - 1);
                 this.elementosTela.add(telaTransparente);
+
                 Texto textoPausado = new Texto("Jogo pausado (Pressione P para continuar)");
                 textoPausado.moverComponente(textoPausado.x, textoPausado.y, zMax);
                 this.elementosTela.add(textoPausado);
+
+            break;
+
+            case PERDEU:
+
+                Texto textoPerdeu = new Texto("Você perdeu, pressione R para recomeçar");
+                textoPerdeu.moverComponente(textoPerdeu.x, textoPerdeu.y, zMax);
+                this.elementosTela.add(textoPerdeu);
+
             break;
         }
     }

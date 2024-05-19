@@ -5,6 +5,7 @@ import com.jogamp.newt.event.KeyListener;
 
 import cg.projeto.Main;
 import cg.projeto.Debug.ModoEdicao;
+import cg.projeto.Game.Jogo;
 import cg.projeto.Game.Estados.EstadosJogo;
 import cg.projeto.UI.Tela;
 
@@ -80,23 +81,18 @@ public class Keyboard implements KeyListener{
                     }
                 }
             break;
+
             case KeyEvent.VK_R:
-                if(Main.DEBUG)
+
+                if(Main.DEBUG && Tela.modoEdicao != ModoEdicao.ROTACIONAR)
                 {
-                    if(Tela.modoEdicao != ModoEdicao.ROTACIONAR)
-                    {
-                        Tela.modoEdicao = ModoEdicao.ROTACIONAR;
-                    }
+                    Tela.modoEdicao = ModoEdicao.ROTACIONAR;
                 }
-                else
+                else if(Tela.jogo.estado == EstadosJogo.JOGANDO || Tela.jogo.estado == EstadosJogo.PERDEU)
                 {
-                    if(Tela.jogo.estado == EstadosJogo.JOGANDO)
-                    {
-                        Tela.jogo.pontuacao = 0;
-                        Tela.jogo.vidas = 5;
-                        Tela.jogo.fase = 1;
-                        Tela.jogo.resetarPosicoes();
-                    }
+                    Tela.jogo = new Jogo();
+                    Tela.jogo.resetarPosicoes();
+                    if(Tela.jogo.estado == EstadosJogo.PERDEU) Tela.jogo.estado = EstadosJogo.JOGANDO;
                 }
             break;
 
