@@ -88,24 +88,24 @@ public class Keyboard implements KeyListener{
                 {
                     Tela.modoEdicao = ModoEdicao.ROTACIONAR;
                 }
-                else if(Tela.jogo.estado == EstadosJogo.JOGANDO || Tela.jogo.estado == EstadosJogo.PERDEU)
+                else if(Jogo.estado == EstadosJogo.JOGANDO || Jogo.estado == EstadosJogo.PERDEU)
                 {
                     Tela.jogo = new Jogo();
                     Tela.jogo.resetarPosicoes();
-                    if(Tela.jogo.estado == EstadosJogo.PERDEU) Tela.jogo.estado = EstadosJogo.JOGANDO;
+                    if(Jogo.estado == EstadosJogo.PERDEU) Jogo.estado = EstadosJogo.JOGANDO;
                 }
             break;
 
             // Jogo
             case KeyEvent.VK_ENTER:
-                if(!(Main.DEBUG) && Tela.jogo.estado == EstadosJogo.INICIAL){
+                if(!(Main.DEBUG) && Jogo.estado == EstadosJogo.INICIAL){
                     Tela.jogo.mudarEstado(EstadosJogo.JOGANDO);
                 }
             break;
             case KeyEvent.VK_P:
                 if(!(Main.DEBUG)){
-                    if(Tela.jogo.estado == EstadosJogo.JOGANDO) Tela.jogo.mudarEstado(EstadosJogo.PAUSADO);
-                    else if(Tela.jogo.estado == EstadosJogo.PAUSADO) Tela.jogo.mudarEstado(EstadosJogo.JOGANDO);
+                    if(Jogo.estado == EstadosJogo.JOGANDO) Tela.jogo.mudarEstado(EstadosJogo.PAUSADO);
+                    else if(Jogo.estado == EstadosJogo.PAUSADO) Tela.jogo.mudarEstado(EstadosJogo.JOGANDO);
                 }
             break;
         }

@@ -5,9 +5,7 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GL4bc;
 import com.jogamp.opengl.GLAutoDrawable;
@@ -19,8 +17,6 @@ import cg.projeto.Main;
 import cg.projeto.Utils;
 import cg.projeto.Debug.ModoEdicao;
 import cg.projeto.Game.Jogo;
-import cg.projeto.Game.Estados.EstadosBola;
-import cg.projeto.Game.Estados.EstadosJogo;
 import cg.projeto.UI._2D.Componentes.Texto;
 import cg.projeto.UI._2D.Componentes.Circulo;
 import cg.projeto.UI._2D.Componentes.Octagono;
@@ -31,18 +27,22 @@ import cg.projeto.UI._3D.Componentes.Hexaedro;
 public class Tela implements GLEventListener
 {    
     // Elementos UI
+    public static final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    public static final float 
+        screenWidth = (float) screenSize.getWidth(), 
+        screenHeight = (float) screenSize.getHeight(),
+        limiteZ = 1000,
+        margem = 25;
     public static float
-        limiteZ = 1000, margem = 25, escalaCamera = 1,
+        escalaCamera = 1,
         xMin, xMax, xPontoCentral,
         yMin, yMax, yPontoCentral,
         zMin, zMax, zPontoCentral,
-        anguloHexaedroDebug = 0,
-        espacamentoTexto = 10,
-        screenWidth = 0, screenHeight = 0;
+        anguloHexaedroDebug = 0;
     public static float[]
         rotacaoCamera = {0, 0, 0},
         posicaoCamera = {0, 0, 0};
-    public String[] textoInicial = {
+    public static final String[] textoInicial = {
         "Bem-vindo ao jogo de pong!",
         "A D ou <- -> ou MOUSE (Movimentação).",
         "P (Pause)", 
@@ -53,17 +53,15 @@ public class Tela implements GLEventListener
         "",
         "Pressione enter para começar."
     };
-    private final List<ComponenteBase> elementosTela = new ArrayList<ComponenteBase>(); 
-    private int camadaMenu, camadaHUD;
+    public final static List<ComponenteBase> elementosTela = new ArrayList<ComponenteBase>(); 
 
     // Conteúdo do jogo
-    public static Jogo jogo = new Jogo();
-    private Texto textoPontuacao, textoVidas, textoFase;
+    public static Jogo jogo;
 
     // Renderizadores
     public static GL2 drawer2D;
-    public static GLUT drawer3D = new GLUT();
-    public static TextRenderer textRenderer = new TextRenderer(new Font(Fonte.FAMILY, Fonte.STYLE, Fonte.SIZE));
+    public static final GLUT drawer3D = new GLUT();
+    public static final TextRenderer textRenderer = new TextRenderer(new Font(Fonte.FAMILY, Fonte.STYLE, Fonte.SIZE));
 
     // Debug
     public static ModoEdicao modoEdicao = ModoEdicao.MOVER;
@@ -71,10 +69,6 @@ public class Tela implements GLEventListener
     public void init(GLAutoDrawable drawable) 
     {
         //Estabelece as coordenadas do SRU (Sistema de Referencia do Universo)
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        screenWidth = (float) screenSize.getWidth();
-        screenHeight = (float) screenSize.getHeight();
-
         xMin = screenWidth/2 * -1;
         xMax = screenWidth/2;
         yMin = screenHeight/2 * -1;
@@ -102,11 +96,6 @@ public class Tela implements GLEventListener
 
         // Inicializa jogo
         jogo = new Jogo();
-        textoPontuacao = new Texto("Pontuação: " + jogo.pontuacao);
-        textoVidas = new Texto("Vidas: " + jogo.vidas);
-        textoFase = new Texto("Fase " + jogo.vidas);
-        camadaMenu = (int)zMax;
-        camadaHUD = camadaMenu - 1;
     }
 
     public void display(GLAutoDrawable drawable) 
@@ -117,102 +106,8 @@ public class Tela implements GLEventListener
         drawer2D.glLoadIdentity(); // Limpa resto
         this.limparTela(); // Apaga elementos
 
-        if(Main.DEBUG) {
-            montarMenu(Menus.DEBUG);
-        }
-        else{
-            // Verifica estado atual do jogo
-            switch(jogo.estado){
-
-                case INICIAL:
-
-                    montarMenu(Menus.INICIAL);
-
-                break;
-
-                case JOGANDO:
-
-                    this.textoPontuacao.conteudo = "Pontuação: " + jogo.pontuacao;
-                    this.textoPontuacao.moverComponente(xMin + margem + textoPontuacao.largura/2, yMax - margem - textoPontuacao.altura/2, zMax - 2);
-                    this.elementosTela.add(textoPontuacao);
-                    
-                    this.textoVidas.conteudo = "Vidas: " + jogo.vidas;
-                    this.textoVidas.moverComponente(xMax - margem - textoVidas.largura/2, yMax - margem - textoVidas.altura/2, zMax - 2);
-                    this.elementosTela.add(textoVidas);
-                    
-                    if(jogo.bola.estado == EstadosBola.MOVENDO)
-                    {
-                        if(jogo.bola.elemento.colidiuComComponente(jogo.bastao.elemento) && jogo.bola.elemento.y >= jogo.bastao.elemento.y)
-                        {   
-                            jogo.bola.aumentarVelocidade(1);
-                            jogo.aumentarPontuacao(20);
-                            if(jogo.bola.elemento.x > jogo.bastao.elemento.x){
-                                jogo.bola.anguloX = jogo.bastao.elemento.largura/2 / 100 * (jogo.bola.elemento.x - jogo.bastao.elemento.x) / 100; 
-                                jogo.bola.direcaoMovimentacaoX = 1;
-                            }
-                            if(jogo.bola.elemento.x < jogo.bastao.elemento.x){
-                                jogo.bola.anguloX = jogo.bastao.elemento.largura/2 / 100 * (jogo.bastao.elemento.x - jogo.bola.elemento.x) / 100; 
-                                jogo.bola.direcaoMovimentacaoX = -1;
-                            }
-                            if(jogo.bola.elemento.x == jogo.bastao.elemento.x){
-                                jogo.bola.direcaoMovimentacaoX = new Random().nextBoolean() ? 1 : -1;
-                            }
-                            jogo.bola.direcaoMovimentacaoY = 1;
-                        }
-                        if(jogo.bola.elemento.colidiuComComponente(jogo.teto.elemento))
-                        {
-                            jogo.bola.inverterDirecaoMovimentacaoY();
-                        }
-                        if(jogo.bola.elemento.colidiuComComponente(jogo.paredeDireita.elemento) || jogo.bola.elemento.colidiuComComponente(jogo.paredeEsquerda.elemento))
-                        {
-                            jogo.bola.inverterDirecaoMovimentacaoX();
-                        }
-
-                        float novaPosicaoBolaX = jogo.bola.elemento.x + jogo.bola.direcaoMovimentacaoX * jogo.bola.velocidadeMovimento * jogo.bola.anguloX;
-                        float novaPosicaoBolaY = jogo.bola.elemento.y + jogo.bola.direcaoMovimentacaoY * jogo.bola.velocidadeMovimento;
-                        
-                        if(novaPosicaoBolaY < jogo.bastao.elemento.y)
-                        {
-                            jogo.resetarPosicoes();
-                            jogo.vidas--;
-                        }
-                        else jogo.bola.elemento.moverComponente(
-                            novaPosicaoBolaX, 
-                            novaPosicaoBolaY,  
-                            jogo.bola.elemento.z
-                        );
-                    }
-
-                    this.elementosTela.add(jogo.bastao.elemento);
-                    this.elementosTela.add(jogo.bola.elemento);
-                    this.elementosTela.add(jogo.teto.elemento);
-                    this.elementosTela.add(jogo.paredeDireita.elemento);
-                    this.elementosTela.add(jogo.paredeEsquerda.elemento);
-                    if(jogo.vidas == 0) jogo.estado = EstadosJogo.PERDEU;
-
-                break;
-
-                case PERDEU:
-
-                    this.elementosTela.add(textoVidas);
-                    this.elementosTela.add(textoPontuacao);
-                    this.elementosTela.add(jogo.bastao.elemento);
-                    this.elementosTela.add(jogo.bola.elemento);
-                    montarMenu(Menus.PERDEU);
-
-                break;
-
-                case PAUSADO:
-
-                    this.elementosTela.add(textoVidas);
-                    this.elementosTela.add(textoPontuacao);
-                    this.elementosTela.add(jogo.bastao.elemento);
-                    this.elementosTela.add(jogo.bola.elemento);
-                    montarMenu(Menus.PAUSADO);
-
-                break;
-            }
-        }
+        if(Main.DEBUG) montarMenu(Menus.DEBUG);
+        else jogo.desenharJogo();
 
         // Adiciona luz no cenário
         drawer2D.glLightfv(GL2.GL_LIGHT0, GL2.GL_DIFFUSE, new float[]{1f, 1f, 1f, 1}, 0);
@@ -268,9 +163,9 @@ public class Tela implements GLEventListener
         }
     }
     
-    private void limparTela(){ this.elementosTela.clear(); }
+    private void limparTela(){ elementosTela.clear(); }
 
-    private void montarMenu(Menus novoMenu)
+    public static void montarMenu(Menus novoMenu)
     {
         switch(novoMenu)
         {
@@ -284,7 +179,7 @@ public class Tela implements GLEventListener
                     posYAtual -= linhaTela.altura + margem;
                     linhaTela.centralizarComponente(false, true, false)
                         .moverComponente(linhaTela.x, posYAtual, linhaTela.z);
-                    this.elementosTela.add(linhaTela);
+                    elementosTela.add(linhaTela);
                 }
 
                 posYAtual -= margem * 2;
@@ -295,17 +190,17 @@ public class Tela implements GLEventListener
                     .centralizarComponente(false, false, false)
                     .preencherComponente(false);
                 campo.moverComponente(campo.x, posYAtual - campo.altura / 2, campo.z);
-                this.elementosTela.add(campo);
+                elementosTela.add(campo);
 
                 Quadrilatero bastao = new Quadrilatero()
                     .redimensionarComponente(112.5f, 37.5f)
                     .centralizarComponente(false, true, false);
                 bastao.moverComponente(bastao.x, posYAtual - campo.altura + 11 + bastao.altura / 2, bastao.z);
-                this.elementosTela.add(bastao);
+                elementosTela.add(bastao);
 
                 Circulo bolinha = new Circulo().redimensionarComponente(20);
                 bolinha.moverComponente(campo.x + campo.largura / 3, campo.y , bolinha.z);
-                this.elementosTela.add(bolinha);
+                elementosTela.add(bolinha);
 
             break;
 
@@ -397,11 +292,11 @@ public class Tela implements GLEventListener
                     .redimensionarComponente(xMax - xMin, yMax - yMin)
                     .trocarCor(0, 0, 0, 1);
                 telaTransparente.moverComponente(telaTransparente.x, telaTransparente.y, zMax - 1);
-                this.elementosTela.add(telaTransparente);
+                elementosTela.add(telaTransparente);
 
                 Texto textoPausado = new Texto("Jogo pausado (Pressione P para continuar)");
                 textoPausado.moverComponente(textoPausado.x, textoPausado.y, zMax);
-                this.elementosTela.add(textoPausado);
+                elementosTela.add(textoPausado);
 
             break;
 
@@ -409,7 +304,7 @@ public class Tela implements GLEventListener
 
                 Texto textoPerdeu = new Texto("Você perdeu, pressione R para recomeçar");
                 textoPerdeu.moverComponente(textoPerdeu.x, textoPerdeu.y, zMax);
-                this.elementosTela.add(textoPerdeu);
+                elementosTela.add(textoPerdeu);
 
             break;
         }
