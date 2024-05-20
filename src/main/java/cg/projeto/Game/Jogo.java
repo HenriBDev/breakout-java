@@ -6,7 +6,6 @@ import java.util.Random;
 
 import cg.projeto.Game.Estados.EstadosBola;
 import cg.projeto.Game.Estados.EstadosJogo;
-import cg.projeto.UI.ComponenteBase;
 import cg.projeto.UI.Menus;
 import cg.projeto.UI.Tela;
 import cg.projeto.UI._2D.Componentes.Texto;
@@ -65,7 +64,7 @@ public class Jogo {
                 {
                     if(bola.elemento.colidiuComComponente(bastao.elemento) && bola.elemento.y >= bastao.elemento.y)
                     {   
-                        bola.aumentarVelocidade(1);
+                        bola.aumentarVelocidade(.75f);
                         aumentarPontuacao(20);
                         if(bola.elemento.x > bastao.elemento.x){
                             bola.anguloX = bastao.elemento.largura/2 / 100 * (bola.elemento.x - bastao.elemento.x) / 100; 
@@ -125,11 +124,11 @@ public class Jogo {
                     float novaPosicaoBolaX = bola.elemento.x + bola.direcaoMovimentacaoX * bola.velocidadeMovimento * bola.anguloX;
                     float novaPosicaoBolaY = bola.elemento.y + bola.direcaoMovimentacaoY * bola.velocidadeMovimento;
                     
-                    if(novaPosicaoBolaY < bastao.elemento.y || (fase == 1 && pontuacao >= 20) || (fase > 1 && obstaculos.isEmpty()))
+                    if(novaPosicaoBolaY < bastao.elemento.y || (fase == 1 && pontuacao >= 200) || (fase == 2 && obstaculos.isEmpty()))
                     {
                         resetarPosicoes();
                         if(novaPosicaoBolaY < bastao.elemento.y) vidas--;
-                        if((fase == 1 && pontuacao >= 20) || (fase > 1 && obstaculos.isEmpty())) trocarFase(fase + 1);
+                        if((fase == 1 && pontuacao >= 200) || (fase == 2 && obstaculos.isEmpty())) trocarFase(fase + 1);
                     }
                     else bola.elemento.moverComponente(
                         novaPosicaoBolaX, 
@@ -207,8 +206,8 @@ public class Jogo {
                         novoObstaculo.elemento
                             .redimensionarComponente(larguraObstaculo, alturaObstaculo, 10)
                             .moverComponente(
-                                (Tela.xPontoCentral - (larguraObstaculo * qtdColunas/2) - (espacamentoObstaculos * (qtdColunas-1))) + (larguraObstaculo * contHorizontal) + (espacamentoObstaculos * contHorizontal) - larguraObstaculo/2,
-                                (Tela.yPontoCentral + (alturaObstaculo * qtdLinhas/2) + (espacamentoObstaculos * (qtdLinhas-1)) + 200) - (alturaObstaculo * contVertical) - (espacamentoObstaculos * contVertical) + alturaObstaculo/2,
+                                Tela.xPontoCentral - (larguraObstaculo * qtdColunas / 2) - (espacamentoObstaculos * qtdColunas / 2) + (larguraObstaculo * contHorizontal) + (espacamentoObstaculos * contHorizontal) + (larguraObstaculo/2),
+                                Tela.yPontoCentral + (alturaObstaculo * qtdLinhas / 2) + (espacamentoObstaculos * qtdLinhas / 2) + 200 - (alturaObstaculo * contVertical) - (espacamentoObstaculos * contVertical) - (alturaObstaculo/2),
                                 novoObstaculo.elemento.z
                             );
                         obstaculos.add(novoObstaculo);
