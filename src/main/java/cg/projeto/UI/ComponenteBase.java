@@ -42,28 +42,40 @@ public abstract class ComponenteBase<tipoComponente> {
         );
     }
 
-    public boolean colidiuComComponente(ComponenteBase componenteAColidir)
+    public boolean colidiuComComponenteHorizontalmente(ComponenteBase componenteAColidir)
     {
+        float pontaDireitaComponenteAColidir = componenteAColidir.x + componenteAColidir.largura/2;
+        float pontaEsquerdaComponenteAColidir = componenteAColidir.x - componenteAColidir.largura/2;
         float pontaDireitaComponenteAtual = this.x + this.largura/2;
         float pontaEsquerdaComponenteAtual = this.x - this.largura/2;
+
+        return (
+            pontaDireitaComponenteAtual >= pontaEsquerdaComponenteAColidir &&
+            pontaEsquerdaComponenteAtual <= pontaDireitaComponenteAColidir
+        ) || (
+            pontaEsquerdaComponenteAtual <= pontaDireitaComponenteAColidir &&
+            pontaDireitaComponenteAtual >= pontaEsquerdaComponenteAColidir
+        );
+    }
+    
+    public boolean colidiuComComponenteVerticalmente(ComponenteBase componenteAColidir)
+    {
+        float pontaCimaComponenteAColidir = componenteAColidir.y + componenteAColidir.altura/2;
+        float pontaBaixoComponenteAColidir = componenteAColidir.y - componenteAColidir.altura/2;
         float pontaCimaComponenteAtual = this.y + this.altura/2;
         float pontaBaixoComponenteAtual = this.y - this.altura/2;
 
-        float pontaDireitaComponenteAColidir = componenteAColidir.x + componenteAColidir.largura/2;
-        float pontaEsquerdaComponenteAColidir = componenteAColidir.x - componenteAColidir.largura/2;
-        float pontaCimaComponenteAColidir = componenteAColidir.y + componenteAColidir.altura/2;
-        float pontaBaixoComponenteAColidir = componenteAColidir.y - componenteAColidir.altura/2;
+        return (
+            pontaCimaComponenteAtual >= pontaBaixoComponenteAColidir &&
+            pontaBaixoComponenteAtual <= pontaCimaComponenteAColidir
+        ) || (
+            pontaBaixoComponenteAtual <= pontaCimaComponenteAColidir &&
+            pontaCimaComponenteAtual >= pontaBaixoComponenteAColidir
+        );
+    }
 
-        boolean colidiuHorizontalmente = (pontaDireitaComponenteAtual >= pontaEsquerdaComponenteAColidir &&
-        pontaEsquerdaComponenteAtual <= pontaDireitaComponenteAColidir) ||
-        (pontaEsquerdaComponenteAtual <= pontaDireitaComponenteAColidir &&
-        pontaDireitaComponenteAtual >= pontaEsquerdaComponenteAColidir);
-        
-        boolean colidiuVerticalmente = (pontaCimaComponenteAtual >= pontaBaixoComponenteAColidir &&
-        pontaBaixoComponenteAtual <= pontaCimaComponenteAColidir) ||
-        (pontaBaixoComponenteAtual <= pontaCimaComponenteAColidir &&
-        pontaCimaComponenteAtual >= pontaBaixoComponenteAColidir);
-
-        return colidiuVerticalmente && colidiuHorizontalmente;
+    public boolean colidiuComComponente(ComponenteBase componenteAColidir)
+    {
+        return colidiuComComponenteVerticalmente(componenteAColidir) && colidiuComComponenteHorizontalmente(componenteAColidir);
     }
 }

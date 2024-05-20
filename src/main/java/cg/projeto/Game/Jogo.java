@@ -1,9 +1,12 @@
 package cg.projeto.Game;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import cg.projeto.Game.Estados.EstadosBola;
 import cg.projeto.Game.Estados.EstadosJogo;
+import cg.projeto.UI.ComponenteBase;
 import cg.projeto.UI.Menus;
 import cg.projeto.UI.Tela;
 import cg.projeto.UI._2D.Componentes.Texto;
@@ -21,6 +24,7 @@ public class Jogo {
         paredeDireita = new Parede(),
         paredeEsquerda = new Parede();
     public static final Bola bola = new Bola();
+    public static final List<Obstaculo> obstaculos = new ArrayList<Obstaculo>();
     private Texto textoPontuacao, textoVidas, textoFase;
 
     public Jogo()
@@ -33,7 +37,6 @@ public class Jogo {
         textoFase.moverComponente(Tela.xPontoCentral, Tela.yMax - Tela.margem - textoFase.altura/2, Tela.zMax - 2);
 
         bastao.elemento.redimensionarComponente(200, 50, 50);
-        bola.elemento.redimensionarComponente(25);
         teto.elemento.redimensionarComponente(Tela.screenWidth, 100, 100);
         paredeDireita.elemento.redimensionarComponente(100, Tela.screenHeight, 100);
         paredeEsquerda.elemento.redimensionarComponente(100, Tela.screenHeight, 100);
@@ -86,13 +89,47 @@ public class Jogo {
                         bola.inverterDirecaoMovimentacaoX();
                     }
 
+                    if(fase > 1)
+                    {
+                        int index = 0;
+                        while(index < obstaculos.size())
+                        {
+                            Obstaculo obstaculo = obstaculos.get(index);
+
+                            if(bola.elemento.colidiuComComponente(obstaculo.elemento))
+                            {
+                                float posicaoBolaXAnterior = bola.elemento.x - bola.direcaoMovimentacaoX * bola.velocidadeMovimento * bola.anguloX;
+                                float posicaoBolaYAnterior = bola.elemento.y - bola.direcaoMovimentacaoY * bola.velocidadeMovimento;
+                                Bola bolaAnteriora = new Bola();
+                                bolaAnteriora.elemento.moverComponente(
+                                    posicaoBolaXAnterior, 
+                                    posicaoBolaYAnterior,  
+                                    bola.elemento.z
+                                );
+                                if(!bolaAnteriora.elemento.colidiuComComponenteVerticalmente(obstaculo.elemento))
+                                {
+                                    bola.inverterDirecaoMovimentacaoY();
+                                }
+                                if(!bolaAnteriora.elemento.colidiuComComponenteHorizontalmente(obstaculo.elemento))
+                                {
+                                    bola.inverterDirecaoMovimentacaoX();
+                                }
+
+                                aumentarPontuacao(25);
+                                obstaculos.remove(index);
+                            }
+                            else index++;
+                        }
+                    }
+
                     float novaPosicaoBolaX = bola.elemento.x + bola.direcaoMovimentacaoX * bola.velocidadeMovimento * bola.anguloX;
                     float novaPosicaoBolaY = bola.elemento.y + bola.direcaoMovimentacaoY * bola.velocidadeMovimento;
                     
-                    if(novaPosicaoBolaY < bastao.elemento.y)
+                    if(novaPosicaoBolaY < bastao.elemento.y || (fase == 1 && pontuacao >= 20) || (fase > 1 && obstaculos.isEmpty()))
                     {
                         resetarPosicoes();
-                        vidas--;
+                        if(novaPosicaoBolaY < bastao.elemento.y) vidas--;
+                        if((fase == 1 && pontuacao >= 20) || (fase > 1 && obstaculos.isEmpty())) trocarFase(fase + 1);
                     }
                     else bola.elemento.moverComponente(
                         novaPosicaoBolaX, 
@@ -106,6 +143,10 @@ public class Jogo {
                 Tela.elementosTela.add(teto.elemento);
                 Tela.elementosTela.add(paredeDireita.elemento);
                 Tela.elementosTela.add(paredeEsquerda.elemento);
+                for(int index = obstaculos.size() - 1; index >= 0; index--)
+                {    
+                    Tela.elementosTela.add(obstaculos.get(index).elemento);
+                }
                 if(vidas == 0) estado = EstadosJogo.PERDEU;
 
             break;
@@ -146,6 +187,37 @@ public class Jogo {
 
     public void trocarFase(int novaFase){
         fase = novaFase;
+        obstaculos.clear();
+        bola.velocidadeMovimento = 10;
+        switch(fase)
+        {
+            case 2:
+
+                int qtdColunas = 9,
+                    qtdLinhas = 4;
+
+                for(int contHorizontal = 0; contHorizontal < qtdColunas; contHorizontal++)
+                {
+                    for(int contVertical = 0; contVertical < qtdLinhas; contVertical++)
+                    {
+                        float larguraObstaculo = 75,
+                            alturaObstaculo = 25,
+                            espacamentoObstaculos = 10;
+                        Obstaculo novoObstaculo = new Obstaculo();
+                        novoObstaculo.elemento
+                            .redimensionarComponente(larguraObstaculo, alturaObstaculo, 10)
+                            .moverComponente(
+                                (Tela.xPontoCentral - (larguraObstaculo * qtdColunas/2) - (espacamentoObstaculos * (qtdColunas-1))) + (larguraObstaculo * contHorizontal) + (espacamentoObstaculos * contHorizontal) - larguraObstaculo/2,
+                                (Tela.yPontoCentral + (alturaObstaculo * qtdLinhas/2) + (espacamentoObstaculos * (qtdLinhas-1)) + 200) - (alturaObstaculo * contVertical) - (espacamentoObstaculos * contVertical) + alturaObstaculo/2,
+                                novoObstaculo.elemento.z
+                            );
+                        obstaculos.add(novoObstaculo);
+                        Tela.elementosTela.add(novoObstaculo.elemento);
+                    }
+                }
+            break;
+        }
+        resetarPosicoes();
     }
 
     public void resetarPosicoes(){
@@ -153,7 +225,7 @@ public class Jogo {
         bastao.elemento.centralizarComponente(false, true, true)
             .moverComponente(bastao.elemento.x, Tela.yMin + Tela.margem + bastao.elemento.altura / 2, bastao.elemento.z);
         bola.elemento.centralizarComponente(false, true, true)
-            .moverComponente(bola.elemento.x, bastao.elemento.y + bastao.elemento.altura / 2 + bola.elemento.raio, bola.elemento.z);
+            .moverComponente(bola.elemento.x, bastao.elemento.y + bastao.elemento.altura / 2 + bola.elemento.raio + 1, bola.elemento.z);
         paredeDireita.elemento.centralizarComponente(true, false, true)
             .moverComponente(Tela.xMax + paredeDireita.elemento.largura/2, paredeDireita.elemento.y, paredeDireita.elemento.z);
         paredeEsquerda.elemento.centralizarComponente(true, false, true)

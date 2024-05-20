@@ -12,6 +12,10 @@ public class Bola {
     public int direcaoMovimentacaoX = 0; // 1 = Direita, -1 = Esquerda
     public int direcaoMovimentacaoY = 0; // 1 = Cima, -1 = Baixo
 
+    public Bola(){
+        elemento.redimensionarComponente(25);
+    }
+
     public void mudarEstado(EstadosBola novoEstado){
         this.estado = novoEstado;
     }
