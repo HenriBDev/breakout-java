@@ -28,10 +28,13 @@ public class Jogo {
 
     public Jogo()
     {
+        pontuacao = 0;
         textoPontuacao = new Texto("Pontuação: " + pontuacao);
         textoPontuacao.moverComponente(Tela.xMin + Tela.margem + textoPontuacao.largura/2, Tela.yMax - Tela.margem - textoPontuacao.altura/2, Tela.zMax - 2);
+        vidas = 5;
         textoVidas = new Texto("Vidas: " + vidas);
         textoVidas.moverComponente(Tela.xMax - Tela.margem - textoVidas.largura/2, Tela.yMax - Tela.margem - textoVidas.altura/2, Tela.zMax - 2);
+        fase = 1;
         textoFase = new Texto("Fase " + fase);
         textoFase.moverComponente(Tela.xPontoCentral, Tela.yMax - Tela.margem - textoFase.altura/2, Tela.zMax - 2);
 
@@ -192,9 +195,9 @@ public class Jogo {
         {
             case 2:
 
-                int qtdColunas = 9,
+                int qtdColunas = 8,
                     qtdLinhas = 4;
-
+                    
                 for(int contHorizontal = 0; contHorizontal < qtdColunas; contHorizontal++)
                 {
                     for(int contVertical = 0; contVertical < qtdLinhas; contVertical++)

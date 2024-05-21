@@ -13,7 +13,7 @@ import cg.projeto.UI.Tela;
 
 public class Main {
 
-    public static boolean DEBUG = false;
+    public static boolean DEBUG = true;
     
     public static GLWindow window = null;
 
@@ -46,7 +46,7 @@ public class Main {
         
         window.setTitle("Pong maneiro fi");
         window.setFullscreen(true);
-        window.setPointerVisible(false);
+        if(!DEBUG) window.setPointerVisible(false);
         window.setVisible(true);
 
     }

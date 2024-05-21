@@ -4,7 +4,7 @@ import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.KeyListener;
 
 import cg.projeto.Main;
-import cg.projeto.Debug.ModoEdicao;
+import cg.projeto.Debug.ModosEdicao;
 import cg.projeto.Game.Jogo;
 import cg.projeto.Game.Estados.EstadosJogo;
 import cg.projeto.UI.Tela;
@@ -76,17 +76,17 @@ public class Keyboard implements KeyListener{
             // Debug
             case KeyEvent.VK_M:
                 if(Main.DEBUG){
-                    if(Tela.modoEdicao != ModoEdicao.MOVER){
-                        Tela.modoEdicao = ModoEdicao.MOVER;
+                    if(Tela.modoEdicao != ModosEdicao.MOVER){
+                        Tela.modoEdicao = ModosEdicao.MOVER;
                     }
                 }
             break;
 
             case KeyEvent.VK_R:
 
-                if(Main.DEBUG && Tela.modoEdicao != ModoEdicao.ROTACIONAR)
+                if(Main.DEBUG && Tela.modoEdicao != ModosEdicao.ROTACIONAR)
                 {
-                    Tela.modoEdicao = ModoEdicao.ROTACIONAR;
+                    Tela.modoEdicao = ModosEdicao.ROTACIONAR;
                 }
                 else if(Jogo.estado == EstadosJogo.JOGANDO || Jogo.estado == EstadosJogo.PERDEU)
                 {
@@ -95,15 +95,27 @@ public class Keyboard implements KeyListener{
                     if(Jogo.estado == EstadosJogo.PERDEU) Jogo.estado = EstadosJogo.JOGANDO;
                 }
             break;
+            
+            case KeyEvent.VK_G:
+
+                if(Main.DEBUG && Tela.modoEdicao != ModosEdicao.GRID)
+                {
+                    Tela.modoEdicao = ModosEdicao.GRID;
+                }
+            break;
 
             // Jogo
             case KeyEvent.VK_ENTER:
-                if(!(Main.DEBUG) && Jogo.estado == EstadosJogo.INICIAL){
+
+                if(!(Main.DEBUG) && Jogo.estado == EstadosJogo.INICIAL)
+                {
                     Tela.jogo.mudarEstado(EstadosJogo.JOGANDO);
                 }
             break;
+
             case KeyEvent.VK_P:
-                if(!(Main.DEBUG)){
+                if(!(Main.DEBUG))
+                {
                     if(Jogo.estado == EstadosJogo.JOGANDO) Tela.jogo.mudarEstado(EstadosJogo.PAUSADO);
                     else if(Jogo.estado == EstadosJogo.PAUSADO) Tela.jogo.mudarEstado(EstadosJogo.JOGANDO);
                 }

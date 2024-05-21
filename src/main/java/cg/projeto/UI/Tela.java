@@ -15,7 +15,7 @@ import com.jogamp.opengl.util.gl2.GLUT;
 
 import cg.projeto.Main;
 import cg.projeto.Utils;
-import cg.projeto.Debug.ModoEdicao;
+import cg.projeto.Debug.ModosEdicao;
 import cg.projeto.Game.Jogo;
 import cg.projeto.UI._2D.Componentes.Texto;
 import cg.projeto.UI._2D.Componentes.Circulo;
@@ -64,7 +64,10 @@ public class Tela implements GLEventListener
     public static final TextRenderer textRenderer = new TextRenderer(new Font(Fonte.FAMILY, Fonte.STYLE, Fonte.SIZE));
 
     // Debug
-    public static ModoEdicao modoEdicao = ModoEdicao.MOVER;
+    public static int qtdColunasGrid = 15, qtdLinhasGrid = 15;
+    public static ModosEdicao modoEdicao = ModosEdicao.MOVER;
+    public static List<ArrayList<Quadrilatero>> gridEdicao = new ArrayList<ArrayList<Quadrilatero>>();
+    public static Quadrilatero fundoGrid = new Quadrilatero();
     
     public void init(GLAutoDrawable drawable) 
     {
@@ -96,6 +99,30 @@ public class Tela implements GLEventListener
 
         // Inicializa jogo
         jogo = new Jogo();
+
+        fundoGrid.centralizarComponente(true, true, true)
+            .redimensionarComponente(xMax - xMin - margem - 200, yMax - yMin - margem - 200);
+
+        // Desenha linhas do grid
+        float larguraCelulas = fundoGrid.largura/qtdLinhasGrid,
+            alturaCelulas = fundoGrid.altura/qtdColunasGrid;
+        for(int coluna = 0; coluna < qtdColunasGrid; coluna++)
+        {
+            gridEdicao.add(new ArrayList<Quadrilatero>());
+            for(int linha = 0; linha < qtdLinhasGrid; linha++)
+            {
+                Quadrilatero celula = new Quadrilatero()
+                    .preencherComponente(false)
+                    .trocarCor(0.8f, 0.8f, 0.8f, 1)
+                    .redimensionarComponente(larguraCelulas, alturaCelulas);
+                celula.moverComponente(
+                    fundoGrid.x - fundoGrid.largura/2 + larguraCelulas*coluna + larguraCelulas/2, 
+                    fundoGrid.y + fundoGrid.altura/2 - alturaCelulas*linha - alturaCelulas/2, 
+                    zPontoCentral + 1
+                );
+                gridEdicao.get(coluna).add(celula);
+            }
+        }
     }
 
     public void display(GLAutoDrawable drawable) 
@@ -209,81 +236,96 @@ public class Tela implements GLEventListener
                 Texto texto = new Texto("Bem-vindo ao editor do jogo de Pong!");
                 texto.moverComponente(texto.x, yMax - margem - texto.altura, texto.z)
                     .centralizarComponente(false, true, true);
-                
-                Quadrilatero quadrado = new Quadrilatero()
-                    .moverComponente(0, 0, zMax - 2)
-                    .trocarCor(0, 1, 0, 1f)
-                    .preencherComponente(false)
-                    .redimensionarComponente(500, 500)
-                    .rotacionarComponente(0, 0, 45)
-                    .centralizarComponente(true, true, false);
-                
-                Octagono octagono = new Octagono()
-                    .moverComponente(0, 0, zMax - 2)
-                    .preencherComponente(false)
-                    .trocarCor(1, 1, 0, 1)
-                    .redimensionarComponente(450, 450)
-                    .centralizarComponente(true, true, false);
-            
-                if(anguloHexaedroDebug < 360) anguloHexaedroDebug++;
-                else anguloHexaedroDebug = 0;
-                Hexaedro hexaedro = new Hexaedro()
-                    .trocarCor(1, 0, 1, 0.2f)
-                    .redimensionarComponente(200, 200, 200)
-                    .rotacionarComponente(anguloHexaedroDebug, anguloHexaedroDebug, anguloHexaedroDebug)
-                    .centralizarComponente(true, true, true);
-            
-                Esfera esfera = new Esfera()
-                    .trocarCor(1, 0, 0, 1)
-                    .redimensionarComponente(75)
-                    .preencherComponente(false)
-                    .centralizarComponente(true, true, true)
-                    .rotacionarComponente(0, 90, 0);
-            
-                // Adiciona ponto vermelho central
-                Quadrilatero pontoVermelho = new Quadrilatero()
-                    .trocarCor(1, 0, 0, 1)
-                    .redimensionarComponente(10, 10)
-                    .centralizarComponente(true, true, true);
-                    
-                // Adiciona modo de edição
-                Texto textoModoEdicao = new Texto("Modo de edição: "+modoEdicao);
-                textoModoEdicao.moverComponente(xMin + textoModoEdicao.largura / 2 + margem, yMin + textoModoEdicao.altura / 2 + margem, zPontoCentral);
-                
-                // Adiciona escala
-                Texto textoEscala = new Texto("Escala: "+Math.round(escalaCamera * 100)+"%");
-                textoEscala.moverComponente(xMin + textoEscala.largura / 2 + margem, yMin + textoEscala.altura / 2 + margem + textoModoEdicao.altura, zPontoCentral);
-                
-                Esfera esfera1 = new Esfera()
-                .trocarCor(1, 1, 0, 1)
-                .redimensionarComponente(75)
-                .preencherComponente(false)
-                .centralizarComponente(true, true, true)
-                .rotacionarComponente(0, 90, 0)
-                .moverComponente(xMin, yMin, 0);
-                
-                Esfera esfera2 = new Esfera()
-                .trocarCor(0, 1, 1, 1)
-                .redimensionarComponente(75)
-                .preencherComponente(false)
-                .centralizarComponente(true, true, true)
-                .rotacionarComponente(0, 90, 0)
-                .moverComponente(xMin+10, yMin+10, 0);
-                
-                Texto textoColidiu = new Texto("Colidiu?: " + esfera1.largura + (esfera1.colidiuComComponente(esfera2) ? "Sim" : "Não"));
-                textoColidiu.moverComponente(xMin + textoEscala.largura + margem + textoColidiu.largura/2 + 30, yMin + textoColidiu.altura / 2 + margem + textoModoEdicao.altura, zPontoCentral);
-
                 elementosTela.add(texto);
-                elementosTela.add(textoModoEdicao);
-                elementosTela.add(textoEscala);
-                elementosTela.add(textoColidiu);
-                elementosTela.add(pontoVermelho);
-                elementosTela.add(quadrado);
-                elementosTela.add(octagono);
-                elementosTela.add(hexaedro);
-                elementosTela.add(esfera);
-                elementosTela.add(esfera1);
-                elementosTela.add(esfera2);
+
+                if(modoEdicao != ModosEdicao.GRID)
+                {
+                    Quadrilatero quadrado = new Quadrilatero()
+                        .moverComponente(0, 0, zMax - 2)
+                        .trocarCor(0, 1, 0, 1f)
+                        .preencherComponente(false)
+                        .redimensionarComponente(500, 500)
+                        .rotacionarComponente(0, 0, 45)
+                        .centralizarComponente(true, true, false);
+                    elementosTela.add(quadrado);
+
+                    Octagono octagono = new Octagono()
+                        .moverComponente(0, 0, zMax - 2)
+                        .preencherComponente(false)
+                        .trocarCor(1, 1, 0, 1)
+                        .redimensionarComponente(450, 450)
+                        .centralizarComponente(true, true, false);
+                    elementosTela.add(octagono);
+
+                    if(anguloHexaedroDebug < 360) anguloHexaedroDebug++;
+                    else anguloHexaedroDebug = 0;
+                    Hexaedro hexaedro = new Hexaedro()
+                        .trocarCor(1, 0, 1, 0.2f)
+                        .redimensionarComponente(200, 200, 200)
+                        .rotacionarComponente(anguloHexaedroDebug, anguloHexaedroDebug, anguloHexaedroDebug)
+                        .centralizarComponente(true, true, true);
+                    elementosTela.add(hexaedro);
+
+                    Esfera esfera = new Esfera()
+                        .trocarCor(1, 0, 0, 1)
+                        .redimensionarComponente(75)
+                        .preencherComponente(false)
+                        .centralizarComponente(true, true, true)
+                        .rotacionarComponente(0, 90, 0);
+                    elementosTela.add(esfera);
+                
+                    // Adiciona ponto vermelho central
+                    Quadrilatero pontoVermelho = new Quadrilatero()
+                        .trocarCor(1, 0, 0, 1)
+                        .redimensionarComponente(10, 10)
+                        .centralizarComponente(true, true, true);
+                    elementosTela.add(pontoVermelho);
+
+                    // Adiciona modo de edição
+                    Texto textoModoEdicao = new Texto("Modo de edição: "+modoEdicao);
+                    textoModoEdicao.moverComponente(xMin + textoModoEdicao.largura / 2 + margem, yMin + textoModoEdicao.altura / 2 + margem, zPontoCentral);
+                    elementosTela.add(textoModoEdicao);
+
+                    // Adiciona escala
+                    Texto textoEscala = new Texto("Escala: "+Math.round(escalaCamera * 100)+"%");
+                    textoEscala.moverComponente(xMin + textoEscala.largura / 2 + margem, yMin + textoEscala.altura / 2 + margem + textoModoEdicao.altura, zPontoCentral);
+                    elementosTela.add(textoEscala);
+
+                    Esfera esfera1 = new Esfera()
+                        .trocarCor(1, 1, 0, 1)
+                        .redimensionarComponente(75)
+                        .preencherComponente(false)
+                        .centralizarComponente(true, true, true)
+                        .rotacionarComponente(0, 90, 0)
+                        .moverComponente(xMin, yMin, 0);
+                    elementosTela.add(esfera1);
+                    
+                    Esfera esfera2 = new Esfera()
+                        .trocarCor(0, 1, 1, 1)
+                        .redimensionarComponente(75)
+                        .preencherComponente(false)
+                        .centralizarComponente(true, true, true)
+                        .rotacionarComponente(0, 90, 0)
+                        .moverComponente(xMin+10, yMin+10, 0);
+                    elementosTela.add(esfera2);
+                    
+                    Texto textoColidiu = new Texto("Colidiu?: " + esfera1.largura + (esfera1.colidiuComComponente(esfera2) ? "Sim" : "Não"));
+                    textoColidiu.moverComponente(xMin + textoEscala.largura + margem + textoColidiu.largura/2 + 30, yMin + textoColidiu.altura / 2 + margem + textoModoEdicao.altura, zPontoCentral);
+                    elementosTela.add(textoColidiu);
+                }
+                else if(modoEdicao == ModosEdicao.GRID)
+                {
+                    elementosTela.add(fundoGrid);
+
+                    // Desenha linhas do grid
+                    for(int coluna = 0; coluna < qtdColunasGrid; coluna++)
+                    {
+                        for(int linha = 0; linha < qtdLinhasGrid; linha++)
+                        {
+                            elementosTela.add(gridEdicao.get(coluna).get(linha));
+                        }
+                    }
+                }
             break;
 
             case PAUSADO:

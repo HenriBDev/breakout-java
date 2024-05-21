@@ -6,10 +6,12 @@ import com.jogamp.newt.event.MouseEvent;
 import com.jogamp.newt.event.MouseListener;
 
 import cg.projeto.Main;
+import cg.projeto.Debug.ModosEdicao;
 import cg.projeto.Game.Jogo;
 import cg.projeto.Game.Estados.EstadosBola;
 import cg.projeto.Game.Estados.EstadosJogo;
 import cg.projeto.UI.Tela;
+import cg.projeto.UI._2D.Componentes.Quadrilatero;
 
 public class Mouse implements MouseListener{
 
@@ -23,11 +25,36 @@ public class Mouse implements MouseListener{
 
     public void mouseReleased(MouseEvent e){}
 
-    public void mouseClicked(MouseEvent e){
-        if(!(Main.DEBUG) && Jogo.estado == EstadosJogo.JOGANDO && Jogo.bola.estado == EstadosBola.PARADA){
+    public void mouseClicked(MouseEvent e)
+    {
+        if(!(Main.DEBUG) && Jogo.estado == EstadosJogo.JOGANDO && Jogo.bola.estado == EstadosBola.PARADA)
+        {
             Jogo.bola.direcaoMovimentacaoX = new Random().nextBoolean() ? 1 : -1;
             Jogo.bola.direcaoMovimentacaoY = 1;
             Jogo.bola.estado = EstadosBola.MOVENDO;
+        }
+        else if (Main.DEBUG && Tela.modoEdicao == ModosEdicao.GRID)
+        {
+            float xMouse = e.getX() - Tela.screenWidth/2, yMouse = Tela.screenHeight/2 - e.getY();
+            for(int coluna = 0; coluna < Tela.qtdColunasGrid; coluna++)
+            {
+                for(int linha = 0; linha < Tela.qtdLinhasGrid; linha++)
+                {
+                    Quadrilatero celula = Tela.gridEdicao.get(coluna).get(linha);
+                    float pontaCimaCelula = celula.y + celula.altura/2;
+                    float pontaBaixoCelula = celula.y - celula.altura/2;
+                    float pontaDireitaCelula = celula.x + celula.largura/2;
+                    float pontaEsquerdaCelula = celula.x - celula.largura/2;
+                    if(
+                        xMouse >= pontaEsquerdaCelula && 
+                        xMouse <= pontaDireitaCelula && 
+                        yMouse >= pontaBaixoCelula && 
+                        yMouse <= pontaCimaCelula)
+                    {
+                        celula.preencherComponente(!celula.preencher);
+                    }
+                }
+            }
         }
     }
 
