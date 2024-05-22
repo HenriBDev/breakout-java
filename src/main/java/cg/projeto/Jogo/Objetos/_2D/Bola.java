@@ -1,7 +1,7 @@
-package cg.projeto.Game;
+package cg.projeto.Jogo.Objetos._2D;
 
-import cg.projeto.Game.Estados.EstadosBola;
-import cg.projeto.UI._3D.Componentes.Esfera;
+import cg.projeto.Jogo.Estados.EstadosBola;
+import cg.projeto.Motor.Componentes._3D.Esfera;
 
 public class Bola {
     
@@ -12,27 +12,33 @@ public class Bola {
     public int direcaoMovimentacaoX = 0; // 1 = Direita, -1 = Esquerda
     public int direcaoMovimentacaoY = 0; // 1 = Cima, -1 = Baixo
 
-    public Bola(){
+    public Bola()
+    {
         elemento.redimensionarComponente(25);
     }
 
-    public void mudarEstado(EstadosBola novoEstado){
+    public void mudarEstado(EstadosBola novoEstado)
+    {
         this.estado = novoEstado;
     }
 
-    public void aumentarVelocidade(float aumento){
+    public void aumentarVelocidade(float aumento)
+    {
         this.velocidadeMovimento += aumento;
     }
 
-    public void inverterDirecaoMovimentacaoX(){
+    public void inverterDirecaoMovimentacaoX()
+    {
         this.direcaoMovimentacaoX *= -1;
     }
     
-    public void inverterDirecaoMovimentacaoY(){
+    public void inverterDirecaoMovimentacaoY()
+    {
         this.direcaoMovimentacaoY *= -1;
     }
 
-    public void pararBola(){
+    public void pararBola()
+    {
         this.direcaoMovimentacaoX = 0;
         this.direcaoMovimentacaoY = 0;
         this.velocidadeMovimento = 10;
@@ -40,11 +46,13 @@ public class Bola {
         this.estado = EstadosBola.PARADA;
     }
 
-    public void iniciarMovimentoBolaX(boolean moverParaDireita){
+    public void iniciarMovimentoBolaX(boolean moverParaDireita)
+    {
         this.direcaoMovimentacaoX = moverParaDireita ? 1 : -1;
     }
     
-    public void iniciarMovimentoBolaY(boolean moverParaCima){
+    public void iniciarMovimentoBolaY(boolean moverParaCima)
+    {
         this.direcaoMovimentacaoY = moverParaCima ? 1 : -1;
     }
 

@@ -7,13 +7,13 @@ import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.util.FPSAnimator;
 
-import cg.projeto.Events.Keyboard;
-import cg.projeto.Events.Mouse;
-import cg.projeto.UI.Tela;
+import cg.projeto.Eventos.Keyboard;
+import cg.projeto.Eventos.Mouse;
+import cg.projeto.Motor.Tela;
 
 public class Main {
 
-    public static boolean DEBUG = true;
+    public static boolean DEBUG = false;
     
     public static GLWindow window = null;
 

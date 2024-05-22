@@ -1,4 +1,4 @@
-package cg.projeto.Game.Estados;
+package cg.projeto.Jogo.Estados;
 
 public enum EstadosJogo {
     INICIAL,

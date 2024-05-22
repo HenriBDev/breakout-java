@@ -1,6 +1,6 @@
-package cg.projeto.UI._3D.Componentes;
+package cg.projeto.Motor.Componentes._3D;
 
-import cg.projeto.UI.ComponenteBase;
+import cg.projeto.Motor.Componentes.ComponenteBase;
 
 public abstract class ComponenteBase3D<tipoComponente> extends ComponenteBase<tipoComponente> {
     

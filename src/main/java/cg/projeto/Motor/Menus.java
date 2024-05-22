@@ -1,4 +1,4 @@
-package cg.projeto.UI;
+package cg.projeto.Motor;
 
 public enum Menus {
     DEBUG,

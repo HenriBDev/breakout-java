@@ -1,4 +1,6 @@
-package cg.projeto.UI;
+package cg.projeto.Motor.Componentes;
+
+import cg.projeto.Motor.Tela;
 
 public abstract class ComponenteBase<tipoComponente> {
     

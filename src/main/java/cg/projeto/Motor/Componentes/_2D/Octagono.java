@@ -1,9 +1,9 @@
-package cg.projeto.UI._2D.Componentes;
+package cg.projeto.Motor.Componentes._2D;
 
 import com.jogamp.opengl.GL2;
 
-import cg.projeto.UI.ComponenteBase;
-import cg.projeto.UI.Tela;
+import cg.projeto.Motor.Tela;
+import cg.projeto.Motor.Componentes.ComponenteBase;
 
 public class Octagono extends ComponenteBase<Octagono> {
 

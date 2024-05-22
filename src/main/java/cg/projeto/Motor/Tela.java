@@ -1,8 +1,11 @@
-package cg.projeto.UI;
+package cg.projeto.Motor;
 
 import java.awt.Dimension;
+import java.awt.DisplayMode;
 import java.awt.Font;
-import java.awt.Toolkit;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,24 +19,29 @@ import com.jogamp.opengl.util.gl2.GLUT;
 import cg.projeto.Main;
 import cg.projeto.Utils;
 import cg.projeto.Debug.ModosEdicao;
-import cg.projeto.Game.Jogo;
-import cg.projeto.UI._2D.Componentes.Texto;
-import cg.projeto.UI._2D.Componentes.Circulo;
-import cg.projeto.UI._2D.Componentes.Octagono;
-import cg.projeto.UI._2D.Componentes.Quadrilatero;
-import cg.projeto.UI._3D.Componentes.Esfera;
-import cg.projeto.UI._3D.Componentes.Hexaedro;
+import cg.projeto.Jogo.GameLoop;
+import cg.projeto.Jogo.Objetos._2D.Bastao;
+import cg.projeto.Jogo.Objetos._2D.Bola;
+import cg.projeto.Jogo.Objetos._2D.Obstaculos.AglomeradoBlocos;
+import cg.projeto.Jogo.Objetos._2D.Obstaculos.Bloco;
+import cg.projeto.Motor.Componentes.ComponenteBase;
+import cg.projeto.Motor.Componentes._2D.Circulo;
+import cg.projeto.Motor.Componentes._2D.Octagono;
+import cg.projeto.Motor.Componentes._2D.Quadrilatero;
+import cg.projeto.Motor.Componentes._2D.Texto;
+import cg.projeto.Motor.Componentes._3D.Esfera;
+import cg.projeto.Motor.Componentes._3D.Hexaedro;
 
 public class Tela implements GLEventListener
 {    
     // Elementos UI
-    public static final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    public static Dimension screenSize;
     public static final float 
-        screenWidth = (float) screenSize.getWidth(), 
-        screenHeight = (float) screenSize.getHeight(),
         limiteZ = 1000,
         margem = 25;
     public static float
+        screenWidth, 
+        screenHeight,
         escalaCamera = 1,
         xMin, xMax, xPontoCentral,
         yMin, yMax, yPontoCentral,
@@ -56,7 +64,7 @@ public class Tela implements GLEventListener
     public final static List<ComponenteBase> elementosTela = new ArrayList<ComponenteBase>(); 
 
     // Conteúdo do jogo
-    public static Jogo jogo;
+    public static GameLoop jogo;
 
     // Renderizadores
     public static GL2 drawer2D;
@@ -64,14 +72,23 @@ public class Tela implements GLEventListener
     public static final TextRenderer textRenderer = new TextRenderer(new Font(Fonte.FAMILY, Fonte.STYLE, Fonte.SIZE));
 
     // Debug
-    public static int qtdColunasGrid = 15, qtdLinhasGrid = 15;
     public static ModosEdicao modoEdicao = ModosEdicao.MOVER;
-    public static List<ArrayList<Quadrilatero>> gridEdicao = new ArrayList<ArrayList<Quadrilatero>>();
+    public static AglomeradoBlocos gridBlocos = new AglomeradoBlocos(14, 10, 10);
     public static Quadrilatero fundoGrid = new Quadrilatero();
-    
+
     public void init(GLAutoDrawable drawable) 
     {
         //Estabelece as coordenadas do SRU (Sistema de Referencia do Universo)
+        DisplayMode displayMode;
+        Rectangle bounds;
+        Rectangle scaledBounds;
+        for (GraphicsDevice device : GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()) {
+            displayMode = device.getDefaultConfiguration().getDevice().getDisplayMode();
+            scaledBounds = device.getDefaultConfiguration().getBounds();
+            bounds = new Rectangle(scaledBounds.x, scaledBounds.y, displayMode.getWidth(), displayMode.getHeight());
+            screenWidth = Math.max(Integer.MIN_VALUE, bounds.x + bounds.width) - Math.min(Integer.MAX_VALUE, bounds.x);
+            screenHeight = Math.max(Integer.MIN_VALUE, bounds.y + bounds.height) - Math.min(Integer.MAX_VALUE, bounds.y);
+        }
         xMin = screenWidth/2 * -1;
         xMax = screenWidth/2;
         yMin = screenHeight/2 * -1;
@@ -98,31 +115,21 @@ public class Tela implements GLEventListener
         drawer2D.glBlendFunc(GL4bc.GL_SRC_ALPHA, GL4bc.GL_ONE_MINUS_SRC_ALPHA);
 
         // Inicializa jogo
-        jogo = new Jogo();
+        jogo = new GameLoop();
 
-        fundoGrid.centralizarComponente(true, true, true)
-            .redimensionarComponente(xMax - xMin - margem - 200, yMax - yMin - margem - 200);
-
-        // Desenha linhas do grid
-        float larguraCelulas = fundoGrid.largura/qtdLinhasGrid,
-            alturaCelulas = fundoGrid.altura/qtdColunasGrid;
-        for(int coluna = 0; coluna < qtdColunasGrid; coluna++)
+        // Tira preenchimento dos blocos no grid de debug
+        for(int coluna = 0; coluna < gridBlocos.qtdBlocosHorizontal; coluna++)
         {
-            gridEdicao.add(new ArrayList<Quadrilatero>());
-            for(int linha = 0; linha < qtdLinhasGrid; linha++)
+            for(int linha = 0; linha < gridBlocos.qtdBlocosVertical; linha++)
             {
-                Quadrilatero celula = new Quadrilatero()
-                    .preencherComponente(false)
-                    .trocarCor(0.8f, 0.8f, 0.8f, 1)
-                    .redimensionarComponente(larguraCelulas, alturaCelulas);
-                celula.moverComponente(
-                    fundoGrid.x - fundoGrid.largura/2 + larguraCelulas*coluna + larguraCelulas/2, 
-                    fundoGrid.y + fundoGrid.altura/2 - alturaCelulas*linha - alturaCelulas/2, 
-                    zPontoCentral + 1
-                );
-                gridEdicao.get(coluna).add(celula);
+                gridBlocos.blocos.get(coluna).get(linha).elemento.preencherComponente(false);
             }
         }
+        fundoGrid.redimensionarComponente(
+            Bloco.larguraBloco * gridBlocos.qtdBlocosHorizontal + gridBlocos.espacamento * (gridBlocos.qtdBlocosHorizontal-1), 
+            Bloco.alturaBloco * gridBlocos.qtdBlocosVertical + gridBlocos.espacamento * (gridBlocos.qtdBlocosVertical-1)
+        ).moverComponente(xPontoCentral, yMax - margem - 100 - fundoGrid.altura/2, zPontoCentral);
+        gridBlocos.moverAglomerado(fundoGrid.x, fundoGrid.y, fundoGrid.z);
     }
 
     public void display(GLAutoDrawable drawable) 
@@ -315,14 +322,24 @@ public class Tela implements GLEventListener
                 }
                 else if(modoEdicao == ModosEdicao.GRID)
                 {
+                    Hexaedro bastaoModelo = new Bastao().elemento
+                        .centralizarComponente(false, true, true);
+                    bastaoModelo.moverComponente(bastaoModelo.x, Tela.yMin + Tela.margem + bastaoModelo.altura / 2, bastaoModelo.z);
+                    elementosTela.add(bastaoModelo);
+
+                    Esfera bolaModelo = new Bola().elemento
+                        .centralizarComponente(false, true, true);
+                        bolaModelo.moverComponente(bolaModelo.x, bastaoModelo.y + bastaoModelo.altura / 2 + bolaModelo.raio + 1, bolaModelo.z);
+                    elementosTela.add(bolaModelo);
+                    
                     elementosTela.add(fundoGrid);
 
                     // Desenha linhas do grid
-                    for(int coluna = 0; coluna < qtdColunasGrid; coluna++)
+                    for(int coluna = 0; coluna < gridBlocos.qtdBlocosHorizontal; coluna++)
                     {
-                        for(int linha = 0; linha < qtdLinhasGrid; linha++)
+                        for(int linha = 0; linha < gridBlocos.qtdBlocosVertical; linha++)
                         {
-                            elementosTela.add(gridEdicao.get(coluna).get(linha));
+                            elementosTela.add(gridBlocos.blocos.get(coluna).get(linha).elemento);
                         }
                     }
                 }

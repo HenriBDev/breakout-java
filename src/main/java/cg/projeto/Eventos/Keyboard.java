@@ -1,13 +1,13 @@
-package cg.projeto.Events;
+package cg.projeto.Eventos;
 
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.KeyListener;
 
 import cg.projeto.Main;
 import cg.projeto.Debug.ModosEdicao;
-import cg.projeto.Game.Jogo;
-import cg.projeto.Game.Estados.EstadosJogo;
-import cg.projeto.UI.Tela;
+import cg.projeto.Jogo.GameLoop;
+import cg.projeto.Jogo.Estados.EstadosJogo;
+import cg.projeto.Motor.Tela;
 
 public class Keyboard implements KeyListener{
     
@@ -25,8 +25,10 @@ public class Keyboard implements KeyListener{
 
             // Setas
             case KeyEvent.VK_RIGHT:
-                if(Main.DEBUG){
-                    switch(Tela.modoEdicao){
+                if(Main.DEBUG)
+                {
+                    switch(Tela.modoEdicao)
+                    {
                         case MOVER:
                             Tela.posicaoCamera[0]+=10;
                         break;
@@ -36,9 +38,12 @@ public class Keyboard implements KeyListener{
                     }
                 }
             break;
+
             case KeyEvent.VK_LEFT:
-                if(Main.DEBUG){
-                    switch(Tela.modoEdicao){
+                if(Main.DEBUG)
+                {
+                    switch(Tela.modoEdicao)
+                    {
                         case MOVER:
                             Tela.posicaoCamera[0]-=10;
                         break;
@@ -48,9 +53,12 @@ public class Keyboard implements KeyListener{
                     }
                 }
             break;
+
             case KeyEvent.VK_UP:
-                if(Main.DEBUG){
-                    switch(Tela.modoEdicao){
+                if(Main.DEBUG)
+                {
+                    switch(Tela.modoEdicao)
+                    {
                         case MOVER:
                             Tela.posicaoCamera[1]+=10;
                         break;
@@ -60,9 +68,12 @@ public class Keyboard implements KeyListener{
                     }
                 }
             break;
+
             case KeyEvent.VK_DOWN:
-                if(Main.DEBUG){
-                    switch(Tela.modoEdicao){
+                if(Main.DEBUG)
+                {
+                    switch(Tela.modoEdicao)
+                    {
                         case MOVER:
                             Tela.posicaoCamera[1]-=10;
                         break;
@@ -75,8 +86,10 @@ public class Keyboard implements KeyListener{
 
             // Debug
             case KeyEvent.VK_M:
-                if(Main.DEBUG){
-                    if(Tela.modoEdicao != ModosEdicao.MOVER){
+                if(Main.DEBUG)
+                {
+                    if(Tela.modoEdicao != ModosEdicao.MOVER)
+                    {
                         Tela.modoEdicao = ModosEdicao.MOVER;
                     }
                 }
@@ -88,11 +101,11 @@ public class Keyboard implements KeyListener{
                 {
                     Tela.modoEdicao = ModosEdicao.ROTACIONAR;
                 }
-                else if(Jogo.estado == EstadosJogo.JOGANDO || Jogo.estado == EstadosJogo.PERDEU)
+                else if(GameLoop.estado == EstadosJogo.JOGANDO || GameLoop.estado == EstadosJogo.PERDEU)
                 {
-                    Tela.jogo = new Jogo();
+                    Tela.jogo = new GameLoop();
                     Tela.jogo.resetarPosicoes();
-                    if(Jogo.estado == EstadosJogo.PERDEU) Jogo.estado = EstadosJogo.JOGANDO;
+                    if(GameLoop.estado == EstadosJogo.PERDEU) GameLoop.estado = EstadosJogo.JOGANDO;
                 }
             break;
             
@@ -107,7 +120,7 @@ public class Keyboard implements KeyListener{
             // Jogo
             case KeyEvent.VK_ENTER:
 
-                if(!(Main.DEBUG) && Jogo.estado == EstadosJogo.INICIAL)
+                if(!(Main.DEBUG) && GameLoop.estado == EstadosJogo.INICIAL)
                 {
                     Tela.jogo.mudarEstado(EstadosJogo.JOGANDO);
                 }
@@ -116,8 +129,8 @@ public class Keyboard implements KeyListener{
             case KeyEvent.VK_P:
                 if(!(Main.DEBUG))
                 {
-                    if(Jogo.estado == EstadosJogo.JOGANDO) Tela.jogo.mudarEstado(EstadosJogo.PAUSADO);
-                    else if(Jogo.estado == EstadosJogo.PAUSADO) Tela.jogo.mudarEstado(EstadosJogo.JOGANDO);
+                    if(GameLoop.estado == EstadosJogo.JOGANDO) Tela.jogo.mudarEstado(EstadosJogo.PAUSADO);
+                    else if(GameLoop.estado == EstadosJogo.PAUSADO) Tela.jogo.mudarEstado(EstadosJogo.JOGANDO);
                 }
             break;
         }

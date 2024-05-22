@@ -1,6 +1,6 @@
-package cg.projeto.UI._3D.Componentes;
+package cg.projeto.Motor.Componentes._3D;
 
-import cg.projeto.UI.Tela;
+import cg.projeto.Motor.Tela;
 
 public class Esfera extends ComponenteBase3D<Esfera> {
 

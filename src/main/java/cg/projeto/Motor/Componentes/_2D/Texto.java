@@ -1,7 +1,7 @@
-package cg.projeto.UI._2D.Componentes;
+package cg.projeto.Motor.Componentes._2D;
 
-import cg.projeto.UI.ComponenteBase;
-import cg.projeto.UI.Tela;
+import cg.projeto.Motor.Tela;
+import cg.projeto.Motor.Componentes.ComponenteBase;
 
 public class Texto extends ComponenteBase<Texto> {
     
