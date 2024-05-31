@@ -4,11 +4,11 @@ import cg.projeto.Motor.Componentes._3D.Hexaedro;
 
 public class Bastao {
     
-    public Hexaedro elemento = new Hexaedro();
+    public Hexaedro componente = new Hexaedro();
     public float velocidadeMovimento = 10;
 
     public Bastao(){
-        this.elemento.redimensionarComponente(200, 50, 50);
+        this.componente.redimensionarComponente(200, 50, 50);
     }
 
 }

@@ -42,10 +42,21 @@ public class GameLoop {
         textoFase = new Texto("Fase " + fase);
         textoFase.moverComponente(Tela.xPontoCentral, Tela.yMax - Tela.margem - textoFase.altura/2, Tela.zMax - 2);
 
-        teto.elemento.redimensionarComponente(Tela.screenWidth, 100, 100);
-        paredeDireita.elemento.redimensionarComponente(100, Tela.screenHeight, 100);
-        paredeEsquerda.elemento.redimensionarComponente(100, Tela.screenHeight, 100);
-        resetarPosicoes();
+        teto.componente.redimensionarComponente(Tela.screenWidth, 100, 100);
+        paredeDireita.componente.redimensionarComponente(100, Tela.screenHeight, 100);
+        paredeEsquerda.componente.redimensionarComponente(100, Tela.screenHeight, 100);
+        
+        paredeDireita.componente
+            .centralizarComponente(true, false, true)
+            .moverComponente(Tela.xMax + paredeDireita.componente.largura/2, paredeDireita.componente.y, paredeDireita.componente.z);
+        paredeEsquerda.componente
+            .centralizarComponente(true, false, true)
+            .moverComponente(Tela.xMin - paredeEsquerda.componente.largura/2, paredeEsquerda.componente.y, paredeEsquerda.componente.z);
+        teto.componente
+            .centralizarComponente(false, true, true)
+            .moverComponente(teto.componente.x, Tela.yMax + teto.componente.altura/2, teto.componente.z);
+        
+            resetarPosicoes();
     }
 
     public void desenharJogo()
@@ -68,28 +79,28 @@ public class GameLoop {
                 
                 if(bola.estado == EstadosBola.MOVENDO)
                 {
-                    if(bola.elemento.colidiuComComponente(bastao.elemento) && bola.elemento.y >= bastao.elemento.y)
+                    if(bola.componente.colidiuComComponente(bastao.componente) && bola.componente.y >= bastao.componente.y)
                     {   
                         bola.aumentarVelocidade(.75f);
                         aumentarPontuacao(20);
-                        if(bola.elemento.x > bastao.elemento.x){
-                            bola.anguloX = bastao.elemento.largura/2 / 100 * (bola.elemento.x - bastao.elemento.x) / 100; 
+                        if(bola.componente.x > bastao.componente.x){
+                            bola.anguloX = bastao.componente.largura/2 / 100 * (bola.componente.x - bastao.componente.x) / 100; 
                             bola.direcaoMovimentacaoX = 1;
                         }
-                        if(bola.elemento.x < bastao.elemento.x){
-                            bola.anguloX = bastao.elemento.largura/2 / 100 * (bastao.elemento.x - bola.elemento.x) / 100; 
+                        if(bola.componente.x < bastao.componente.x){
+                            bola.anguloX = bastao.componente.largura/2 / 100 * (bastao.componente.x - bola.componente.x) / 100; 
                             bola.direcaoMovimentacaoX = -1;
                         }
-                        if(bola.elemento.x == bastao.elemento.x){
+                        if(bola.componente.x == bastao.componente.x){
                             bola.direcaoMovimentacaoX = new Random().nextBoolean() ? 1 : -1;
                         }
                         bola.direcaoMovimentacaoY = 1;
                     }
-                    if(bola.elemento.colidiuComComponente(teto.elemento))
+                    if(bola.componente.colidiuComComponente(teto.componente))
                     {
                         bola.inverterDirecaoMovimentacaoY();
                     }
-                    if(bola.elemento.colidiuComComponente(paredeDireita.elemento) || bola.elemento.colidiuComComponente(paredeEsquerda.elemento))
+                    if(bola.componente.colidiuComComponente(paredeDireita.componente) || bola.componente.colidiuComComponente(paredeEsquerda.componente))
                     {
                         bola.inverterDirecaoMovimentacaoX();
                     }
@@ -102,21 +113,21 @@ public class GameLoop {
                             {
                                 Bloco obstaculo = obstaculos.blocos.get(coluna).get(linha);
 
-                                if(bola.elemento.colidiuComComponente(obstaculo.elemento))
+                                if(bola.componente.colidiuComComponente(obstaculo.componente))
                                 {
-                                    float posicaoBolaXAnterior = bola.elemento.x - bola.direcaoMovimentacaoX * bola.velocidadeMovimento * bola.anguloX;
-                                    float posicaoBolaYAnterior = bola.elemento.y - bola.direcaoMovimentacaoY * bola.velocidadeMovimento;
+                                    float posicaoBolaXAnterior = bola.componente.x - bola.direcaoMovimentacaoX * bola.velocidadeMovimento * bola.anguloX;
+                                    float posicaoBolaYAnterior = bola.componente.y - bola.direcaoMovimentacaoY * bola.velocidadeMovimento;
                                     Bola bolaAnteriora = new Bola();
-                                    bolaAnteriora.elemento.moverComponente(
+                                    bolaAnteriora.componente.moverComponente(
                                         posicaoBolaXAnterior, 
                                         posicaoBolaYAnterior,  
-                                        bola.elemento.z
+                                        bola.componente.z
                                     );
-                                    if(!bolaAnteriora.elemento.colidiuComComponenteVerticalmente(obstaculo.elemento))
+                                    if(!bolaAnteriora.componente.colidiuComComponenteVerticalmente(obstaculo.componente))
                                     {
                                         bola.inverterDirecaoMovimentacaoY();
                                     }
-                                    if(!bolaAnteriora.elemento.colidiuComComponenteHorizontalmente(obstaculo.elemento))
+                                    if(!bolaAnteriora.componente.colidiuComComponenteHorizontalmente(obstaculo.componente))
                                     {
                                         bola.inverterDirecaoMovimentacaoX();
                                     }
@@ -129,34 +140,34 @@ public class GameLoop {
                         }
                     }
 
-                    float novaPosicaoBolaX = bola.elemento.x + bola.direcaoMovimentacaoX * bola.velocidadeMovimento * bola.anguloX;
-                    float novaPosicaoBolaY = bola.elemento.y + bola.direcaoMovimentacaoY * bola.velocidadeMovimento;
+                    float novaPosicaoBolaX = bola.componente.x + bola.direcaoMovimentacaoX * bola.velocidadeMovimento * bola.anguloX;
+                    float novaPosicaoBolaY = bola.componente.y + bola.direcaoMovimentacaoY * bola.velocidadeMovimento;
                     
-                    if(novaPosicaoBolaY < bastao.elemento.y || (fase == 1 && pontuacao >= 200) || (fase == 2 && obstaculosRestantes == 0))
+                    if(novaPosicaoBolaY < bastao.componente.y || (fase == 1 && pontuacao >= 200) || (fase == 2 && obstaculosRestantes == 0))
                     {
                         resetarPosicoes();
-                        if(novaPosicaoBolaY < bastao.elemento.y) vidas--;
+                        if(novaPosicaoBolaY < bastao.componente.y) vidas--;
                         if((fase == 1 && pontuacao >= 200) || (fase == 2 && obstaculosRestantes == 0)) trocarFase(fase + 1);
                     }
-                    else bola.elemento.moverComponente(
+                    else bola.componente.moverComponente(
                         novaPosicaoBolaX, 
                         novaPosicaoBolaY,  
-                        bola.elemento.z
+                        bola.componente.z
                     );
                 }
 
-                Tela.elementosTela.add(bastao.elemento);
-                Tela.elementosTela.add(bola.elemento);
-                Tela.elementosTela.add(teto.elemento);
-                Tela.elementosTela.add(paredeDireita.elemento);
-                Tela.elementosTela.add(paredeEsquerda.elemento);
+                Tela.elementosTela.add(bastao.componente);
+                Tela.elementosTela.add(bola.componente);
+                Tela.elementosTela.add(teto.componente);
+                Tela.elementosTela.add(paredeDireita.componente);
+                Tela.elementosTela.add(paredeEsquerda.componente);
                 if(fase > 1)
                 {
                     for(int coluna = 0; coluna < obstaculos.qtdBlocosHorizontal; coluna++)
                     {
                         for(int linha = 0; linha < obstaculos.blocos.get(coluna).size(); linha++)
                         {
-                            Tela.elementosTela.add(obstaculos.blocos.get(coluna).get(linha).elemento);
+                            Tela.elementosTela.add(obstaculos.blocos.get(coluna).get(linha).componente);
                         }
                     }
                 }
@@ -168,8 +179,8 @@ public class GameLoop {
 
                 Tela.elementosTela.add(textoVidas);
                 Tela.elementosTela.add(textoPontuacao);
-                Tela.elementosTela.add(bastao.elemento);
-                Tela.elementosTela.add(bola.elemento);
+                Tela.elementosTela.add(bastao.componente);
+                Tela.elementosTela.add(bola.componente);
                 Tela.montarMenu(Menus.PERDEU);
 
             break;
@@ -178,8 +189,8 @@ public class GameLoop {
 
                 Tela.elementosTela.add(textoVidas);
                 Tela.elementosTela.add(textoPontuacao);
-                Tela.elementosTela.add(bastao.elemento);
-                Tela.elementosTela.add(bola.elemento);
+                Tela.elementosTela.add(bastao.componente);
+                Tela.elementosTela.add(bola.componente);
                 Tela.montarMenu(Menus.PAUSADO);
 
             break;
@@ -208,7 +219,7 @@ public class GameLoop {
                 {
                     for(int linha = 0; linha < obstaculos.qtdBlocosVertical; linha++)
                     {
-                        Tela.elementosTela.add(obstaculos.blocos.get(coluna).get(linha).elemento);
+                        Tela.elementosTela.add(obstaculos.blocos.get(coluna).get(linha).componente);
                     }
                 }
             break;
@@ -219,16 +230,10 @@ public class GameLoop {
     public void resetarPosicoes()
     {
         bola.pararBola();
-        bastao.elemento.centralizarComponente(false, true, true)
-            .moverComponente(bastao.elemento.x, Tela.yMin + Tela.margem + bastao.elemento.altura / 2, bastao.elemento.z);
-        bola.elemento.centralizarComponente(false, true, true)
-            .moverComponente(bola.elemento.x, bastao.elemento.y + bastao.elemento.altura / 2 + bola.elemento.raio + 1, bola.elemento.z);
-        paredeDireita.elemento.centralizarComponente(true, false, true)
-            .moverComponente(Tela.xMax + paredeDireita.elemento.largura/2, paredeDireita.elemento.y, paredeDireita.elemento.z);
-        paredeEsquerda.elemento.centralizarComponente(true, false, true)
-            .moverComponente(Tela.xMin - paredeEsquerda.elemento.largura/2, paredeEsquerda.elemento.y, paredeEsquerda.elemento.z);
-        teto.elemento.centralizarComponente(false, true, true)
-            .moverComponente(teto.elemento.x, Tela.yMax + teto.elemento.altura/2, teto.elemento.z);
+        bastao.componente.centralizarComponente(false, true, true)
+            .moverComponente(bastao.componente.x, Tela.yMin + Tela.margem + bastao.componente.altura / 2, bastao.componente.z);
+        bola.componente.centralizarComponente(false, true, true)
+            .moverComponente(bola.componente.x, bastao.componente.y + bastao.componente.altura / 2 + bola.componente.raio + 1, bola.componente.z);
     }
 
 }

@@ -25,9 +25,9 @@ public class AglomeradoBlocos
             for(int linha = 0; linha < qtdBlocosVertical; linha++)
             {
                 Bloco bloco = new Bloco();
-                bloco.elemento.moverComponente(
-                    x - (bloco.elemento.largura * qtdBlocosHorizontal / 2) - (espacamento * qtdBlocosHorizontal / 2) + (bloco.elemento.largura * coluna) + (espacamento * coluna) + (bloco.elemento.largura/2),
-                    y + (bloco.elemento.altura * qtdBlocosVertical / 2) + (espacamento * qtdBlocosVertical / 2) - (bloco.elemento.altura * linha) - (espacamento * linha) - (bloco.elemento.altura/2),
+                bloco.componente.moverComponente(
+                    x - (bloco.componente.largura * qtdBlocosHorizontal / 2) - (espacamento * qtdBlocosHorizontal / 2) + (bloco.componente.largura * coluna) + (espacamento * coluna) + (bloco.componente.largura/2),
+                    y + (bloco.componente.altura * qtdBlocosVertical / 2) + (espacamento * qtdBlocosVertical / 2) - (bloco.componente.altura * linha) - (espacamento * linha) - (bloco.componente.altura/2),
                     z
                 );
                 blocos.get(coluna).add(bloco);
@@ -42,9 +42,9 @@ public class AglomeradoBlocos
             for(int linha = 0; linha < qtdBlocosVertical; linha++)
             {
                 Bloco bloco = blocos.get(coluna).get(linha);
-                bloco.elemento.moverComponente(
-                    x - (bloco.elemento.largura * qtdBlocosHorizontal / 2) - (espacamento * qtdBlocosHorizontal / 2) + (bloco.elemento.largura * coluna) + (espacamento * coluna) + (bloco.elemento.largura/2) + (espacamento/2),
-                    y + (bloco.elemento.altura * qtdBlocosVertical / 2) + (espacamento * qtdBlocosVertical / 2) - (bloco.elemento.altura * linha) - (espacamento * linha) - (bloco.elemento.altura/2) - (espacamento/2),
+                bloco.componente.moverComponente(
+                    x - (bloco.componente.largura * qtdBlocosHorizontal / 2) - (espacamento * qtdBlocosHorizontal / 2) + (bloco.componente.largura * coluna) + (espacamento * coluna) + (bloco.componente.largura/2) + (espacamento/2),
+                    y + (bloco.componente.altura * qtdBlocosVertical / 2) + (espacamento * qtdBlocosVertical / 2) - (bloco.componente.altura * linha) - (espacamento * linha) - (bloco.componente.altura/2) - (espacamento/2),
                     z
                 );
             }

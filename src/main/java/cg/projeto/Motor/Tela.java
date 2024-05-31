@@ -122,7 +122,7 @@ public class Tela implements GLEventListener
         {
             for(int linha = 0; linha < gridBlocos.qtdBlocosVertical; linha++)
             {
-                gridBlocos.blocos.get(coluna).get(linha).elemento.preencherComponente(false);
+                gridBlocos.blocos.get(coluna).get(linha).componente.preencherComponente(false);
             }
         }
         fundoGrid.redimensionarComponente(
@@ -322,12 +322,12 @@ public class Tela implements GLEventListener
                 }
                 else if(modoEdicao == ModosEdicao.GRID)
                 {
-                    Hexaedro bastaoModelo = new Bastao().elemento
+                    Hexaedro bastaoModelo = new Bastao().componente
                         .centralizarComponente(false, true, true);
                     bastaoModelo.moverComponente(bastaoModelo.x, Tela.yMin + Tela.margem + bastaoModelo.altura / 2, bastaoModelo.z);
                     elementosTela.add(bastaoModelo);
 
-                    Esfera bolaModelo = new Bola().elemento
+                    Esfera bolaModelo = new Bola().componente
                         .centralizarComponente(false, true, true);
                         bolaModelo.moverComponente(bolaModelo.x, bastaoModelo.y + bastaoModelo.altura / 2 + bolaModelo.raio + 1, bolaModelo.z);
                     elementosTela.add(bolaModelo);
@@ -339,7 +339,7 @@ public class Tela implements GLEventListener
                     {
                         for(int linha = 0; linha < gridBlocos.qtdBlocosVertical; linha++)
                         {
-                            elementosTela.add(gridBlocos.blocos.get(coluna).get(linha).elemento);
+                            elementosTela.add(gridBlocos.blocos.get(coluna).get(linha).componente);
                         }
                     }
                 }
