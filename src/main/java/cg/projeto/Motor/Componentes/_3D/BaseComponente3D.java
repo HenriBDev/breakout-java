@@ -1,8 +1,8 @@
 package cg.projeto.Motor.Componentes._3D;
 
-import cg.projeto.Motor.Componentes.ComponenteBase;
+import cg.projeto.Motor.Componentes.BaseComponente;
 
-public abstract class ComponenteBase3D<tipoComponente> extends ComponenteBase<tipoComponente> {
+public abstract class BaseComponente3D<tipoComponente> extends BaseComponente<tipoComponente> {
     
     public boolean preencher = true;
 

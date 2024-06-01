@@ -9,7 +9,7 @@ import com.jogamp.opengl.util.FPSAnimator;
 
 import cg.projeto.Eventos.Keyboard;
 import cg.projeto.Eventos.Mouse;
-import cg.projeto.Motor.Tela;
+import cg.projeto.Motor.Renderizador;
 
 public class Main {
 
@@ -27,7 +27,7 @@ public class Main {
         window = GLWindow.create(caps);
         
         // Adiciona a Cena na janela e os inputs
-        window.addGLEventListener(new Tela()); 
+        window.addGLEventListener(new Renderizador()); 
         window.addKeyListener(new Keyboard());
         window.addMouseListener(new Mouse());
         

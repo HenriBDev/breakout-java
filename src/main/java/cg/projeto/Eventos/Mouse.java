@@ -6,18 +6,20 @@ import com.jogamp.newt.event.MouseEvent;
 import com.jogamp.newt.event.MouseListener;
 
 import cg.projeto.Main;
-import cg.projeto.Debug.ModosEdicao;
+import cg.projeto.Jogo.DebugLoop;
 import cg.projeto.Jogo.GameLoop;
 import cg.projeto.Jogo.Estados.EstadosBola;
 import cg.projeto.Jogo.Estados.EstadosJogo;
-import cg.projeto.Motor.Tela;
-import cg.projeto.Motor.Componentes.ComponenteBase;
-import cg.projeto.Motor.Componentes._2D.Quadrilatero;
-import cg.projeto.Motor.Componentes._3D.Hexaedro;
+import cg.projeto.Jogo.Estados.Debug.EstadosEditor;
+import cg.projeto.Motor.Renderizador;
+import cg.projeto.Motor.Resolucao;
+import cg.projeto.Motor.Componentes.BaseComponente;
+import cg.projeto.Motor.Componentes._2D.QuadrilateroComponente;
+import cg.projeto.Motor.Componentes._3D.HexaedroComponente;
 
 public class Mouse implements MouseListener{
 
-    public ComponenteBase componente = new Quadrilatero().redimensionarComponente(1, 1);
+    public BaseComponente componente = new QuadrilateroComponente().redimensionarComponente(1, 1);
 
     public Mouse(){}
 
@@ -31,20 +33,20 @@ public class Mouse implements MouseListener{
     {
         System.err.println("Mouse clicked: (" + e.getX() + ", " + e.getY() + ")");
 
-        if(e.getX() - Tela.screenWidth/2 != componente.x || Tela.screenHeight/2 - e.getY() != componente.y)
+        if(e.getX() - Resolucao.larguraTela/2 != componente.x || Resolucao.alturaTela/2 - e.getY() != componente.y)
         {
-            componente.moverComponente(e.getX() - Tela.screenWidth/2, Tela.screenHeight/2 - e.getY(), 0);
+            componente.moverComponente(e.getX() - Resolucao.larguraTela/2, Resolucao.alturaTela/2 - e.getY(), 0);
         }
 
         if(Main.DEBUG)
         {
-            if(Tela.modoEdicao == ModosEdicao.GRID)
+            if(DebugLoop.modoEdicao == EstadosEditor.GRID)
             {
-                for(int coluna = 0; coluna < Tela.gridBlocos.qtdBlocosHorizontal; coluna++)
+                for(int coluna = 0; coluna < DebugLoop.telaGrid.gridBlocos.qtdBlocosHorizontal; coluna++)
                 {
-                    for(int linha = 0; linha < Tela.gridBlocos.qtdBlocosVertical; linha++)
+                    for(int linha = 0; linha < DebugLoop.telaGrid.gridBlocos.qtdBlocosVertical; linha++)
                     {
-                        Hexaedro celula = Tela.gridBlocos.blocos.get(coluna).get(linha).componente;
+                        HexaedroComponente celula = DebugLoop.telaGrid.gridBlocos.blocos.get(coluna).get(linha).componente;
                         if(celula.colidiuComComponente(componente)) celula.preencherComponente(!celula.preencher);
                     }
                 }
@@ -64,19 +66,19 @@ public class Mouse implements MouseListener{
 
     public void mouseMoved(MouseEvent e)
     {
-        componente.moverComponente(e.getX() - Tela.screenWidth/2, Tela.screenHeight/2 - e.getY(), 0);
+        componente.moverComponente(e.getX() - Resolucao.larguraTela/2, Resolucao.alturaTela/2 - e.getY(), 0);
 
         if(!(Main.DEBUG) && GameLoop.estado == EstadosJogo.JOGANDO && GameLoop.bola.estado == EstadosBola.MOVENDO)
         {
             float distanciaBolaBastaoX = GameLoop.bastao.componente.x - GameLoop.bola.componente.x;
             float posicaoBastaoX;
-            if(componente.x + GameLoop.bastao.componente.largura/2 >= Tela.screenWidth/2)
+            if(componente.x + GameLoop.bastao.componente.largura/2 >= Resolucao.larguraTela/2)
             {
-                posicaoBastaoX = Tela.screenWidth/2 - GameLoop.bastao.componente.largura/2;
+                posicaoBastaoX = Resolucao.larguraTela/2 - GameLoop.bastao.componente.largura/2;
             }
-            else if(componente.x  - GameLoop.bastao.componente.largura/2 <= Tela.screenWidth/2 * -1)
+            else if(componente.x  - GameLoop.bastao.componente.largura/2 <= Resolucao.larguraTela/2 * -1)
             {
-                posicaoBastaoX = Tela.screenWidth/2 * -1 + GameLoop.bastao.componente.largura/2;
+                posicaoBastaoX = Resolucao.larguraTela/2 * -1 + GameLoop.bastao.componente.largura/2;
             }
             else
             {
@@ -96,8 +98,8 @@ public class Mouse implements MouseListener{
 
         if(Main.DEBUG)
         {
-            if(e.getRotation()[1] == 1) Tela.escalaCamera += .1f;
-            else if (e.getRotation()[1] == -1 && Tela.escalaCamera - .25f > 0) Tela.escalaCamera -= .1f;
+            if(e.getRotation()[1] == 1) Renderizador.escalaCamera += .1f;
+            else if (e.getRotation()[1] == -1 && Renderizador.escalaCamera - .25f > 0) Renderizador.escalaCamera -= .1f;
         }
 
     }

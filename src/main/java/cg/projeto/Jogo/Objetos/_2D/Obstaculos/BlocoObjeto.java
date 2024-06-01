@@ -1,13 +1,13 @@
 package cg.projeto.Jogo.Objetos._2D.Obstaculos;
 
-import cg.projeto.Motor.Componentes._3D.Hexaedro;
+import cg.projeto.Motor.Componentes._3D.HexaedroComponente;
 
-public class Bloco {
+public class BlocoObjeto {
     
-    public Hexaedro componente = new Hexaedro();
+    public HexaedroComponente componente = new HexaedroComponente();
     public static float alturaBloco = 25, larguraBloco = 75, comprimentoBloco = 10;
 
-    public Bloco(){
+    public BlocoObjeto(){
         componente.redimensionarComponente(larguraBloco, alturaBloco, comprimentoBloco);
     }
 

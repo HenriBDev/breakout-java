@@ -4,10 +4,11 @@ import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.KeyListener;
 
 import cg.projeto.Main;
-import cg.projeto.Debug.ModosEdicao;
+import cg.projeto.Jogo.DebugLoop;
 import cg.projeto.Jogo.GameLoop;
 import cg.projeto.Jogo.Estados.EstadosJogo;
-import cg.projeto.Motor.Tela;
+import cg.projeto.Jogo.Estados.Debug.EstadosEditor;
+import cg.projeto.Motor.Renderizador;
 
 public class Keyboard implements KeyListener{
     
@@ -27,13 +28,13 @@ public class Keyboard implements KeyListener{
             case KeyEvent.VK_RIGHT:
                 if(Main.DEBUG)
                 {
-                    switch(Tela.modoEdicao)
+                    switch(DebugLoop.modoEdicao)
                     {
                         case MOVER:
-                            Tela.posicaoCamera[0]+=10;
+                            Renderizador.posicaoCamera[0]+=10;
                         break;
                         case ROTACIONAR:
-                            Tela.rotacaoCamera[0]+=1;
+                            Renderizador.rotacaoCamera[0]+=1;
                         break;
                     }
                 }
@@ -42,13 +43,13 @@ public class Keyboard implements KeyListener{
             case KeyEvent.VK_LEFT:
                 if(Main.DEBUG)
                 {
-                    switch(Tela.modoEdicao)
+                    switch(DebugLoop.modoEdicao)
                     {
                         case MOVER:
-                            Tela.posicaoCamera[0]-=10;
+                            Renderizador.posicaoCamera[0]-=10;
                         break;
                         case ROTACIONAR:
-                            Tela.rotacaoCamera[0]-=1;
+                            Renderizador.rotacaoCamera[0]-=1;
                         break;
                     }
                 }
@@ -57,13 +58,13 @@ public class Keyboard implements KeyListener{
             case KeyEvent.VK_UP:
                 if(Main.DEBUG)
                 {
-                    switch(Tela.modoEdicao)
+                    switch(DebugLoop.modoEdicao)
                     {
                         case MOVER:
-                            Tela.posicaoCamera[1]+=10;
+                            Renderizador.posicaoCamera[1]+=10;
                         break;
                         case ROTACIONAR:
-                            Tela.rotacaoCamera[1]+=1;
+                            Renderizador.rotacaoCamera[1]+=1;
                         break;
                     }
                 }
@@ -72,13 +73,13 @@ public class Keyboard implements KeyListener{
             case KeyEvent.VK_DOWN:
                 if(Main.DEBUG)
                 {
-                    switch(Tela.modoEdicao)
+                    switch(DebugLoop.modoEdicao)
                     {
                         case MOVER:
-                            Tela.posicaoCamera[1]-=10;
+                            Renderizador.posicaoCamera[1]-=10;
                         break;
                         case ROTACIONAR:
-                            Tela.rotacaoCamera[1]-=1;
+                            Renderizador.rotacaoCamera[1]-=1;
                         break;
                     }
                 }
@@ -88,32 +89,32 @@ public class Keyboard implements KeyListener{
             case KeyEvent.VK_M:
                 if(Main.DEBUG)
                 {
-                    if(Tela.modoEdicao != ModosEdicao.MOVER)
+                    if(DebugLoop.modoEdicao != EstadosEditor.MOVER)
                     {
-                        Tela.modoEdicao = ModosEdicao.MOVER;
+                        DebugLoop.setModoEdicao(EstadosEditor.MOVER);
                     }
                 }
             break;
 
             case KeyEvent.VK_R:
 
-                if(Main.DEBUG && Tela.modoEdicao != ModosEdicao.ROTACIONAR)
+                if(Main.DEBUG && DebugLoop.modoEdicao != EstadosEditor.ROTACIONAR)
                 {
-                    Tela.modoEdicao = ModosEdicao.ROTACIONAR;
+                    DebugLoop.setModoEdicao(EstadosEditor.ROTACIONAR);
                 }
                 else if(GameLoop.estado == EstadosJogo.JOGANDO || GameLoop.estado == EstadosJogo.PERDEU)
                 {
-                    Tela.jogo = new GameLoop();
-                    Tela.jogo.resetarPosicoes();
+                    Renderizador.jogo = new GameLoop();
+                    Renderizador.jogo.resetarPosicoes();
                     if(GameLoop.estado == EstadosJogo.PERDEU) GameLoop.estado = EstadosJogo.JOGANDO;
                 }
             break;
             
             case KeyEvent.VK_G:
 
-                if(Main.DEBUG && Tela.modoEdicao != ModosEdicao.GRID)
+                if(Main.DEBUG && DebugLoop.modoEdicao != EstadosEditor.GRID)
                 {
-                    Tela.modoEdicao = ModosEdicao.GRID;
+                    DebugLoop.modoEdicao = EstadosEditor.GRID;
                 }
             break;
 
@@ -122,15 +123,15 @@ public class Keyboard implements KeyListener{
 
                 if(!(Main.DEBUG) && GameLoop.estado == EstadosJogo.INICIAL)
                 {
-                    Tela.jogo.mudarEstado(EstadosJogo.JOGANDO);
+                    Renderizador.jogo.mudarEstado(EstadosJogo.JOGANDO);
                 }
             break;
 
             case KeyEvent.VK_P:
                 if(!(Main.DEBUG))
                 {
-                    if(GameLoop.estado == EstadosJogo.JOGANDO) Tela.jogo.mudarEstado(EstadosJogo.PAUSADO);
-                    else if(GameLoop.estado == EstadosJogo.PAUSADO) Tela.jogo.mudarEstado(EstadosJogo.JOGANDO);
+                    if(GameLoop.estado == EstadosJogo.JOGANDO) Renderizador.jogo.mudarEstado(EstadosJogo.PAUSADO);
+                    else if(GameLoop.estado == EstadosJogo.PAUSADO) Renderizador.jogo.mudarEstado(EstadosJogo.JOGANDO);
                 }
             break;
         }

@@ -1,17 +1,22 @@
 package cg.projeto.Jogo;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import cg.projeto.Jogo.Estados.EstadosBola;
 import cg.projeto.Jogo.Estados.EstadosJogo;
-import cg.projeto.Jogo.Objetos._2D.Obstaculos.AglomeradoBlocos;
-import cg.projeto.Jogo.Objetos._2D.Bastao;
-import cg.projeto.Jogo.Objetos._2D.Bola;
-import cg.projeto.Jogo.Objetos._2D.Parede;
-import cg.projeto.Jogo.Objetos._2D.Obstaculos.Bloco;
-import cg.projeto.Motor.Menus;
-import cg.projeto.Motor.Tela;
-import cg.projeto.Motor.Componentes._2D.Texto;
+import cg.projeto.Jogo.Objetos._2D.Obstaculos.AglomeradoBlocosObjeto;
+import cg.projeto.Jogo.Objetos._2D.BastaoObjeto;
+import cg.projeto.Jogo.Objetos._2D.BolaObjeto;
+import cg.projeto.Jogo.Objetos._2D.ParedeObjeto;
+import cg.projeto.Jogo.Objetos._2D.Obstaculos.BlocoObjeto;
+import cg.projeto.Jogo.Telas.InicialTela;
+import cg.projeto.Jogo.Telas.PausaTela;
+import cg.projeto.Jogo.Telas.PerdeuTela;
+import cg.projeto.Motor.Resolucao;
+import cg.projeto.Motor.Componentes.BaseComponente;
+import cg.projeto.Motor.Componentes._2D.TextoComponente;
 
 public class GameLoop {
     
@@ -20,62 +25,69 @@ public class GameLoop {
     public static int pontuacao = 0;
     public static int fase = 1;
     public static int obstaculosRestantes;
+    public static float margemTela = 25;
+
+    // Telas
+    public static InicialTela telaInicial;
+    public static PausaTela telaPausa;
+    public static PerdeuTela telaPerdeu;
 
     // Componentes
-    public static final Bastao bastao = new Bastao();
-    public static final Parede teto = new Parede(),
-        paredeDireita = new Parede(),
-        paredeEsquerda = new Parede();
-    public static final Bola bola = new Bola();
-    private Texto textoPontuacao, textoVidas, textoFase;
-    public AglomeradoBlocos obstaculos;
+    public static final BastaoObjeto bastao = new BastaoObjeto();
+    public static final ParedeObjeto teto = new ParedeObjeto(),
+        paredeDireita = new ParedeObjeto(),
+        paredeEsquerda = new ParedeObjeto();
+    public static final BolaObjeto bola = new BolaObjeto();
+    private TextoComponente textoPontuacao, textoVidas, textoFase;
+    public AglomeradoBlocosObjeto obstaculos;
 
     public GameLoop()
     {
-        pontuacao = 0;
-        textoPontuacao = new Texto("Pontuação: " + pontuacao);
-        textoPontuacao.moverComponente(Tela.xMin + Tela.margem + textoPontuacao.largura/2, Tela.yMax - Tela.margem - textoPontuacao.altura/2, Tela.zMax - 2);
-        vidas = 5;
-        textoVidas = new Texto("Vidas: " + vidas);
-        textoVidas.moverComponente(Tela.xMax - Tela.margem - textoVidas.largura/2, Tela.yMax - Tela.margem - textoVidas.altura/2, Tela.zMax - 2);
-        fase = 1;
-        textoFase = new Texto("Fase " + fase);
-        textoFase.moverComponente(Tela.xPontoCentral, Tela.yMax - Tela.margem - textoFase.altura/2, Tela.zMax - 2);
+        telaInicial = new InicialTela();
+        telaPausa = new PausaTela();
+        telaPerdeu = new PerdeuTela();
 
-        teto.componente.redimensionarComponente(Tela.screenWidth, 100, 100);
-        paredeDireita.componente.redimensionarComponente(100, Tela.screenHeight, 100);
-        paredeEsquerda.componente.redimensionarComponente(100, Tela.screenHeight, 100);
+        pontuacao = 0;
+        textoPontuacao = new TextoComponente("Pontuação: " + pontuacao);
+        textoPontuacao.moverComponente(Resolucao.SRUxMin + margemTela + textoPontuacao.largura/2, Resolucao.SRUyMax - margemTela - textoPontuacao.altura/2, Resolucao.SRUzMax - 2);
+        vidas = 5;
+        textoVidas = new TextoComponente("Vidas: " + vidas);
+        textoVidas.moverComponente(Resolucao.SRUxMax - margemTela - textoVidas.largura/2, Resolucao.SRUyMax - margemTela - textoVidas.altura/2, Resolucao.SRUzMax - 2);
+        fase = 1;
+        textoFase = new TextoComponente("Fase " + fase);
+        textoFase.moverComponente(Resolucao.SRUxCentral, Resolucao.SRUyMax - margemTela - textoFase.altura/2, Resolucao.SRUzMax - 2);
+
+        teto.componente.redimensionarComponente(Resolucao.larguraTela, 100, 100);
+        paredeDireita.componente.redimensionarComponente(100, Resolucao.alturaTela, 100);
+        paredeEsquerda.componente.redimensionarComponente(100, Resolucao.alturaTela, 100);
         
         paredeDireita.componente
             .centralizarComponente(true, false, true)
-            .moverComponente(Tela.xMax + paredeDireita.componente.largura/2, paredeDireita.componente.y, paredeDireita.componente.z);
+            .moverComponente(Resolucao.SRUxMax + paredeDireita.componente.largura/2, paredeDireita.componente.y, paredeDireita.componente.z);
         paredeEsquerda.componente
             .centralizarComponente(true, false, true)
-            .moverComponente(Tela.xMin - paredeEsquerda.componente.largura/2, paredeEsquerda.componente.y, paredeEsquerda.componente.z);
+            .moverComponente(Resolucao.SRUxMin - paredeEsquerda.componente.largura/2, paredeEsquerda.componente.y, paredeEsquerda.componente.z);
         teto.componente
             .centralizarComponente(false, true, true)
-            .moverComponente(teto.componente.x, Tela.yMax + teto.componente.altura/2, teto.componente.z);
+            .moverComponente(teto.componente.x, Resolucao.SRUyMax + teto.componente.altura/2, teto.componente.z);
         
-            resetarPosicoes();
+        resetarPosicoes();
     }
 
-    public void desenharJogo()
+    public List<BaseComponente> desenharJogo()
     {
         // Verifica estado atual do jogo
         switch(estado){
 
-            case INICIAL: Tela.montarMenu(Menus.INICIAL); break;
+            case INICIAL: 
+
+                return telaInicial.componentes;
 
             case JOGANDO:
 
                 textoPontuacao.conteudo = "Pontuação: " + pontuacao;
-                Tela.elementosTela.add(textoPontuacao);
-                
                 textoVidas.conteudo = "Vidas: " + vidas;
-                Tela.elementosTela.add(textoVidas);
-
                 textoFase.conteudo = "Fase: " + fase;
-                Tela.elementosTela.add(textoFase);
                 
                 if(bola.estado == EstadosBola.MOVENDO)
                 {
@@ -111,13 +123,13 @@ public class GameLoop {
                         {
                             for(int linha = 0; linha < obstaculos.blocos.get(coluna).size(); linha++)
                             {
-                                Bloco obstaculo = obstaculos.blocos.get(coluna).get(linha);
+                                BlocoObjeto obstaculo = obstaculos.blocos.get(coluna).get(linha);
 
                                 if(bola.componente.colidiuComComponente(obstaculo.componente))
                                 {
                                     float posicaoBolaXAnterior = bola.componente.x - bola.direcaoMovimentacaoX * bola.velocidadeMovimento * bola.anguloX;
                                     float posicaoBolaYAnterior = bola.componente.y - bola.direcaoMovimentacaoY * bola.velocidadeMovimento;
-                                    Bola bolaAnteriora = new Bola();
+                                    BolaObjeto bolaAnteriora = new BolaObjeto();
                                     bolaAnteriora.componente.moverComponente(
                                         posicaoBolaXAnterior, 
                                         posicaoBolaYAnterior,  
@@ -156,45 +168,12 @@ public class GameLoop {
                     );
                 }
 
-                Tela.elementosTela.add(bastao.componente);
-                Tela.elementosTela.add(bola.componente);
-                Tela.elementosTela.add(teto.componente);
-                Tela.elementosTela.add(paredeDireita.componente);
-                Tela.elementosTela.add(paredeEsquerda.componente);
-                if(fase > 1)
-                {
-                    for(int coluna = 0; coluna < obstaculos.qtdBlocosHorizontal; coluna++)
-                    {
-                        for(int linha = 0; linha < obstaculos.blocos.get(coluna).size(); linha++)
-                        {
-                            Tela.elementosTela.add(obstaculos.blocos.get(coluna).get(linha).componente);
-                        }
-                    }
-                }
                 if(vidas == 0) estado = EstadosJogo.PERDEU;
 
             break;
-
-            case PERDEU:
-
-                Tela.elementosTela.add(textoVidas);
-                Tela.elementosTela.add(textoPontuacao);
-                Tela.elementosTela.add(bastao.componente);
-                Tela.elementosTela.add(bola.componente);
-                Tela.montarMenu(Menus.PERDEU);
-
-            break;
-
-            case PAUSADO:
-
-                Tela.elementosTela.add(textoVidas);
-                Tela.elementosTela.add(textoPontuacao);
-                Tela.elementosTela.add(bastao.componente);
-                Tela.elementosTela.add(bola.componente);
-                Tela.montarMenu(Menus.PAUSADO);
-
-            break;
         }
+
+        return montarTela();
     }
 
     public void mudarEstado(EstadosJogo novoEstado){ estado = novoEstado; }
@@ -212,16 +191,9 @@ public class GameLoop {
             case 2:
 
                 obstaculosRestantes = 8 * 4;
-                obstaculos = new AglomeradoBlocos(8, 4, 10);
-                obstaculos.moverAglomerado(Tela.xPontoCentral, Tela.yMax - Tela.margem - 150, obstaculos.z);
+                obstaculos = new AglomeradoBlocosObjeto(8, 4, 10);
+                obstaculos.moverAglomerado(Resolucao.SRUxCentral, Resolucao.SRUyMax - margemTela - 150, obstaculos.z);
 
-                for(int coluna = 0; coluna < obstaculos.qtdBlocosHorizontal; coluna++)
-                {
-                    for(int linha = 0; linha < obstaculos.qtdBlocosVertical; linha++)
-                    {
-                        Tela.elementosTela.add(obstaculos.blocos.get(coluna).get(linha).componente);
-                    }
-                }
             break;
         }
         resetarPosicoes();
@@ -231,9 +203,57 @@ public class GameLoop {
     {
         bola.pararBola();
         bastao.componente.centralizarComponente(false, true, true)
-            .moverComponente(bastao.componente.x, Tela.yMin + Tela.margem + bastao.componente.altura / 2, bastao.componente.z);
+            .moverComponente(bastao.componente.x, Resolucao.SRUyMin + margemTela + bastao.componente.altura / 2, bastao.componente.z);
         bola.componente.centralizarComponente(false, true, true)
             .moverComponente(bola.componente.x, bastao.componente.y + bastao.componente.altura / 2 + bola.componente.raio + 1, bola.componente.z);
+    }
+
+    public List<BaseComponente> montarTela()
+    {
+        List<BaseComponente> componentes = new ArrayList<BaseComponente>();
+        switch (estado) 
+        {
+            case JOGANDO:
+
+                componentes.add(textoPontuacao);
+                componentes.add(textoVidas);
+                componentes.add(textoFase);
+                componentes.add(bastao.componente);
+                componentes.add(bola.componente);
+                componentes.add(teto.componente);
+                componentes.add(paredeDireita.componente);
+                componentes.add(paredeEsquerda.componente);
+                if(fase > 1)
+                {
+                    for(int coluna = 0; coluna < obstaculos.qtdBlocosHorizontal; coluna++)
+                    {
+                        for(int linha = 0; linha < obstaculos.blocos.get(coluna).size(); linha++)
+                        {
+                            componentes.add(obstaculos.blocos.get(coluna).get(linha).componente);
+                        }
+                    }
+                }
+            break;
+        
+            case PERDEU:
+
+                componentes.add(textoVidas);
+                componentes.add(textoPontuacao);
+                componentes.add(bastao.componente);
+                componentes.add(bola.componente);
+                componentes.addAll(telaPerdeu.componentes);
+            break;
+
+            case PAUSADO:
+
+                componentes.add(textoVidas);
+                componentes.add(textoPontuacao);
+                componentes.add(bastao.componente);
+                componentes.add(bola.componente);
+                componentes.addAll(telaPausa.componentes);
+            break;
+        }
+        return componentes;
     }
 
 }

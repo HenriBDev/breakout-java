@@ -1,8 +1,8 @@
 package cg.projeto.Motor.Componentes;
 
-import cg.projeto.Motor.Tela;
+import cg.projeto.Motor.Resolucao;
 
-public abstract class ComponenteBase<tipoComponente> {
+public abstract class BaseComponente<tipoComponente> {
     
     public float x = 0;
     public float y = 0;
@@ -38,13 +38,13 @@ public abstract class ComponenteBase<tipoComponente> {
 
     public tipoComponente centralizarComponente(boolean vertical, boolean horizontal, boolean eixoZ){
         return this.moverComponente(
-            horizontal ? Tela.xPontoCentral : this.x, 
-            vertical ? Tela.yPontoCentral : this.y,
-            eixoZ ? Tela.zPontoCentral : this.z
+            horizontal ? Resolucao.SRUxCentral : this.x, 
+            vertical ? Resolucao.SRUyCentral : this.y,
+            eixoZ ? Resolucao.SRUzCentral : this.z
         );
     }
 
-    public boolean colidiuComComponenteHorizontalmente(ComponenteBase componenteAColidir)
+    public boolean colidiuComComponenteHorizontalmente(BaseComponente componenteAColidir)
     {
         float pontaDireitaComponenteAColidir = componenteAColidir.x + componenteAColidir.largura/2;
         float pontaEsquerdaComponenteAColidir = componenteAColidir.x - componenteAColidir.largura/2;
@@ -60,7 +60,7 @@ public abstract class ComponenteBase<tipoComponente> {
         );
     }
     
-    public boolean colidiuComComponenteVerticalmente(ComponenteBase componenteAColidir)
+    public boolean colidiuComComponenteVerticalmente(BaseComponente componenteAColidir)
     {
         float pontaCimaComponenteAColidir = componenteAColidir.y + componenteAColidir.altura/2;
         float pontaBaixoComponenteAColidir = componenteAColidir.y - componenteAColidir.altura/2;
@@ -76,7 +76,7 @@ public abstract class ComponenteBase<tipoComponente> {
         );
     }
 
-    public boolean colidiuComComponente(ComponenteBase componenteAColidir)
+    public boolean colidiuComComponente(BaseComponente componenteAColidir)
     {
         return colidiuComComponenteVerticalmente(componenteAColidir) && colidiuComComponenteHorizontalmente(componenteAColidir);
     }

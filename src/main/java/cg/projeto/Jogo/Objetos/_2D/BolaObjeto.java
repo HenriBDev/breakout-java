@@ -1,18 +1,18 @@
 package cg.projeto.Jogo.Objetos._2D;
 
 import cg.projeto.Jogo.Estados.EstadosBola;
-import cg.projeto.Motor.Componentes._3D.Esfera;
+import cg.projeto.Motor.Componentes._3D.EsferaComponente;
 
-public class Bola {
+public class BolaObjeto {
     
     public EstadosBola estado = EstadosBola.PARADA;
-    public Esfera componente = new Esfera();
+    public EsferaComponente componente = new EsferaComponente();
     public float velocidadeMovimento = 10,
         anguloX = 1;
     public int direcaoMovimentacaoX = 0; // 1 = Direita, -1 = Esquerda
     public int direcaoMovimentacaoY = 0; // 1 = Cima, -1 = Baixo
 
-    public Bola()
+    public BolaObjeto()
     {
         componente.redimensionarComponente(25);
     }
