@@ -1,6 +1,6 @@
 package cg.projeto.Jogo.Telas;
 
-import cg.projeto.Motor.Resolucao;
+import cg.projeto.Resolucao;
 import cg.projeto.Motor.Componentes._2D.QuadrilateroComponente;
 import cg.projeto.Motor.Componentes._2D.TextoComponente;
 

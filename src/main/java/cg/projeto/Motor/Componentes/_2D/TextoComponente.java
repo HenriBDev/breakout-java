@@ -7,11 +7,7 @@ public class TextoComponente extends BaseComponente<TextoComponente> {
     
     public String conteudo = "";
 
-    public TextoComponente(String conteudo){ 
-        this.conteudo = conteudo;
-        this.largura = calcularLarguraConteudo();
-        this.altura = calcularAlturaConteudo();
-    }
+    public TextoComponente(String conteudo){ setConteudo(conteudo); }
 
     public void desenharComponente(){
 
@@ -31,7 +27,22 @@ public class TextoComponente extends BaseComponente<TextoComponente> {
         Renderizador.drawer2D.glPopMatrix();
     }
 
-    private float calcularLarguraConteudo() { return (float) Renderizador.textRenderer.getBounds(this.conteudo).getMaxX() - (float) Renderizador.textRenderer.getBounds(this.conteudo).getX(); }
-    private float calcularAlturaConteudo() { return (float) Renderizador.textRenderer.getBounds(this.conteudo).getMaxY() - (float) Renderizador.textRenderer.getBounds(this.conteudo).getY(); }
+    private void calcularNovasDimensoes() 
+    { 
+        largura = (float) Renderizador.textRenderer.getBounds(this.conteudo).getMaxX() - (float) Renderizador.textRenderer.getBounds(this.conteudo).getX(); 
+        altura = (float) Renderizador.textRenderer.getBounds(this.conteudo).getMaxY() - (float) Renderizador.textRenderer.getBounds(this.conteudo).getY(); 
+    }
+
+    public TextoComponente trocarCor(float r, float g, float b, float a){
+        this.cor = new float[]{r, g, b, a};
+        return this;
+    }
+
+    public TextoComponente setConteudo(String novoConteudo)
+    {
+        this.conteudo = novoConteudo;
+        calcularNovasDimensoes();
+        return this;
+    }
 
 }

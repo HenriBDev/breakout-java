@@ -1,10 +1,10 @@
 package cg.projeto.Jogo.Telas.Debug;
 
+import cg.projeto.Resolucao;
 import cg.projeto.Jogo.DebugLoop;
 import cg.projeto.Jogo.Estados.Debug.EstadosEditor;
 import cg.projeto.Jogo.Telas.BaseTela;
 import cg.projeto.Motor.Renderizador;
-import cg.projeto.Motor.Resolucao;
 import cg.projeto.Motor.Componentes._2D.QuadrilateroComponente;
 import cg.projeto.Motor.Componentes._2D.TextoComponente;
 import cg.projeto.Motor.Componentes._3D.EsferaComponente;
@@ -89,7 +89,8 @@ public class EdicaoTela extends BaseTela {
         montarTela();
     }
 
-    private void montarTela(){
+    private void montarTela()
+    {
         componentes.clear();
         componentes.add(titulo);
         componentes.add(quadrado);
@@ -103,14 +104,16 @@ public class EdicaoTela extends BaseTela {
         componentes.add(textoColidiu);
     }
 
-    public void setHexaedroAngulo(float novoAngulo){
+    public void setHexaedroAngulo(float novoAngulo)
+    {
         anguloHexaedroDebug = novoAngulo;
         hexaedro.rotacionarComponente(anguloHexaedroDebug, anguloHexaedroDebug, anguloHexaedroDebug);
         montarTela();
     }
 
-    public void setTextoModoEdicao(EstadosEditor novoModo){
-        textoModoEdicao.conteudo = "Modo de edição: " + novoModo;
+    public void setTextoModoEdicao(EstadosEditor novoModo)
+    {
+        textoModoEdicao.setConteudo("Modo de edição: " + novoModo);
         montarTela();
     }
 

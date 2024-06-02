@@ -1,11 +1,12 @@
 package cg.projeto.Jogo.Telas.Debug;
 
+import cg.projeto.Resolucao;
 import cg.projeto.Jogo.Objetos._2D.BastaoObjeto;
 import cg.projeto.Jogo.Objetos._2D.BolaObjeto;
 import cg.projeto.Jogo.Objetos._2D.Obstaculos.AglomeradoBlocosObjeto;
 import cg.projeto.Jogo.Objetos._2D.Obstaculos.BlocoObjeto;
 import cg.projeto.Jogo.Telas.BaseTela;
-import cg.projeto.Motor.Resolucao;
+import cg.projeto.Motor.Componentes._2D.LabelComponente;
 import cg.projeto.Motor.Componentes._2D.QuadrilateroComponente;
 import cg.projeto.Motor.Componentes._3D.EsferaComponente;
 import cg.projeto.Motor.Componentes._3D.HexaedroComponente;
@@ -22,6 +23,7 @@ public class GridTela extends BaseTela {
 
     public QuadrilateroComponente fundoGrid = new QuadrilateroComponente();
     public AglomeradoBlocosObjeto gridBlocos = new AglomeradoBlocosObjeto(14, 10, 10);
+    public LabelComponente botaoGerarNivel;
 
     public GridTela()
     {
@@ -39,6 +41,7 @@ public class GridTela extends BaseTela {
                 gridBlocos.blocos.get(coluna).get(linha).componente.preencherComponente(false);
             }
         }
+
         fundoGrid.redimensionarComponente(
             BlocoObjeto.larguraBloco * gridBlocos.qtdBlocosHorizontal + gridBlocos.espacamento * (gridBlocos.qtdBlocosHorizontal-1), 
             BlocoObjeto.alturaBloco * gridBlocos.qtdBlocosVertical + gridBlocos.espacamento * (gridBlocos.qtdBlocosVertical-1)
@@ -47,10 +50,17 @@ public class GridTela extends BaseTela {
             Resolucao.SRUyMax - margemTela - 100 - fundoGrid.altura/2, 
             Resolucao.SRUzCentral
         );
-        gridBlocos.moverAglomerado(fundoGrid.x, fundoGrid.y, fundoGrid.z);
         componentes.add(fundoGrid);
 
+        botaoGerarNivel = new LabelComponente("Gerar nível")
+            .moverComponente(fundoGrid.x, fundoGrid.y - fundoGrid.altura/2 - 50, fundoGrid.z)
+            .alterarEspessuraPreenchimento(20)
+            .alterarEspessuraBorda(5);
+        botaoGerarNivel.bordaHabilitada = true;
+        componentes.add(botaoGerarNivel);
+
         // Desenha linhas do grid
+        gridBlocos.moverAglomerado(fundoGrid.x, fundoGrid.y, fundoGrid.z);
         for(int coluna = 0; coluna < gridBlocos.qtdBlocosHorizontal; coluna++)
         {
             for(int linha = 0; linha < gridBlocos.qtdBlocosVertical; linha++)

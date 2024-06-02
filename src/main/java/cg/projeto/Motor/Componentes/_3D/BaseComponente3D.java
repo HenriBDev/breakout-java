@@ -11,4 +11,9 @@ public abstract class BaseComponente3D<tipoComponente> extends BaseComponente<ti
         return (tipoComponente) this;
     }
 
+    public tipoComponente trocarCor(float r, float g, float b, float a){
+        this.cor = new float[]{r, g, b, a};
+        return (tipoComponente) this;
+    }
+
 }

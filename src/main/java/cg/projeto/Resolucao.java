@@ -1,11 +1,9 @@
-package cg.projeto.Motor;
+package cg.projeto;
 
 import java.awt.DisplayMode;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
-
-import cg.projeto.Utils;
 
 public class Resolucao {
 

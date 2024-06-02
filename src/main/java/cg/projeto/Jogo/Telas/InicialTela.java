@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import cg.projeto.Motor.Resolucao;
+import cg.projeto.Resolucao;
 import cg.projeto.Motor.Componentes._2D.CirculoComponente;
 import cg.projeto.Motor.Componentes._2D.QuadrilateroComponente;
 import cg.projeto.Motor.Componentes._2D.TextoComponente;

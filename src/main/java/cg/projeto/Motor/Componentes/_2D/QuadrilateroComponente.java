@@ -53,4 +53,9 @@ public class QuadrilateroComponente extends BaseComponente<QuadrilateroComponent
 
     }
 
+    public QuadrilateroComponente trocarCor(float r, float g, float b, float a){
+        this.cor = new float[]{r, g, b, a};
+        return this;
+    }
+
 }

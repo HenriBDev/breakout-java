@@ -57,5 +57,10 @@ public class OctagonoComponente extends BaseComponente<OctagonoComponente> {
 
         Renderizador.drawer2D.glLineWidth(1);
     }
+
+    public OctagonoComponente trocarCor(float r, float g, float b, float a){
+        this.cor = new float[]{r, g, b, a};
+        return this;
+    }
     
 }

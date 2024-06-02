@@ -12,6 +12,7 @@ import com.jogamp.opengl.util.awt.TextRenderer;
 import com.jogamp.opengl.util.gl2.GLUT;
 
 import cg.projeto.Main;
+import cg.projeto.Resolucao;
 import cg.projeto.Jogo.DebugLoop;
 import cg.projeto.Jogo.GameLoop;
 import cg.projeto.Motor.Componentes.BaseComponente;

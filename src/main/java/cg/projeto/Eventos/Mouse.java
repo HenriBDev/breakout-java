@@ -1,18 +1,23 @@
 package cg.projeto.Eventos;
 
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.Random;
 
 import com.jogamp.newt.event.MouseEvent;
 import com.jogamp.newt.event.MouseListener;
 
+import cg.projeto.Diretorios;
 import cg.projeto.Main;
+import cg.projeto.Resolucao;
 import cg.projeto.Jogo.DebugLoop;
 import cg.projeto.Jogo.GameLoop;
 import cg.projeto.Jogo.Estados.EstadosBola;
 import cg.projeto.Jogo.Estados.EstadosJogo;
 import cg.projeto.Jogo.Estados.Debug.EstadosEditor;
 import cg.projeto.Motor.Renderizador;
-import cg.projeto.Motor.Resolucao;
 import cg.projeto.Motor.Componentes.BaseComponente;
 import cg.projeto.Motor.Componentes._2D.QuadrilateroComponente;
 import cg.projeto.Motor.Componentes._3D.HexaedroComponente;
@@ -50,6 +55,38 @@ public class Mouse implements MouseListener{
                         if(celula.colidiuComComponente(componente)) celula.preencherComponente(!celula.preencher);
                     }
                 }
+                // if(DebugLoop.telaGrid.botaoGerarNivel.colidiuComComponente(componente))
+                // {
+                //     File[] fases = new File(Diretorios.DIRETORIO_LAYOUT_FASES).listFiles();
+                //     try (DataOutputStream dos = new DataOutputStream(new FileOutputStream(fileName))) {
+                        
+                //         // The number of columns (elements in each row)
+                //         int columns = matrix.get(0).size();
+                //         dos.writeByte(columns); // Write the number of columns as the first byte
+                        
+                //         int bitCounter = 0;
+                //         int currentByte = 0;
+
+                //         for (ArrayList<MyObject> row : matrix) {
+                //             for (MyObject obj : row) {
+                //                 if (obj.getValue()) {
+                //                     currentByte |= (1 << (7 - bitCounter));
+                //                 }
+                //                 bitCounter++;
+                //                 if (bitCounter == 8) {
+                //                     dos.writeByte(currentByte);
+                //                     bitCounter = 0;
+                //                     currentByte = 0;
+                //                 }
+                //             }
+                //         }
+
+                //         // Write the last byte if there are remaining bits
+                //         if (bitCounter > 0) {
+                //             dos.writeByte(currentByte);
+                //         }
+                //     }
+                // }
             }
         }
         else if(GameLoop.estado == EstadosJogo.JOGANDO && GameLoop.bola.estado == EstadosBola.PARADA)

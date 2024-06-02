@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import cg.projeto.Resolucao;
 import cg.projeto.Jogo.Estados.EstadosBola;
 import cg.projeto.Jogo.Estados.EstadosJogo;
 import cg.projeto.Jogo.Objetos._2D.Obstaculos.AglomeradoBlocosObjeto;
@@ -14,7 +15,6 @@ import cg.projeto.Jogo.Objetos._2D.Obstaculos.BlocoObjeto;
 import cg.projeto.Jogo.Telas.InicialTela;
 import cg.projeto.Jogo.Telas.PausaTela;
 import cg.projeto.Jogo.Telas.PerdeuTela;
-import cg.projeto.Motor.Resolucao;
 import cg.projeto.Motor.Componentes.BaseComponente;
 import cg.projeto.Motor.Componentes._2D.TextoComponente;
 
@@ -85,9 +85,9 @@ public class GameLoop {
 
             case JOGANDO:
 
-                textoPontuacao.conteudo = "Pontuação: " + pontuacao;
-                textoVidas.conteudo = "Vidas: " + vidas;
-                textoFase.conteudo = "Fase: " + fase;
+                textoPontuacao.setConteudo("Pontuação: " + pontuacao);
+                textoVidas.setConteudo("Vidas: " + vidas);
+                textoFase.setConteudo("Fase: " + fase);
                 
                 if(bola.estado == EstadosBola.MOVENDO)
                 {

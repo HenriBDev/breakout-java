@@ -4,12 +4,12 @@ import cg.projeto.Motor.Renderizador;
 
 public class HexaedroComponente extends BaseComponente3D<HexaedroComponente> {
 
-    public float comprimento = 1;
+    public float profundidade = 1;
 
-    public HexaedroComponente redimensionarComponente(float novaLargura, float novaAltura, float novoComprimento){
+    public HexaedroComponente redimensionarComponente(float novaLargura, float novaAltura, float novaProfundidade){
         this.largura = novaLargura;
         this.altura = novaAltura;
-        this.comprimento = novoComprimento;
+        this.profundidade = novaProfundidade;
         return this;
     }
 
@@ -25,7 +25,7 @@ public class HexaedroComponente extends BaseComponente3D<HexaedroComponente> {
         Renderizador.drawer2D.glRotatef(this.rotacao[0], 0, 1, 0);
         Renderizador.drawer2D.glRotatef(this.rotacao[2], 0, 0, 1);
         
-        Renderizador.drawer2D.glScalef(this.largura, this.altura, this.comprimento);
+        Renderizador.drawer2D.glScalef(this.largura, this.altura, this.profundidade);
         
         if(this.preencher) Renderizador.drawer3D.glutSolidCube(1);
         else Renderizador.drawer3D.glutWireCube(1);

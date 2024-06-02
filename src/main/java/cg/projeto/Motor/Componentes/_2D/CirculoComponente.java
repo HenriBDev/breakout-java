@@ -51,4 +51,9 @@ public class CirculoComponente extends BaseComponente<CirculoComponente> {
         Renderizador.drawer2D.glLineWidth(1);
     }
 
+    public CirculoComponente trocarCor(float r, float g, float b, float a){
+        this.cor = new float[]{r, g, b, a};
+        return this;
+    }
+
 }
