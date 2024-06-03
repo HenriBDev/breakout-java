@@ -11,22 +11,26 @@ public abstract class BaseComponente<tipoComponente> {
     public float altura = 0;
     public float[] cor = new float[]{1, 1, 1, 1};
     public float[] rotacao = new float[]{0, 0, 0};
+    public boolean preencher = true;
 
     public abstract void desenharComponente();
 
-    public tipoComponente moverComponente(float novoX, float novoY, float novoZ){
+    public tipoComponente moverComponente(float novoX, float novoY, float novoZ)
+    {
         this.x = novoX;
         this.y = novoY;
         this.z = novoZ;
         return (tipoComponente) this;
     }
 
-    public tipoComponente rotacionarComponente(float anguloX, float anguloY, float anguloZ){
+    public tipoComponente rotacionarComponente(float anguloX, float anguloY, float anguloZ)
+    {
         this.rotacao = new float[]{anguloX, anguloY, anguloZ};
         return (tipoComponente) this;
     }
 
-    public tipoComponente centralizarComponente(boolean vertical, boolean horizontal, boolean eixoZ){
+    public tipoComponente centralizarComponente(boolean vertical, boolean horizontal, boolean eixoZ)
+    {
         return this.moverComponente(
             horizontal ? Resolucao.SRUxCentral : this.x, 
             vertical ? Resolucao.SRUyCentral : this.y,
@@ -69,5 +73,16 @@ public abstract class BaseComponente<tipoComponente> {
     public boolean colidiuComComponente(BaseComponente componenteAColidir)
     {
         return colidiuComComponenteVerticalmente(componenteAColidir) && colidiuComComponenteHorizontalmente(componenteAColidir);
+    }
+
+    public tipoComponente trocarCor(float r, float g, float b, float a)
+    {
+        this.cor = new float[]{r, g, b, a};
+        return (tipoComponente) this;
+    }
+
+    public tipoComponente preencherComponente(boolean preencher){
+        this.preencher = preencher;
+        return (tipoComponente) this;
     }
 }

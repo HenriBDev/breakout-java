@@ -3,29 +3,9 @@ package cg.projeto.Motor.Componentes._2D;
 import com.jogamp.opengl.GL2;
 
 import cg.projeto.Motor.Renderizador;
-import cg.projeto.Motor.Componentes.BaseComponente;
 
-public class CoracaoComponente extends BaseComponente<CoracaoComponente> {
-    
-    public boolean preencher = true;
-    public float espessuraBorda = 1;
-
-    public CoracaoComponente redimensionarComponente(float novaLargura, float novaAltura){
-        this.largura = novaLargura;
-        this.altura = novaAltura;
-        return this;
-    }
-
-    public CoracaoComponente preencherComponente(boolean preencher){
-        this.preencher = preencher;
-        return this;
-    }
-
-    public CoracaoComponente mudarEspessura(float novaEspessura){
-        this.espessuraBorda = novaEspessura;
-        return this;
-    }
-
+public class CoracaoComponente extends BaseComponente2D<CoracaoComponente> 
+{
     public void desenharComponente()
     {
         Renderizador.drawer2D.glLineWidth(this.espessuraBorda);
@@ -66,10 +46,4 @@ public class CoracaoComponente extends BaseComponente<CoracaoComponente> {
 
         Renderizador.drawer2D.glLineWidth(1);
     }
-
-    public CoracaoComponente trocarCor(float r, float g, float b, float a){
-        this.cor = new float[]{r, g, b, a};
-        return this;
-    }
-
 }

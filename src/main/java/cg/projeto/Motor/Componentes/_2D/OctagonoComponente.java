@@ -3,29 +3,9 @@ package cg.projeto.Motor.Componentes._2D;
 import com.jogamp.opengl.GL2;
 
 import cg.projeto.Motor.Renderizador;
-import cg.projeto.Motor.Componentes.BaseComponente;
 
-public class OctagonoComponente extends BaseComponente<OctagonoComponente> {
-
-    public boolean preencher = true;
-    public float espessuraBorda = 1;
-
-    public OctagonoComponente redimensionarComponente(float novaLargura, float novaAltura){
-        this.largura = novaLargura;
-        this.altura = novaAltura;
-        return this;
-    }
-
-    public OctagonoComponente preencherComponente(boolean preencher){
-        this.preencher = preencher;
-        return this;
-    }
-
-    public OctagonoComponente mudarEspessura(float novaEspessura){
-        this.espessuraBorda = novaEspessura;
-        return this;
-    }
-
+public class OctagonoComponente extends BaseComponente2D<OctagonoComponente> 
+{
     public void desenharComponente()
     {
         Renderizador.drawer2D.glLineWidth(this.espessuraBorda);
@@ -57,10 +37,4 @@ public class OctagonoComponente extends BaseComponente<OctagonoComponente> {
 
         Renderizador.drawer2D.glLineWidth(1);
     }
-
-    public OctagonoComponente trocarCor(float r, float g, float b, float a){
-        this.cor = new float[]{r, g, b, a};
-        return this;
-    }
-    
 }

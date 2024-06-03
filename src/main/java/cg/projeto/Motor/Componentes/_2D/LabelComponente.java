@@ -1,14 +1,13 @@
 package cg.projeto.Motor.Componentes._2D;
 
-import cg.projeto.Motor.Componentes.BaseComponente;
 
-public class LabelComponente extends BaseComponente<LabelComponente> {
-    
+public class LabelComponente extends BaseComponente2D<LabelComponente> 
+{
     public float[] corTexto = new float[]{1, 1, 1, 1};
     public float[] corBorda = new float[]{1, 1, 1, 1};
     public float[] corFundo = new float[]{0, 0, 0, 1};
 
-    public float espessuraBorda = 1, espessuraPreenchimento = 5;
+    public float espessuraPreenchimento = 5;
 
     public TextoComponente textoComponente;
     public QuadrilateroComponente
@@ -36,7 +35,7 @@ public class LabelComponente extends BaseComponente<LabelComponente> {
     public void desenharComponente()
     {
         textoComponente.desenharComponente();
-        fundo.desenharComponente();
+        if(preencher) fundo.desenharComponente();
 
         if(bordaHabilitada)
         {
@@ -90,14 +89,10 @@ public class LabelComponente extends BaseComponente<LabelComponente> {
         return this;
     }
 
-    public LabelComponente alterarEspessuraBorda(float novaEspessura)
+    public LabelComponente setTextoConteudo(String novoConteudo)
     {
-        espessuraBorda = novaEspessura;
-
-        ajustarDimensoesBorda();
-        ajustarPosicaoBorda();
+        textoComponente.setConteudo(novoConteudo);
         calcularNovasDimensoes();
-
         return this;
     }
 
@@ -122,12 +117,4 @@ public class LabelComponente extends BaseComponente<LabelComponente> {
         largura = textoComponente.largura + espessuraPreenchimento + (bordaHabilitada ? espessuraBorda : 0);
         altura = textoComponente.altura + espessuraPreenchimento + (bordaHabilitada ? espessuraBorda : 0);
     }
-
-    public LabelComponente setTextoConteudo(String novoConteudo)
-    {
-        textoComponente.setConteudo(novoConteudo);
-        calcularNovasDimensoes();
-        return this;
-    }
-
 }

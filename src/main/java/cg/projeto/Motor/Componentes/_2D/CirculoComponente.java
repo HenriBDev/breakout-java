@@ -3,31 +3,11 @@ package cg.projeto.Motor.Componentes._2D;
 import com.jogamp.opengl.GL2;
 
 import cg.projeto.Motor.Renderizador;
-import cg.projeto.Motor.Componentes.BaseComponente;
 
-public class CirculoComponente extends BaseComponente<CirculoComponente> {
-    
-    public boolean preencher = true;
-    public float espessuraBorda = 1;
-
-    public CirculoComponente redimensionarComponente(float largura, float altura){
-        this.largura = largura;
-        this.altura = altura;
-        return this;
-    }
-
-    public CirculoComponente preencherComponente(boolean preencher){
-        this.preencher = preencher;
-        return this;
-    }
-
-    public CirculoComponente mudarEspessura(float novaEspessura){
-        this.espessuraBorda = novaEspessura;
-        return this;
-    }
-
-    public void desenharComponente(){
-
+public class CirculoComponente extends BaseComponente2D<CirculoComponente> 
+{
+    public void desenharComponente()
+    {
         Renderizador.drawer2D.glLineWidth(this.espessuraBorda);
 
         Renderizador.drawer2D.glColor4f(this.cor[0], this.cor[1], this.cor[2], this.cor[3]);
@@ -53,10 +33,4 @@ public class CirculoComponente extends BaseComponente<CirculoComponente> {
 
         Renderizador.drawer2D.glLineWidth(1);
     }
-
-    public CirculoComponente trocarCor(float r, float g, float b, float a){
-        this.cor = new float[]{r, g, b, a};
-        return this;
-    }
-
 }

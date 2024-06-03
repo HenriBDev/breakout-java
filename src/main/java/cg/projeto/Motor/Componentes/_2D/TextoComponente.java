@@ -3,14 +3,14 @@ package cg.projeto.Motor.Componentes._2D;
 import cg.projeto.Motor.Renderizador;
 import cg.projeto.Motor.Componentes.BaseComponente;
 
-public class TextoComponente extends BaseComponente<TextoComponente> {
-    
+public class TextoComponente extends BaseComponente<TextoComponente> 
+{
     public String conteudo = "";
 
     public TextoComponente(String conteudo){ setConteudo(conteudo); }
 
-    public void desenharComponente(){
-
+    public void desenharComponente()
+    {
         Renderizador.drawer2D.glPushMatrix();
 
         Renderizador.drawer2D.glTranslatef(this.x, this.y, this.z);
@@ -33,16 +33,10 @@ public class TextoComponente extends BaseComponente<TextoComponente> {
         altura = (float) Renderizador.textRenderer.getBounds(this.conteudo).getMaxY() - (float) Renderizador.textRenderer.getBounds(this.conteudo).getY(); 
     }
 
-    public TextoComponente trocarCor(float r, float g, float b, float a){
-        this.cor = new float[]{r, g, b, a};
-        return this;
-    }
-
     public TextoComponente setConteudo(String novoConteudo)
     {
         this.conteudo = novoConteudo;
         calcularNovasDimensoes();
         return this;
     }
-
 }
