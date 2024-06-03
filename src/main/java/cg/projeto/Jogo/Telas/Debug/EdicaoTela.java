@@ -43,7 +43,7 @@ public class EdicaoTela extends BaseTela {
         .moverComponente(Resolucao.SRUxCentral, Resolucao.SRUyCentral, Resolucao.SRUzMax - 2)
         .trocarCor(0, 1, 1, 1f)
         .preencherComponente(false)
-        .redimensionarComponente(200, 200)
+        .redimensionarComponente(400, 400)
         .centralizarComponente(true, true, false);
 
     public float anguloHexaedroDebug = 0, margemTela = 25;

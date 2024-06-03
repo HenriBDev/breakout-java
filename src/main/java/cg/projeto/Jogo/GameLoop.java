@@ -16,16 +16,21 @@ import cg.projeto.Jogo.Telas.InicialTela;
 import cg.projeto.Jogo.Telas.PausaTela;
 import cg.projeto.Jogo.Telas.PerdeuTela;
 import cg.projeto.Motor.Componentes.BaseComponente;
+import cg.projeto.Motor.Componentes._2D.CoracaoComponente;
 import cg.projeto.Motor.Componentes._2D.TextoComponente;
 
 public class GameLoop {
     
     public static EstadosJogo estado = EstadosJogo.INICIAL;
-    public static int vidas = 5;
+    public static final int TOTAL_VIDAS = 5;
+    public static int vidas = TOTAL_VIDAS;
     public static int pontuacao = 0;
     public static int fase = 1;
     public static int obstaculosRestantes;
-    public static float margemTela = 25;
+    public static float 
+        margemTela = 25,
+        larguraCoracoes = 20,
+        espacamentoCoracoes = 10;
 
     // Telas
     public static InicialTela telaInicial;
@@ -40,6 +45,7 @@ public class GameLoop {
     public static final BolaObjeto bola = new BolaObjeto();
     private TextoComponente textoPontuacao, textoVidas, textoFase;
     public AglomeradoBlocosObjeto obstaculos;
+    public List<CoracaoComponente> coracoesVida = new ArrayList<CoracaoComponente>(TOTAL_VIDAS);
 
     public GameLoop()
     {
@@ -50,9 +56,27 @@ public class GameLoop {
         pontuacao = 0;
         textoPontuacao = new TextoComponente("Pontuação: " + pontuacao);
         textoPontuacao.moverComponente(Resolucao.SRUxMin + margemTela + textoPontuacao.largura/2, Resolucao.SRUyMax - margemTela - textoPontuacao.altura/2, Resolucao.SRUzMax - 2);
-        vidas = 5;
-        textoVidas = new TextoComponente("Vidas: " + vidas);
-        textoVidas.moverComponente(Resolucao.SRUxMax - margemTela - textoVidas.largura/2, Resolucao.SRUyMax - margemTela - textoVidas.altura/2, Resolucao.SRUzMax - 2);
+        
+        vidas = TOTAL_VIDAS;
+        for(int i = 0; i < TOTAL_VIDAS; i++)
+        {
+            coracoesVida.add(new CoracaoComponente()
+                .redimensionarComponente(larguraCoracoes, larguraCoracoes)
+                .trocarCor(1, 0, 0, 1)
+                .moverComponente(
+                    Resolucao.SRUxMax - margemTela - (i * larguraCoracoes * 2) - (i * espacamentoCoracoes) - larguraCoracoes/2, 
+                    Resolucao.SRUyMax - margemTela - larguraCoracoes/2, 
+                    Resolucao.SRUzMax - 2
+                )
+            );
+        }
+        textoVidas = new TextoComponente("Vidas:");
+        textoVidas.moverComponente(
+            Resolucao.SRUxMax - margemTela - (TOTAL_VIDAS * larguraCoracoes * 2) - (TOTAL_VIDAS * espacamentoCoracoes) - textoVidas.largura/2, 
+            Resolucao.SRUyMax - margemTela - textoVidas.altura/2, 
+            Resolucao.SRUzMax - 2
+        );
+        
         fase = 1;
         textoFase = new TextoComponente("Fase " + fase);
         textoFase.moverComponente(Resolucao.SRUxCentral, Resolucao.SRUyMax - margemTela - textoFase.altura/2, Resolucao.SRUzMax - 2);
@@ -86,7 +110,6 @@ public class GameLoop {
             case JOGANDO:
 
                 textoPontuacao.setConteudo("Pontuação: " + pontuacao);
-                textoVidas.setConteudo("Vidas: " + vidas);
                 textoFase.setConteudo("Fase: " + fase);
                 
                 if(bola.estado == EstadosBola.MOVENDO)
@@ -158,7 +181,7 @@ public class GameLoop {
                     if(novaPosicaoBolaY < bastao.componente.y || (fase == 1 && pontuacao >= 200) || (fase == 2 && obstaculosRestantes == 0))
                     {
                         resetarPosicoes();
-                        if(novaPosicaoBolaY < bastao.componente.y) vidas--;
+                        if(novaPosicaoBolaY < bastao.componente.y) diminuirVida();
                         if((fase == 1 && pontuacao >= 200) || (fase == 2 && obstaculosRestantes == 0)) trocarFase(fase + 1);
                     }
                     else bola.componente.moverComponente(
@@ -178,7 +201,18 @@ public class GameLoop {
 
     public void mudarEstado(EstadosJogo novoEstado){ estado = novoEstado; }
 
-    public void diminuirVida(){ vidas--; }
+    public void diminuirVida()
+    { 
+        vidas--;
+        for(int i = 0; i < TOTAL_VIDAS; i++)
+        {
+            if(coracoesVida.get(i).cor[1] != 1)
+            {
+                coracoesVida.get(i).trocarCor(1, 1, 1, 1);
+                break;
+            }
+        }
+    }
 
     public void aumentarPontuacao(int valorAdicional){ pontuacao += valorAdicional; }
 
@@ -217,6 +251,7 @@ public class GameLoop {
 
                 componentes.add(textoPontuacao);
                 componentes.add(textoVidas);
+                componentes.addAll(coracoesVida);
                 componentes.add(textoFase);
                 componentes.add(bastao.componente);
                 componentes.add(bola.componente);
