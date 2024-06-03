@@ -1,6 +1,7 @@
 package cg.projeto.Motor.Componentes._3D;
-
+import com.jogamp.opengl.GL2;
 import cg.projeto.Motor.Renderizador;
+import cg.projeto.Motor.Textura;
 
 public class EsferaComponente extends BaseComponente3D<EsferaComponente> {
 
@@ -30,6 +31,12 @@ public class EsferaComponente extends BaseComponente3D<EsferaComponente> {
 
         Renderizador.drawer2D.glPopMatrix();
 
+    }
+
+    public EsferaComponente trocarCor(float r, float g, float b, float a)
+    {
+        this.cor = new float[]{r, g, b, a};
+        return this;
     }
 
 }

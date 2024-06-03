@@ -1,4 +1,6 @@
 package cg.projeto.Motor.Componentes;
+import cg.projeto.Motor.Textura;
+import com.jogamp.opengl.GL2;
 
 import cg.projeto.Resolucao;
 
@@ -11,6 +13,7 @@ public abstract class BaseComponente<tipoComponente> {
     public float altura = 0;
     public float[] cor = new float[]{1, 1, 1, 1};
     public float[] rotacao = new float[]{0, 0, 0};
+    public Textura textura = null;
 
     public abstract void desenharComponente();
 

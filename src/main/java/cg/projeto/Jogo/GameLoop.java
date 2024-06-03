@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import cg.projeto.Diretorios;
 import cg.projeto.Resolucao;
 import cg.projeto.Jogo.Estados.EstadosBola;
 import cg.projeto.Jogo.Estados.EstadosJogo;
@@ -71,6 +72,8 @@ public class GameLoop {
             .centralizarComponente(false, true, true)
             .moverComponente(teto.componente.x, Resolucao.SRUyMax + teto.componente.altura/2, teto.componente.z);
         
+        bastao.componente.alterarTextura(Diretorios.DIRETORIO_TEXTURAS_OBJETOS + "/textura-esfera.jpg", 0);
+
         resetarPosicoes();
     }
 
