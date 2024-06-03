@@ -6,6 +6,7 @@ import cg.projeto.Jogo.Estados.Debug.EstadosEditor;
 import cg.projeto.Jogo.Telas.BaseTela;
 import cg.projeto.Motor.Renderizador;
 import cg.projeto.Motor.Componentes._2D.CirculoComponente;
+import cg.projeto.Motor.Componentes._2D.CoracaoComponente;
 import cg.projeto.Motor.Componentes._2D.OctagonoComponente;
 import cg.projeto.Motor.Componentes._2D.QuadrilateroComponente;
 import cg.projeto.Motor.Componentes._2D.TextoComponente;
@@ -36,6 +37,13 @@ public class EdicaoTela extends BaseTela {
         .trocarCor(0, 0, 1, 1f)
         .preencherComponente(false)
         .redimensionarComponente(350, 350)
+        .centralizarComponente(true, true, false);
+    
+    public CoracaoComponente coracao = new CoracaoComponente()
+        .moverComponente(Resolucao.SRUxCentral, Resolucao.SRUyCentral, Resolucao.SRUzMax - 2)
+        .trocarCor(0, 1, 1, 1f)
+        .preencherComponente(false)
+        .redimensionarComponente(200, 200)
         .centralizarComponente(true, true, false);
 
     public float anguloHexaedroDebug = 0, margemTela = 25;
@@ -112,6 +120,7 @@ public class EdicaoTela extends BaseTela {
         componentes.add(quadrado);
         componentes.add(octagono);
         componentes.add(circulo);
+        componentes.add(coracao);
         componentes.add(hexaedro);
         componentes.add(esfera);
         componentes.add(pontoVermelho);
