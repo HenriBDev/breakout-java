@@ -11,15 +11,15 @@ import cg.projeto.Eventos.Keyboard;
 import cg.projeto.Eventos.Mouse;
 import cg.projeto.Motor.Renderizador;
 
-public class Main {
-
-    public static boolean DEBUG = true;
+public class Main 
+{
+    public static boolean DEBUG = false;
     
     public static GLWindow window = null;
 
     //Cria a janela de rendeziração do JOGL
-    public static void init(){
-
+    public static void init()
+    {
         GLProfile.initSingleton();
         GLProfile profile = GLProfile.get(GLProfile.GL2);
         GLCapabilities caps = new GLCapabilities(profile);
@@ -48,11 +48,10 @@ public class Main {
         window.setFullscreen(true);
         if(!DEBUG) window.setPointerVisible(false);
         window.setVisible(true);
-
     }
   
-    public static void main(String[] args) {
+    public static void main(String[] args) 
+    {
         init();
     }
-
 }

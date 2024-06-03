@@ -7,12 +7,12 @@ import cg.projeto.Motor.Componentes.BaseComponente;
 
 public class CirculoComponente extends BaseComponente<CirculoComponente> {
     
-    public float raio = 1;
     public boolean preencher = true;
     public float espessuraBorda = 1;
 
-    public CirculoComponente redimensionarComponente(float novoRaio){
-        this.raio = novoRaio;
+    public CirculoComponente redimensionarComponente(float largura, float altura){
+        this.largura = largura;
+        this.altura = altura;
         return this;
     }
 
@@ -40,9 +40,12 @@ public class CirculoComponente extends BaseComponente<CirculoComponente> {
         Renderizador.drawer2D.glRotatef(this.rotacao[0], 0, 1, 0);
         Renderizador.drawer2D.glRotatef(this.rotacao[2], 0, 0, 1);
 
+        Renderizador.drawer2D.glScalef(this.largura, this.altura, 1);
+
         Renderizador.drawer2D.glBegin(preencher ? GL2.GL_POLYGON : GL2.GL_LINE_LOOP);
-        for(float i = 0; i < 2 * Math.PI; i += 0.01){
-            Renderizador.drawer2D.glVertex3f((float)(this.raio * Math.cos(i)), (float)(this.raio * Math.sin(i)), 0);
+        for(float i = 0; i < 2 * Math.PI; i += 0.01)
+        {
+            Renderizador.drawer2D.glVertex3f((float) Math.cos(i), (float) Math.sin(i), 0);
         }
         Renderizador.drawer2D.glEnd();
 

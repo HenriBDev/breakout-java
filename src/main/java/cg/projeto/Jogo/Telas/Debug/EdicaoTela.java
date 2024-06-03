@@ -5,6 +5,8 @@ import cg.projeto.Jogo.DebugLoop;
 import cg.projeto.Jogo.Estados.Debug.EstadosEditor;
 import cg.projeto.Jogo.Telas.BaseTela;
 import cg.projeto.Motor.Renderizador;
+import cg.projeto.Motor.Componentes._2D.CirculoComponente;
+import cg.projeto.Motor.Componentes._2D.OctagonoComponente;
 import cg.projeto.Motor.Componentes._2D.QuadrilateroComponente;
 import cg.projeto.Motor.Componentes._2D.TextoComponente;
 import cg.projeto.Motor.Componentes._3D.EsferaComponente;
@@ -20,6 +22,20 @@ public class EdicaoTela extends BaseTela {
         .preencherComponente(false)
         .redimensionarComponente(500, 500)
         .rotacionarComponente(0, 0, 45)
+        .centralizarComponente(true, true, false);
+    
+    public OctagonoComponente octagono = new OctagonoComponente()
+        .moverComponente(Resolucao.SRUxCentral, Resolucao.SRUyCentral, Resolucao.SRUzMax - 2)
+        .trocarCor(1, 0, 0, 1f)
+        .preencherComponente(false)
+        .redimensionarComponente(400, 400)
+        .centralizarComponente(true, true, false);
+
+    public CirculoComponente circulo = new CirculoComponente()
+        .moverComponente(Resolucao.SRUxCentral, Resolucao.SRUyCentral, Resolucao.SRUzMax - 2)
+        .trocarCor(0, 0, 1, 1f)
+        .preencherComponente(false)
+        .redimensionarComponente(350, 350)
         .centralizarComponente(true, true, false);
 
     public float anguloHexaedroDebug = 0, margemTela = 25;
@@ -94,6 +110,8 @@ public class EdicaoTela extends BaseTela {
         componentes.clear();
         componentes.add(titulo);
         componentes.add(quadrado);
+        componentes.add(octagono);
+        componentes.add(circulo);
         componentes.add(hexaedro);
         componentes.add(esfera);
         componentes.add(pontoVermelho);

@@ -36,7 +36,7 @@ public class InicialTela extends BaseTela {
         .redimensionarComponente(112.5f, 37.5f)
         .centralizarComponente(false, true, false);
 
-    CirculoComponente bolinha = new CirculoComponente().redimensionarComponente(20);
+    CirculoComponente bolinha = new CirculoComponente().redimensionarComponente(20, 20);
     
     public InicialTela()
     {
