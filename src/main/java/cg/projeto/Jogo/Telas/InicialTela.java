@@ -18,7 +18,7 @@ public class InicialTela extends BaseTela {
         "A D ou <- -> ou MOUSE (Movimentação).",
         "P (Pause)", 
         "R (Recomeçar jogo)",
-        "Seu objetivo é acumular 500 pontos para avançar",
+        "Seu objetivo é acumular 200 pontos para avançar",
         "para a próxima fase. Rebata a esfera e ganhe pontos.",
         "Mas cuidado com a pegadinha do malandro 👀... (A bolinha fica mais rápida)",
         "",
