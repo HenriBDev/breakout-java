@@ -72,7 +72,7 @@ public class GameLoop {
             .centralizarComponente(false, true, true)
             .moverComponente(teto.componente.x, Resolucao.SRUyMax + teto.componente.altura/2, teto.componente.z);
         
-        bastao.componente.alterarTextura(Diretorios.DIRETORIO_TEXTURAS_OBJETOS + "/textura-esfera.jpg", 0);
+        bastao.componente.alterarTextura(Diretorios.DIRETORIO_TEXTURAS_OBJETOS + "/bandeira.jpg", 0);
 
         resetarPosicoes();
     }

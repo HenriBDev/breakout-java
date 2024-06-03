@@ -42,22 +42,43 @@ public class HexaedroComponente extends BaseComponente3D<HexaedroComponente> {
 
     public HexaedroComponente alterarTextura(String fileName, int indice)
     {   
-        int limite = 1;
+        float limite = 1;
         this.textura = new Textura(1);
 
-        Renderizador.drawer2D.glMatrixMode(GL2.GL_TEXTURE);
-           Renderizador.drawer2D.glLoadIdentity();
-           Renderizador.drawer2D.glScalef(limite/textura.getWidth(), limite/textura.getHeight(), limite);
-        Renderizador.drawer2D.glMatrixMode(GL2.GL_MODELVIEW);
+        Renderizador.drawer2D.glPushMatrix();
+        Renderizador.drawer2D.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
+
+        Renderizador.drawer2D.glLoadIdentity();
 
         //é geração de textura automática
         this.textura.setAutomatica(true);
+
+
 
         //habilita os filtros
         this.textura.setFiltro(GL2.GL_LINEAR);
         this.textura.setModo(GL2.GL_DECAL);
         this.textura.setWrap(GL2.GL_REPEAT);
+        Renderizador.drawer2D.glEnable(GL2.GL_TEXTURE_2D);
         this.textura.gerarTextura(Renderizador.drawer2D, fileName, indice);
+
+        Renderizador.drawer2D.glBegin(GL2.GL_QUADS);
+        // Top-Left
+        Renderizador.drawer2D.glTexCoord2f(0.0f, 1.0f);
+        Renderizador.drawer2D.glVertex3f(-0.5f, 0.5f, 0.0f);
+        // Top-Right
+        Renderizador.drawer2D.glTexCoord2f(1.0f, 1.0f);
+        Renderizador.drawer2D.glVertex3f(0.5f, 0.5f, 0.0f);
+        // Bottom-Right
+        Renderizador.drawer2D.glTexCoord2f(1.0f, 0.0f);
+        Renderizador.drawer2D.glVertex3f(0.5f, -0.5f, 0.0f);
+        // Bottom-Left
+        Renderizador.drawer2D.glTexCoord2f(0.0f, 0.0f);
+        Renderizador.drawer2D.glVertex3f(-0.5f, -0.5f, 0.0f);
+        Renderizador.drawer2D.glEnd();
+
+        Renderizador.drawer2D.glPopMatrix();
+        Renderizador.drawer2D.glFlush();
         
         //
         // this.textura.setAutomatica(false);
