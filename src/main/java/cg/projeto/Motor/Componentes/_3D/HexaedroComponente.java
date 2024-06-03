@@ -4,8 +4,6 @@ import cg.projeto.Motor.Renderizador;
 
 public class HexaedroComponente extends BaseComponente3D<HexaedroComponente> {
 
-    public float profundidade = 1;
-
     public HexaedroComponente redimensionarComponente(float novaLargura, float novaAltura, float novaProfundidade){
         this.largura = novaLargura;
         this.altura = novaAltura;

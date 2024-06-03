@@ -30,7 +30,7 @@ public class GridTela extends BaseTela {
         bastaoModelo.moverComponente(bastaoModelo.x, Resolucao.SRUyMin + margemTela + bastaoModelo.altura / 2, bastaoModelo.z);
         componentes.add(bastaoModelo);
 
-        bolaModelo.moverComponente(bolaModelo.x, bastaoModelo.y + bastaoModelo.altura / 2 + bolaModelo.raio + 1, bolaModelo.z);
+        bolaModelo.moverComponente(bolaModelo.x, bastaoModelo.y + bastaoModelo.altura / 2 + bolaModelo.altura + 1, bolaModelo.z);
         componentes.add(bolaModelo);
 
         // Tira preenchimento dos blocos no grid de debug

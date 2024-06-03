@@ -205,7 +205,7 @@ public class GameLoop {
         bastao.componente.centralizarComponente(false, true, true)
             .moverComponente(bastao.componente.x, Resolucao.SRUyMin + margemTela + bastao.componente.altura / 2, bastao.componente.z);
         bola.componente.centralizarComponente(false, true, true)
-            .moverComponente(bola.componente.x, bastao.componente.y + bastao.componente.altura / 2 + bola.componente.raio + 1, bola.componente.z);
+            .moverComponente(bola.componente.x, bastao.componente.y + bastao.componente.altura / 2 + bola.componente.altura + 1, bola.componente.z);
     }
 
     public List<BaseComponente> montarTela()

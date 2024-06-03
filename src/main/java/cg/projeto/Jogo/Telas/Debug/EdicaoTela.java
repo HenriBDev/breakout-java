@@ -48,7 +48,7 @@ public class EdicaoTela extends BaseTela {
 
     EsferaComponente esfera = new EsferaComponente()
         .trocarCor(1, 0, 0, 1)
-        .redimensionarComponente(75)
+        .redimensionarComponente(75, 75, 75)
         .preencherComponente(false)
         .centralizarComponente(true, true, true)
         .rotacionarComponente(0, 90, 0);
@@ -60,7 +60,7 @@ public class EdicaoTela extends BaseTela {
 
     EsferaComponente esfera1 = new EsferaComponente()
         .trocarCor(1, 1, 0, 1)
-        .redimensionarComponente(75)
+        .redimensionarComponente(75, 75, 75)
         .preencherComponente(false)
         .centralizarComponente(true, true, true)
         .rotacionarComponente(0, 90, 0)
@@ -68,7 +68,7 @@ public class EdicaoTela extends BaseTela {
 
     EsferaComponente esfera2 = new EsferaComponente()
         .trocarCor(0, 1, 1, 1)
-        .redimensionarComponente(75)
+        .redimensionarComponente(75, 75, 75)
         .preencherComponente(false)
         .centralizarComponente(true, true, true)
         .rotacionarComponente(0, 90, 0)

@@ -14,7 +14,7 @@ public class BolaObjeto {
 
     public BolaObjeto()
     {
-        componente.redimensionarComponente(25);
+        componente.redimensionarComponente(25, 25, 25);
     }
 
     public void mudarEstado(EstadosBola novoEstado)
