@@ -96,7 +96,7 @@ public class EdicaoTela extends BaseTela {
         );
 
         // Adiciona escala
-        textoEscala = new TextoComponente("Escala: "+Math.round(Renderizador.escalaCamera * 100)+"%");
+        textoEscala = new TextoComponente("Escala (Altere com o scroll do mouse): "+Math.round(Renderizador.escalaCamera * 100)+"%");
         textoEscala.moverComponente(
             Resolucao.SRUxMin + textoEscala.largura / 2 + margemTela, 
             Resolucao.SRUyMin + textoEscala.altura / 2 + margemTela + textoModoEdicao.altura, 
@@ -140,7 +140,12 @@ public class EdicaoTela extends BaseTela {
 
     public void setTextoModoEdicao(EstadosEditor novoModo)
     {
-        textoModoEdicao.setConteudo("Modo de edição: " + novoModo);
+        textoModoEdicao.setConteudo("Modo de edição (Alterne com M ou R): " + novoModo);
+        textoModoEdicao.moverComponente(
+            Resolucao.SRUxMin + textoModoEdicao.largura / 2 + margemTela, 
+            Resolucao.SRUyMin + textoModoEdicao.altura / 2 + margemTela, 
+            Resolucao.SRUzCentral
+        );
         montarTela();
     }
 
