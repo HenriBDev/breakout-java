@@ -84,11 +84,11 @@ public class EdicaoTela extends BaseTela {
 
     public EdicaoTela()
     {    
-        titulo = new TextoComponente("Bem-vindo ao editor do jogo de Pong!")
+        titulo = new TextoComponente("Bem-vindo ao editor do jogo de Pong! (Para acessar o grid pressione G)")
             .centralizarComponente(false, true, true);
         titulo.moverComponente(Resolucao.SRUxCentral, Resolucao.SRUyMax - margemTela - titulo.altura, titulo.z);
 
-        textoModoEdicao = new TextoComponente("Modo de edição: "+ DebugLoop.modoEdicao);
+        textoModoEdicao = new TextoComponente("Modo de edição (Alterne com M ou R): "+ DebugLoop.modoEdicao);
         textoModoEdicao.moverComponente(
             Resolucao.SRUxMin + textoModoEdicao.largura / 2 + margemTela, 
             Resolucao.SRUyMin + textoModoEdicao.altura / 2 + margemTela, 

@@ -4,8 +4,10 @@ import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.KeyListener;
 
 import cg.projeto.Main;
+import cg.projeto.Resolucao;
 import cg.projeto.Jogo.DebugLoop;
 import cg.projeto.Jogo.GameLoop;
+import cg.projeto.Jogo.Estados.EstadosBola;
 import cg.projeto.Jogo.Estados.EstadosJogo;
 import cg.projeto.Jogo.Estados.Debug.EstadosEditor;
 import cg.projeto.Motor.Renderizador;
@@ -38,6 +40,22 @@ public class Keyboard implements KeyListener{
                         break;
                     }
                 }
+                else if (GameLoop.estado == EstadosJogo.JOGANDO)
+                {
+                    if(GameLoop.bola.estado == EstadosBola.MOVENDO)
+                    {
+                        float posicaoBastaoX;
+                        if(GameLoop.bastao.componente.x + GameLoop.bastao.velocidadeMovimento + GameLoop.bastao.componente.largura/2 >= Resolucao.larguraTela/2)
+                        {
+                            posicaoBastaoX = Resolucao.larguraTela/2 - GameLoop.bastao.componente.largura/2;
+                        }
+                        else
+                        {
+                            posicaoBastaoX = GameLoop.bastao.componente.x + GameLoop.bastao.velocidadeMovimento;
+                        }
+                        GameLoop.bastao.componente.moverComponente(posicaoBastaoX, GameLoop.bastao.componente.y, GameLoop.bastao.componente.z);
+                    }
+                }
             break;
 
             case KeyEvent.VK_LEFT:
@@ -51,6 +69,22 @@ public class Keyboard implements KeyListener{
                         case ROTACIONAR:
                             Renderizador.rotacaoCamera[0]-=1;
                         break;
+                    }
+                }
+                else if (GameLoop.estado == EstadosJogo.JOGANDO)
+                {
+                    if(GameLoop.bola.estado == EstadosBola.MOVENDO)
+                    {
+                        float posicaoBastaoX;
+                        if(GameLoop.bastao.componente.x - GameLoop.bastao.velocidadeMovimento - GameLoop.bastao.componente.largura/2 <= Resolucao.larguraTela/2 * -1)
+                        {
+                            posicaoBastaoX = Resolucao.larguraTela/2 * -1 + GameLoop.bastao.componente.largura/2;
+                        }
+                        else
+                        {
+                            posicaoBastaoX = GameLoop.bastao.componente.x - GameLoop.bastao.velocidadeMovimento;
+                        }
+                        GameLoop.bastao.componente.moverComponente(posicaoBastaoX, GameLoop.bastao.componente.y, GameLoop.bastao.componente.z);
                     }
                 }
             break;
@@ -81,6 +115,44 @@ public class Keyboard implements KeyListener{
                         case ROTACIONAR:
                             Renderizador.rotacaoCamera[1]-=1;
                         break;
+                    }
+                }
+            break;
+
+            case KeyEvent.VK_A:
+                if (GameLoop.estado == EstadosJogo.JOGANDO)
+                {
+                    if(GameLoop.bola.estado == EstadosBola.MOVENDO)
+                    {
+                        float posicaoBastaoX;
+                        if(GameLoop.bastao.componente.x - GameLoop.bastao.velocidadeMovimento - GameLoop.bastao.componente.largura/2 <= Resolucao.larguraTela/2 * -1)
+                        {
+                            posicaoBastaoX = Resolucao.larguraTela/2 * -1 + GameLoop.bastao.componente.largura/2;
+                        }
+                        else
+                        {
+                            posicaoBastaoX = GameLoop.bastao.componente.x - GameLoop.bastao.velocidadeMovimento;
+                        }
+                        GameLoop.bastao.componente.moverComponente(posicaoBastaoX, GameLoop.bastao.componente.y, GameLoop.bastao.componente.z);
+                    }
+                }
+            break;
+            
+            case KeyEvent.VK_D:
+                if (GameLoop.estado == EstadosJogo.JOGANDO)
+                {
+                    if(GameLoop.bola.estado == EstadosBola.MOVENDO)
+                    {
+                        float posicaoBastaoX;
+                        if(GameLoop.bastao.componente.x + GameLoop.bastao.velocidadeMovimento + GameLoop.bastao.componente.largura/2 >= Resolucao.larguraTela/2)
+                        {
+                            posicaoBastaoX = Resolucao.larguraTela/2 - GameLoop.bastao.componente.largura/2;
+                        }
+                        else
+                        {
+                            posicaoBastaoX = GameLoop.bastao.componente.x + GameLoop.bastao.velocidadeMovimento;
+                        }
+                        GameLoop.bastao.componente.moverComponente(posicaoBastaoX, GameLoop.bastao.componente.y, GameLoop.bastao.componente.z);
                     }
                 }
             break;
