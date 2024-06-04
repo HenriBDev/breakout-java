@@ -34,15 +34,21 @@ public class LabelComponente extends BaseComponente2D<LabelComponente>
 
     public void desenharComponente()
     {
-        textoComponente.desenharComponente();
-        if(preencher) fundo.desenharComponente();
+        montarComponente();
+    }
+
+    @Override
+    public void montarComponente()
+    {
+        textoComponente.montarComponente();
+        if(preencher) fundo.montarComponente();
 
         if(bordaHabilitada)
         {
-            bordaCima.desenharComponente();
-            bordaDireita.desenharComponente();
-            bordaBaixo.desenharComponente();
-            bordaEsquerda.desenharComponente();
+            bordaCima.montarComponente();
+            bordaDireita.montarComponente();
+            bordaBaixo.montarComponente();
+            bordaEsquerda.montarComponente();
         }
     }
 

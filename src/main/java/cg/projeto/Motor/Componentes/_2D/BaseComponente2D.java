@@ -4,8 +4,6 @@ import cg.projeto.Motor.Componentes.BaseComponente;
 
 public abstract class BaseComponente2D<tipoComponente> extends BaseComponente<tipoComponente> 
 {
-    public float espessuraBorda = 1;
-
     public tipoComponente redimensionarComponente(float novaLargura, float novaAltura)
     {
         this.largura = novaLargura;

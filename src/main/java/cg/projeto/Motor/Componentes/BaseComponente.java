@@ -1,6 +1,7 @@
 package cg.projeto.Motor.Componentes;
 
 import cg.projeto.Resolucao;
+import cg.projeto.Motor.Renderizador;
 
 public abstract class BaseComponente<tipoComponente> {
     
@@ -9,11 +10,36 @@ public abstract class BaseComponente<tipoComponente> {
     public float z = 0;
     public float largura = 0;
     public float altura = 0;
+    public float profundidade = 0;
     public float[] cor = new float[]{1, 1, 1, 1};
     public float[] rotacao = new float[]{0, 0, 0};
     public boolean preencher = true;
+    public float espessuraBorda = 1;
 
     public abstract void desenharComponente();
+
+    public void montarComponente()
+    {
+        Renderizador.drawer2D.glLineWidth(this.espessuraBorda);
+
+        Renderizador.drawer2D.glColor4f(this.cor[0], this.cor[1], this.cor[2], this.cor[3]);
+        
+        Renderizador.drawer2D.glPushMatrix();
+        
+        Renderizador.drawer2D.glTranslatef(this.x, this.y, this.z);
+        
+        Renderizador.drawer2D.glRotatef(this.rotacao[1], 1, 0, 0);
+        Renderizador.drawer2D.glRotatef(this.rotacao[0], 0, 1, 0);
+        Renderizador.drawer2D.glRotatef(this.rotacao[2], 0, 0, 1);
+
+        Renderizador.drawer2D.glScalef(this.largura, this.altura, this.profundidade);
+
+        desenharComponente();
+
+        Renderizador.drawer2D.glPopMatrix();
+
+        Renderizador.drawer2D.glLineWidth(1);
+    }
 
     public tipoComponente moverComponente(float novoX, float novoY, float novoZ)
     {

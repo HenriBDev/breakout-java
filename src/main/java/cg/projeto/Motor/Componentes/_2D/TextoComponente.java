@@ -11,6 +11,12 @@ public class TextoComponente extends BaseComponente<TextoComponente>
 
     public void desenharComponente()
     {
+        montarComponente();
+    }
+
+    @Override
+    public void montarComponente()
+    {
         Renderizador.drawer2D.glPushMatrix();
 
         Renderizador.drawer2D.glTranslatef(this.x, this.y, this.z);

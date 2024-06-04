@@ -122,7 +122,7 @@ public class Renderizador implements GLEventListener
             BaseComponente componente = componentesParaRenderizar.get(index);
             
             if(componente.x >= Resolucao.SRUxMin && componente.x <= Resolucao.SRUxMax && componente.y >= Resolucao.SRUyMin && componente.y <= Resolucao.SRUyMax && componente.z >= Resolucao.SRUzMin && componente.z <= Resolucao.SRUzMax)
-            componente.desenharComponente();
+            componente.montarComponente();
         }
     }
     
