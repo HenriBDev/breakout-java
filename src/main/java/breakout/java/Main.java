@@ -44,7 +44,7 @@ public class Main
             }
         });       
         
-        window.setTitle("Pong maneiro fi");
+        window.setTitle("Breakout Java");
         window.setFullscreen(true);
         if(!DEBUG) window.setPointerVisible(false);
         window.setVisible(true);
