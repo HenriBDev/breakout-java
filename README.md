@@ -1,7 +1,7 @@
 # Breakout Java
 
 <p align="center">
-    <img src="arquivosReadme/demo.gif" alt="drawing" width="50%"/>
+    <img src="arquivosReadme/demo.gif" alt="drawing" />
 </p>
 
 Implementação do jogo Breakout desenvolvido com a biblioteca JOGL (Interface da OpenGL para Java).
