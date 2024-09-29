@@ -13,7 +13,7 @@ import cg.projeto.Motor.Renderizador;
 
 public class Main 
 {
-    public static boolean DEBUG = false;
+    public static boolean DEBUG = System.getProperty("debug") != null && "true".equalsIgnoreCase(System.getProperty("debug"));
     
     public static GLWindow window = null;
 
