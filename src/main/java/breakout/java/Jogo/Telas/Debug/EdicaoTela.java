@@ -88,7 +88,7 @@ public class EdicaoTela extends BaseTela {
             .centralizarComponente(false, true, true);
         titulo.moverComponente(Resolucao.SRUxCentral, Resolucao.SRUyMax - margemTela - titulo.altura, titulo.z);
 
-        textoModoEdicao = new TextoComponente("Modo de edição (Alterne com M ou R): "+ DebugLoop.modoEdicao);
+        textoModoEdicao = new TextoComponente("Modo de edição (Alterne com M, R ou G): "+ DebugLoop.modoEdicao);
         textoModoEdicao.moverComponente(
             Resolucao.SRUxMin + textoModoEdicao.largura / 2 + margemTela, 
             Resolucao.SRUyMin + textoModoEdicao.altura / 2 + margemTela, 
